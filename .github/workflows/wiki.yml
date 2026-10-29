@@ -1,0 +1,16 @@
+name: wiki
+on:
+  push:
+    branches: [main]
+    paths: ['wiki/**']
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish wiki/ to the GitHub wiki
+        uses: Andrew-Chen-Wang/github-wiki-action@v4
+        with:
+          path: wiki

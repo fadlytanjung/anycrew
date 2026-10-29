@@ -12,6 +12,7 @@
 | [07 Presets](07-presets.md) | Stack presets and how to write one |
 | [08 Roadmap](08-roadmap.md) | What is next and what is deliberately out |
 | [ADRs](adr/README.md) | Decisions about anycrew itself |
+| [Wiki](../wiki/Home.md) | Every term and concept explained: SDD, ADR, PRD, ACs, gates, tiers, hooks, presets, standards |
 
 These pages are the source for the GitHub wiki; they are plain Markdown so they render in the repo
 too.

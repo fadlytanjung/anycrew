@@ -22,5 +22,6 @@
   "skills": [
     "./skills/"
   ],
-  "hooks": "./hooks/hooks.json"
+  "hooks": "./hooks/hooks.json",
+  "icon": "./.claude-plugin/icon.png"
 }
