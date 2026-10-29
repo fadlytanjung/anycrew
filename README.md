@@ -32,7 +32,8 @@ constitution, a PRD, ADRs, specs with acceptance criteria, and a status page tha
 really built. Each agent declares how much model it needs, so cheap work runs on cheap models.
 
 ```bash
-npx anycrew init          # in your repo; detects your assistants, asks nothing else
+npx anycrew init                           # once published to npm
+npx github:fadlytanjung/anycrew init       # works today, straight from this repository
 ```
 
 > **Status: 0.1.0, early.** Claude Code and Antigravity outputs are verified end to end; Codex,
@@ -107,6 +108,7 @@ Every term has a page in the [wiki](wiki/Home.md). The short version:
 cd your-project
 npx anycrew init --preset python-fastapi-react --tools claude,codex,antigravity
 # or just:  npx anycrew init     (detects the assistants on your machine)
+# until the npm release lands, use the same commands with: npx github:fadlytanjung/anycrew
 
 npx anycrew doctor      # what each assistant will read
 npx anycrew list        # agents, tiers and the model each assistant will use
