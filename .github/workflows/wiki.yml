@@ -15,7 +15,11 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Publish wiki/ to the GitHub wiki
+      - name: Rewrite Page.md links to wiki page names
+        run: |
+          rm -rf /tmp/wiki && cp -r wiki /tmp/wiki
+          sed -i -E 's/\]\(([A-Za-z_-]+)\.md\)/](\1)/g' /tmp/wiki/*.md
+      - name: Publish to the GitHub wiki
         uses: Andrew-Chen-Wang/github-wiki-action@v4
         with:
-          path: wiki
+          path: /tmp/wiki
