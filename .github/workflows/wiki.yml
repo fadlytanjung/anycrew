@@ -1,8 +1,13 @@
 name: wiki
+# Publishes wiki/ to the repository's GitHub wiki.
+# One-time setup: enable the wiki in Settings → Features and create any first page in the Wiki tab
+# (GitHub only creates the wiki git repository after that), then run this workflow once from the
+# Actions tab. After that it runs on every push that touches wiki/.
 on:
   push:
     branches: [main]
     paths: ['wiki/**']
+  workflow_dispatch:
 jobs:
   publish:
     runs-on: ubuntu-latest
