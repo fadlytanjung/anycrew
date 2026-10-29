@@ -23,7 +23,8 @@
   "scripts": {
     "validate": "node scripts/validate.mjs",
     "test": "node scripts/validate.mjs && node scripts/smoke.mjs",
-    "list": "node bin/anycrew.mjs list"
+    "list": "node bin/anycrew.mjs list",
+    "test:parity": "python3 tests/test_parity.py"
   },
   "engines": {
     "node": ">=18"
@@ -44,6 +45,6 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/fadlytanjung/anycrew"
+    "url": "git+https://github.com/fadlytanjung/anycrew.git"
   }
 }

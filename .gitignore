@@ -6,3 +6,7 @@ node_modules/
 !.env.example
 /tmp/
 /examples/*/node_modules/
+dist/
+*.egg-info/
+__pycache__/
+.venv/

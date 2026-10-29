@@ -15,3 +15,23 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: npm test
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.9", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: astral-sh/setup-uv@v5
+      - name: Python and Node CLIs generate identical projects
+        run: python tests/test_parity.py
+      - name: Build the wheel and run it
+        run: |
+          uv build
+          uvx --from dist/anycrew-*.whl anycrew --version

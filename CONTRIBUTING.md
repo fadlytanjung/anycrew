@@ -13,7 +13,8 @@ this on day one".
 | `presets/*.json` | stack presets | commands, layout, globs, conventions |
 | `models.json` | tier → model per tool | aliases over dated IDs |
 | `templates/` | AGENTS.md and the docs skeleton | `{{placeholders}}` filled by the CLI |
-| `lib/`, `bin/` | the CLI | zero dependencies, Node ≥ 18 |
+| `lib/`, `bin/` | the Node CLI | zero dependencies, Node ≥ 18 |
+| `src/anycrew/` | the Python CLI | zero dependencies, Python ≥ 3.9; must stay byte-identical to the Node CLI (`python3 tests/test_parity.py`) |
 | `docs/` | the wiki | one question per page |
 
 ## Workflow

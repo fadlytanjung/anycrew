@@ -10,6 +10,8 @@
 <p align="center">
   <a href="https://github.com/fadlytanjung/anycrew/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/fadlytanjung/anycrew/ci.yml?branch=main&label=ci"></a>
   <a href="https://www.npmjs.com/package/anycrew"><img alt="npm" src="https://img.shields.io/npm/v/anycrew?color=0284c7"></a>
+  <a href="https://pypi.org/project/anycrew/"><img alt="PyPI" src="https://img.shields.io/pypi/v/anycrew?color=3776ab&logo=python&logoColor=white"></a>
+  <img alt="python" src="https://img.shields.io/badge/python-%E2%89%A53.9-3776ab">
   <img alt="node" src="https://img.shields.io/badge/node-%E2%89%A518-339933?logo=node.js&logoColor=white">
   <img alt="dependencies" src="https://img.shields.io/badge/dependencies-0-0284c7">
   <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
@@ -32,9 +34,12 @@ constitution, a PRD, ADRs, specs with acceptance criteria, and a status page tha
 really built. Each agent declares how much model it needs, so cheap work runs on cheap models.
 
 ```bash
-npx anycrew init                           # once published to npm
-npx github:fadlytanjung/anycrew init       # works today, straight from this repository
+uvx anycrew init            # Python: uv (or `pipx run anycrew init`, or `pip install anycrew`)
+npx anycrew init            # Node: npm (or `npx github:fadlytanjung/anycrew init` straight from this repo)
 ```
+
+Both CLIs are the same tool: one canonical pack, two zero-dependency ports that generate
+byte-identical projects (the CI proves it on every commit). Use whichever runtime you already have.
 
 > **Status: 0.1.0, early.** Claude Code and Antigravity outputs are verified end to end; Codex,
 > Cursor, OpenCode and Copilot outputs follow their documentation and are being exercised next.
@@ -100,18 +105,18 @@ Every term has a page in the [wiki](wiki/Home.md). The short version:
 | **Docs skeleton** | constitution, brainstorm, research, PRD, traceability, architecture, data model, API, frontend, design system, conventions, security, testing, infra, observability, delivery plan, status, ADRs, specs |
 | **Presets** | `python-fastapi-react`, `node-typescript-next`, `go-service`, `generic`; write your own in one JSON file |
 | **Hook** | a tool-agnostic lint-after-edit hook wired into each assistant |
-| **One CLI** | `npx anycrew init` generates every assistant's native files from one source; `sync` keeps them current without touching your edits; zero dependencies |
+| **One CLI, two runtimes** | `uvx anycrew init` (Python) or `npx anycrew init` (Node) generates every assistant's native files from one source; `sync` keeps them current without touching your edits; zero dependencies in both |
 
 ## Quick start
 
 ```bash
 cd your-project
-npx anycrew init --preset python-fastapi-react --tools claude,codex,antigravity
-# or just:  npx anycrew init     (detects the assistants on your machine)
-# until the npm release lands, use the same commands with: npx github:fadlytanjung/anycrew
+uvx anycrew init --preset python-fastapi-react --tools claude,codex,antigravity
+# or just:  uvx anycrew init     (detects the assistants on your machine)
+# Node users: replace `uvx anycrew` with `npx anycrew` in every command below
 
-npx anycrew doctor      # what each assistant will read
-npx anycrew list        # agents, tiers and the model each assistant will use
+uvx anycrew doctor      # what each assistant will read
+uvx anycrew list        # agents, tiers and the model each assistant will use
 ```
 
 Then open your assistant in the folder and type `/crew-status`. For a new idea, `/crew-brainstorm`;
@@ -127,6 +132,7 @@ for an existing codebase, `/crew-spec`.
 | Copilot CLI | `copilot plugin install fadlytanjung/anycrew` |
 | Cursor | Customize → Install, point at the repository (Agent Plugins manifest) |
 | Skills only, any assistant | `npx skills add fadlytanjung/anycrew` |
+| Python environment | `pip install anycrew` or `uv tool install anycrew` gives you the `anycrew` command |
 
 A global install gives you the agents and skills everywhere. `npx anycrew init` in a project adds
 the docs skeleton, the stack rules, the hooks and the per-project model overrides.

@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "anycrew"
+version = "0.1.0"
+description = "One crew of specialist AI agents for any coding assistant. Spec-driven, test-first, security-reviewed, model-tiered. Installs into Claude Code, OpenAI Codex, Google Antigravity, Cursor, OpenCode and GitHub Copilot."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+authors = [{ name = "anycrew contributors" }]
+keywords = ["ai-agents", "claude-code", "codex", "antigravity", "cursor", "opencode", "copilot", "agent-skills", "spec-driven-development", "mvp"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/fadlytanjung/anycrew"
+Repository = "https://github.com/fadlytanjung/anycrew"
+Documentation = "https://github.com/fadlytanjung/anycrew/wiki"
+Changelog = "https://github.com/fadlytanjung/anycrew/blob/main/CHANGELOG.md"
+
+[project.scripts]
+anycrew = "anycrew.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/anycrew"]
+
+# The canonical pack lives at the repository root and is shared with the npm package.
+# For the wheel it is copied under anycrew/pack/ so one source feeds both distributions.
+[tool.hatch.build.targets.wheel.force-include]
+"agents" = "anycrew/pack/agents"
+"skills" = "anycrew/pack/skills"
+"rules" = "anycrew/pack/rules"
+"templates" = "anycrew/pack/templates"
+"presets" = "anycrew/pack/presets"
+"hooks" = "anycrew/pack/hooks"
+"models.json" = "anycrew/pack/models.json"
+"package.json" = "anycrew/pack/package.json"
+
+[tool.hatch.build.targets.sdist]
+include = ["src/anycrew", "agents", "skills", "rules", "templates", "presets", "hooks", "models.json", "package.json", "README.md", "LICENSE", "CHANGELOG.md"]
