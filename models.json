@@ -1,0 +1,98 @@
+{
+  "$comment": "Model tiers are the portable way anycrew says how much model an agent needs. Each tool maps a tier to its own model name here. Override per project in .anycrew/config.json under \"models\". Keep aliases (not dated IDs) wherever the tool offers them so the mapping ages well.",
+  "tiers": {
+    "fast": {
+      "purpose": "Read, search, summarise, format, update status docs, mechanical edits. High volume, low stakes.",
+      "examples": [
+        "scout",
+        "doc-writer"
+      ]
+    },
+    "balanced": {
+      "purpose": "Implement a task, write tests, routine review, research with sources, infra and deploy work.",
+      "examples": [
+        "implementer",
+        "tester",
+        "researcher",
+        "designer",
+        "release-engineer"
+      ]
+    },
+    "strong": {
+      "purpose": "Decisions and judgement: brainstorm, product scope, architecture, specs, security, final review, hard debugging, LLM feature design.",
+      "examples": [
+        "brainstormer",
+        "product-manager",
+        "architect",
+        "spec-writer",
+        "reviewer",
+        "security-reviewer",
+        "debugger",
+        "ai-engineer",
+        "crew-lead"
+      ]
+    }
+  },
+  "tools": {
+    "claude": {
+      "$comment": "Claude Code subagent frontmatter: `model:` accepts haiku | sonnet | opus | fable | inherit | full ID; `effort:` accepts low | medium | high | xhigh | max.",
+      "fast": {
+        "model": "haiku",
+        "effort": "low"
+      },
+      "balanced": {
+        "model": "sonnet",
+        "effort": "medium"
+      },
+      "strong": {
+        "model": "opus",
+        "effort": "high"
+      }
+    },
+    "antigravity": {
+      "$comment": "Antigravity subagents (.agents/agents/*.md) accept `model: inherit | flash | pro` (tiers, not IDs). `flash_lite` exists only for run_workflow scripts, so fast and balanced both map to flash.",
+      "fast": "flash",
+      "balanced": "flash",
+      "strong": "pro"
+    },
+    "gemini": {
+      "$comment": "Gemini CLI model names. Adjust to the models your account can use.",
+      "fast": "gemini-flash-lite-latest",
+      "balanced": "gemini-flash-latest",
+      "strong": "gemini-pro-latest"
+    },
+    "codex": {
+      "$comment": "Codex custom agents (.codex/agents/*.toml) take `model` and `model_reasoning_effort` (low | medium | high | xhigh | max). `model` null keeps the user's default model and varies only the effort.",
+      "fast": {
+        "model": null,
+        "model_reasoning_effort": "low"
+      },
+      "balanced": {
+        "model": null,
+        "model_reasoning_effort": "medium"
+      },
+      "strong": {
+        "model": null,
+        "model_reasoning_effort": "high"
+      }
+    },
+    "cursor": {
+      "$comment": "Cursor subagents accept `model: inherit` or a model ID such as composer-2 or claude-opus-5[effort=high]. inherit keeps the chat's model; set IDs here to enforce tiers.",
+      "fast": "inherit",
+      "balanced": "inherit",
+      "strong": "inherit"
+    },
+    "opencode": {
+      "$comment": "OpenCode agents take `model: provider/model-id`. Defaults assume the Anthropic provider; change to your provider.",
+      "fast": "anthropic/claude-haiku-5-5",
+      "balanced": "anthropic/claude-sonnet-5-5",
+      "strong": "anthropic/claude-opus-5-5"
+    },
+    "copilot": {
+      "$comment": "GitHub Copilot custom agents accept `model:` as a string or a preference-ordered array; empty means inherit the chat's model.",
+      "fast": "",
+      "balanced": "",
+      "strong": ""
+    }
+  }
+}

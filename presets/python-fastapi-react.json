@@ -1,0 +1,49 @@
+{
+  "id": "python-fastapi-react",
+  "name": "Python FastAPI backend + React/Vite frontend",
+  "description": "uv-managed Python 3.12 backend (FastAPI, Pydantic v2, pytest, ruff, pyright strict) and a React 19 + Vite + TypeScript frontend (Vitest, Playwright). Hexagonal backend layers enforced with import-linter.",
+  "languages": ["python", "typescript"],
+  "commands": {
+    "setup": "cd backend && uv sync && cd ../frontend && npm ci",
+    "dev": "make dev",
+    "check": "make check",
+    "test": "cd backend && uv run pytest -q && cd ../frontend && npm test -- --run",
+    "lint": "cd backend && uv run ruff check . && uv run ruff format --check . && uv run pyright && cd ../frontend && npm run lint && npx tsc --noEmit"
+  },
+  "layout": {
+    "backend": "backend",
+    "frontend": "frontend",
+    "docs": "docs",
+    "specs": "docs/specs",
+    "contracts": "contracts"
+  },
+  "rules": {
+    "backend_globs": ["backend/**/*.py"],
+    "frontend_globs": ["frontend/**"],
+    "llm_globs": ["backend/app/agents/**", "**/prompts/**"]
+  },
+  "backend_conventions": [
+    "Python 3.12, `uv` only (`uv sync`, `uv run`); commit `uv.lock`.",
+    "Type-checked with pyright strict; formatted and linted with ruff (line length 100).",
+    "`async` for I/O; wrap sync SDKs with `anyio.to_thread.run_sync`.",
+    "Pydantic v2 models at every boundary (API, LLM output, persistence).",
+    "Layers: `api -> services -> domain + ports`; `adapters` implement `ports`; `domain` is pure (no I/O, no SDKs, no clock). Enforced by import-linter in `backend/.importlinter`.",
+    "Errors: raise domain errors with a stable `code`; the API renders RFC 9457 problem+json.",
+    "Logging: structured JSON; bind request and entity IDs; never log secrets or personal data.",
+    "Money is `Decimal`, never float. Time is injected through a `Clock`; store UTC.",
+    "Tests in `backend/tests/{unit,integration,scenarios}`; an in-memory fake for every port in `backend/tests/fakes/`."
+  ],
+  "frontend_conventions": [
+    "React 19 + Vite + TypeScript strict (`noUncheckedIndexedAccess`); no `any`; named exports only.",
+    "Feature-Sliced Design: `app -> pages -> widgets -> features -> entities -> shared`; import only downward.",
+    "API types are generated from `contracts/openapi.yaml`; never hand-write them.",
+    "Server state only through TanStack Query hooks in `entities/*/api.ts`.",
+    "Design values come from tokens; no raw colours, sizes or inline styles.",
+    "Every data panel has loading, empty and error states; every screen works from 360 px to 1600 px.",
+    "User-visible strings live in locale files, never literal in components.",
+    "Tests: Vitest + Testing Library + MSW; Playwright visual baselines at 390/834/1440 px."
+  ],
+  "hooks": {
+    "lint_after_edit": true
+  }
+}

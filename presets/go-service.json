@@ -1,0 +1,38 @@
+{
+  "id": "go-service",
+  "name": "Go service (API or worker)",
+  "description": "Go 1.23+ module with standard layout, chi or net/http, sqlc or pgx, golangci-lint, table-driven tests. Optional HTMX or a separate frontend.",
+  "languages": ["go"],
+  "commands": {
+    "setup": "go mod download",
+    "dev": "go run ./cmd/server",
+    "check": "gofmt -l . && go vet ./... && golangci-lint run && go test ./...",
+    "test": "go test ./...",
+    "lint": "gofmt -l . && go vet ./... && golangci-lint run"
+  },
+  "layout": {
+    "backend": ".",
+    "frontend": "",
+    "docs": "docs",
+    "specs": "docs/specs",
+    "contracts": "contracts"
+  },
+  "rules": {
+    "backend_globs": ["**/*.go"],
+    "frontend_globs": [],
+    "llm_globs": ["**/prompts/**", "internal/agents/**"]
+  },
+  "backend_conventions": [
+    "Go 1.23+, modules, `gofmt` and `golangci-lint` clean.",
+    "Layout: `cmd/<binary>` for entry points, `internal/<domain>` for business logic, `internal/adapters` for I/O; domain packages import no I/O packages.",
+    "Interfaces are defined where they are used (consumer side); adapters satisfy them.",
+    "Errors are wrapped with context (`fmt.Errorf(\"...: %w\", err)`) and checked with `errors.Is/As`; sentinel errors carry stable names.",
+    "Context is the first parameter of every function that does I/O.",
+    "Structured logging with `log/slog`; never log secrets or personal data.",
+    "Table-driven tests; fakes for interfaces; integration tests behind a build tag."
+  ],
+  "frontend_conventions": [],
+  "hooks": {
+    "lint_after_edit": true
+  }
+}

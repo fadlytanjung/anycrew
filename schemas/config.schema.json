@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/fadlytanjung/anycrew/main/schemas/config.schema.json",
+  "title": "anycrew project configuration (.anycrew/config.json)",
+  "type": "object",
+  "required": ["version", "project", "preset", "tools"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "const": 1 },
+    "anycrew": { "type": "string", "description": "anycrew version that generated this config" },
+    "project": { "type": "string" },
+    "purpose": { "type": "string" },
+    "preset": { "type": "string", "description": "A preset id from presets/ or a path to a preset JSON file" },
+    "tools": { "type": "array", "items": { "enum": ["claude", "codex", "antigravity", "cursor", "opencode", "copilot"] } },
+    "commands": {
+      "type": "object",
+      "properties": {
+        "setup": { "type": "string" }, "dev": { "type": "string" }, "check": { "type": "string" },
+        "test": { "type": "string" }, "lint": { "type": "string" }, "deploy": { "type": "string" }
+      }
+    },
+    "models": {
+      "type": "object",
+      "description": "Per-tool overrides of the tier -> model mapping, same shape as models.json#/tools",
+      "additionalProperties": { "type": "object", "properties": { "fast": {}, "balanced": {}, "strong": {} } }
+    },
+    "agents": { "type": "object", "properties": { "exclude": { "type": "array", "items": { "type": "string" } } } },
+    "skills": { "type": "object", "properties": { "exclude": { "type": "array", "items": { "type": "string" } } } },
+    "hooks": { "type": "object", "properties": { "lint_after_edit": { "type": "boolean" } } }
+  }
+}

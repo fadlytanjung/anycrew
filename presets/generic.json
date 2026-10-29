@@ -1,0 +1,28 @@
+{
+  "id": "generic",
+  "name": "Generic (any stack)",
+  "description": "No stack assumptions. Fill the commands in .anycrew/config.json after init.",
+  "languages": [],
+  "commands": {
+    "setup": "echo 'TODO: install dependencies'",
+    "dev": "echo 'TODO: run the app locally'",
+    "check": "echo 'TODO: lint + types + tests'",
+    "test": "echo 'TODO: run tests'",
+    "lint": "echo 'TODO: lint'"
+  },
+  "layout": {
+    "backend": "",
+    "frontend": "",
+    "docs": "docs",
+    "specs": "docs/specs",
+    "contracts": "contracts"
+  },
+  "rules": {
+    "backend_globs": [],
+    "frontend_globs": [],
+    "llm_globs": ["**/prompts/**", "**/agents/**"]
+  },
+  "hooks": {
+    "lint_after_edit": true
+  }
+}

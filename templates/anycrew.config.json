@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fadlytanjung/anycrew/main/schemas/config.schema.json",
+  "version": 1,
+  "project": "{{project}}",
+  "purpose": "{{purpose}}",
+  "preset": "{{preset}}",
+  "tools": {{tools_json}},
+  "commands": {{commands_json}},
+  "models": {},
+  "agents": { "exclude": [] },
+  "skills": { "exclude": [] },
+  "hooks": { "lint_after_edit": true }
+}

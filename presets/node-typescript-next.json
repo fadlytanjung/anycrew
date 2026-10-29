@@ -1,0 +1,44 @@
+{
+  "id": "node-typescript-next",
+  "name": "TypeScript monorepo: Node API + Next.js",
+  "description": "pnpm workspace with a Node 22 TypeScript API (Hono or NestJS, Zod, Vitest) and a Next.js App Router frontend (React 19, Tailwind, Playwright). Prisma or Drizzle for data.",
+  "languages": ["typescript"],
+  "commands": {
+    "setup": "pnpm install",
+    "dev": "pnpm dev",
+    "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "test": "pnpm test",
+    "lint": "pnpm lint && pnpm typecheck"
+  },
+  "layout": {
+    "backend": "apps/api",
+    "frontend": "apps/web",
+    "docs": "docs",
+    "specs": "docs/specs",
+    "contracts": "contracts"
+  },
+  "rules": {
+    "backend_globs": ["apps/api/**", "packages/**"],
+    "frontend_globs": ["apps/web/**"],
+    "llm_globs": ["**/prompts/**", "**/agents/**"]
+  },
+  "backend_conventions": [
+    "Node 22, TypeScript strict, ESM only; pnpm workspaces; commit `pnpm-lock.yaml`.",
+    "Validate every boundary with Zod schemas; derive types from schemas, never duplicate them.",
+    "Layers: `routes -> services -> domain + ports`; adapters implement ports; domain has no I/O.",
+    "Errors carry a stable `code`; HTTP layer maps them to problem+json.",
+    "Structured JSON logs with request IDs; never log secrets or personal data.",
+    "Database access only through the repository layer; migrations are versioned and forward-only.",
+    "Tests with Vitest; one in-memory fake per port; integration tests hit a disposable database."
+  ],
+  "frontend_conventions": [
+    "Next.js App Router, React 19, TypeScript strict; Server Components by default, client components only when needed.",
+    "Design tokens in one place; Tailwind utilities from tokens only; no arbitrary values.",
+    "Every data view has loading, empty and error states; responsive from 360 px to 1600 px.",
+    "Forms validate with the same Zod schemas the API uses.",
+    "Tests: Vitest + Testing Library; Playwright for flows and visual baselines."
+  ],
+  "hooks": {
+    "lint_after_edit": true
+  }
+}
