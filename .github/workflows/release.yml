@@ -88,6 +88,7 @@ jobs:
         run: node scripts/release-notes.mjs "${{ needs.verify.outputs.version }}" > notes.md && cat notes.md
       - uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ needs.verify.outputs.version }}
           name: anycrew ${{ needs.verify.outputs.version }}
           body_path: notes.md
           files: dist/*
