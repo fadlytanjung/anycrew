@@ -1,0 +1,19 @@
+{
+  "step": {
+    "id": "review",
+    "prompt": "/crew-review Review everything committed for spec 001 against its spec and the constitution. Report findings in the required format. Do not fix anything; do not ask questions.",
+    "maxTurns": 60,
+    "checks": [],
+    "judge": "Read the reply. Score 5 if it shows real command output from the check command and tests, lists findings ranked by severity each with path:line, a concrete scenario, the AC or principle violated and a one-line fix, and includes the conformance table (conformant/untested/drift/missing/undocumented) with evidence. Score 3 if findings exist but lack scenarios or evidence. Score 1 if it is style nitpicks or praise without verification."
+  },
+  "run": {
+    "cost": 2.1665538000000004,
+    "turns": 4,
+    "error": null
+  },
+  "checks": [],
+  "judge": {
+    "score": 5,
+    "reason": "The reply reports real gate output (21 passed, 1 warning, reproduced here) and ranks findings by severity, each with path:line, a concrete scenario, the AC or rule violated and a one-line fix; spot checks confirm create_app requires settings with no Settings() in src, the Makefile runs pytest only, errors.py drops exc.headers, and conftest strips only upper-case names, and it includes a full drift table with conformant/untested/drift/missing/undocumented buckets backed by test names and file lines."
+  }
+}

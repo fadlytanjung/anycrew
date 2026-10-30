@@ -1,0 +1,55 @@
+{
+  "step": {
+    "id": "security",
+    "prompt": "/crew-security Write the threat model in docs/14-security.md for Teamly and audit the repository as it stands. Report findings with evidence. Do not ask questions.",
+    "maxTurns": 80,
+    "checks": [
+      {
+        "type": "exists",
+        "path": "docs/14-security.md"
+      },
+      {
+        "type": "grep",
+        "path": "docs/14-security.md",
+        "pattern": "(?i)trust boundar"
+      },
+      {
+        "type": "grep",
+        "path": "docs/14-security.md",
+        "pattern": "C1"
+      }
+    ],
+    "judge": "Read docs/14-security.md and the reply. Score 5 if assets, actors and trust boundaries are drawn, each boundary has a control with the test that proves it, the audit covers auth and tenancy, untrusted input, secrets, dependencies and data protection with real evidence (commands run, files cited), findings carry severity and a fix with a test, and residual risks have an owner. Score 3 if the model exists but the audit is generic. Score 1 if it is a checklist copied without looking at the code."
+  },
+  "run": {
+    "cost": 2.57742425,
+    "turns": 24,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": "docs/14-security.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/14-security.md",
+      "pattern": "(?i)trust boundar",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/14-security.md",
+      "pattern": "C1",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "docs/14-security.md draws assets, actors and seven boundaries (Mermaid plus table), maps 18 controls to named tests or owning tasks, and the audit record cites verified evidence: Makefile line 6 is `check: test`, main.py line 9 leaves docs defaults on, errors.py lines 70-71 register only two handlers, `git check-ignore` confirms `.env.local` is not ignored, lockfile versions (fastapi 0.162.0, starlette 1.10.0, etc.) match uv.lock, and the three named tests exist. Findings carry severity and a fix with a named test, and five residual risks have owners, dates and revisit triggers; the only soft spot is the `[assumed]` owner attribution carried over from docs/01."
+  }
+}

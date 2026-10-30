@@ -1,0 +1,45 @@
+{
+  "step": {
+    "id": "checkpoint",
+    "prompt": "/crew-checkpoint Update docs/20-implementation-status.md to match the tree after spec 001's work. Do not ask questions.",
+    "maxTurns": 40,
+    "checks": [
+      {
+        "type": "grep",
+        "path": "docs/20-implementation-status.md",
+        "pattern": "001"
+      },
+      {
+        "type": "grep",
+        "path": "docs/20-implementation-status.md",
+        "pattern": "(?i)last updated"
+      }
+    ],
+    "judge": "Read docs/20-implementation-status.md and docs/specs/001-*/tasks.md. Score 5 if every spec-001 component row has a status that matches the ticked tasks and tests, every Built row names its test suite, the date is refreshed and gaps are listed. Score 3 if statuses are right but suites are not named. Score 1 if rows were promoted without evidence."
+  },
+  "run": {
+    "cost": 1.11751675,
+    "turns": 12,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "grep",
+      "path": "docs/20-implementation-status.md",
+      "pattern": "001",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/20-implementation-status.md",
+      "pattern": "(?i)last updated",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "The Foundation row stays In progress, matching tasks.md (T001-01 to T001-05 ticked, T001-06 to T001-99 unchecked), and its built part names the three real suites (test_health.py, test_errors.py, test_config.py) which I confirmed run 21 passed; the frontend and .github directories are absent as the row's pending list and the reply state. The last-updated line is refreshed to 2026-10-31 with a reason, the Makefile deviation is accurately recorded, and the Gaps section lists the missing PRD, architecture, incomplete make check, unenforced coverage floors and the uncommitted docs/14."
+  }
+}

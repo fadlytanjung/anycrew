@@ -13,5 +13,9 @@ Project: `/private/tmp/claude-501/-Users-fjung-dev-anycrew/fdfe655a-9014-4ea2-9f
 | implement-2 | ✅ | 1/1 | 5 | $0.92 | 6 | 80s | T001-02 is ticked in docs/specs/001-foundation/tasks.md and has its own commit b4a2da4 (feat(001): record layout and layer conventions, Task |
 | implement-3 | ✅ | 3/3 | 3 | $1.13 | 11 | 104s | make check is green (2 passed) and backend/src/teamly/api/routes/health.py exposes GET /api/health tested in backend/tests/integration/test_ |
 | test | ✅ | 2/2 | 3 | $3.11 | 30 | 578s | Only AC-001-3, -4 and -5 have tests named after them (test_health.py, test_errors.py, test_config.py; 21 passed, make check green, TestClien |
+| review | ✅ | 0/0 | 5 | $2.17 | 4 | 342s | The reply reports real gate output (21 passed, 1 warning, reproduced here) and ranks findings by severity, each with path:line, a concrete s |
+| security | ✅ | 3/3 | 5 | $2.58 | 24 | 380s | docs/14-security.md draws assets, actors and seven boundaries (Mermaid plus table), maps 18 controls to named tests or owning tasks, and the |
+| verify | ✅ | 0/0 | 5 | $2.57 | 11 | 375s | All eleven ACs of spec 001 appear in the table with buckets and path:line evidence that checks out (errors.py:42/51/56/69, main.py:8, config |
+| checkpoint | ✅ | 2/2 | 5 | $1.12 | 12 | 69s | The Foundation row stays In progress, matching tasks.md (T001-01 to T001-05 ticked, T001-06 to T001-99 unchecked), and its built part names  |
 
-**7/9 steps passed · total cost $14.19**
+**11/13 steps passed · total cost $22.62**

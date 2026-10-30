@@ -122,5 +122,53 @@
     "seconds": 578,
     "error": null,
     "failing": []
+  },
+  {
+    "id": "review",
+    "pass": true,
+    "checks": "0/0",
+    "judge": 5,
+    "judgeWhy": "The reply reports real gate output (21 passed, 1 warning, reproduced here) and ranks findings by severity, each with path:line, a concrete scenario, the AC or rule violated and a one-line fix; spot checks confirm create_app requires settings with no Settings() in src, the Makefile runs pytest only, errors.py drops exc.headers, and conftest strips only upper-case names, and it includes a full drift table with conformant/untested/drift/missing/undocumented buckets backed by test names and file lines.",
+    "costUsd": 2.1665538000000004,
+    "turns": 4,
+    "seconds": 342,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "security",
+    "pass": true,
+    "checks": "3/3",
+    "judge": 5,
+    "judgeWhy": "docs/14-security.md draws assets, actors and seven boundaries (Mermaid plus table), maps 18 controls to named tests or owning tasks, and the audit record cites verified evidence: Makefile line 6 is `check: test`, main.py line 9 leaves docs defaults on, errors.py lines 70-71 register only two handlers, `git check-ignore` confirms `.env.local` is not ignored, lockfile versions (fastapi 0.162.0, starlette 1.10.0, etc.) match uv.lock, and the three named tests exist. Findings carry severity and a fix with a named test, and five residual risks have owners, dates and revisit triggers; the only soft spot is the `[assumed]` owner attribution carried over from docs/01.",
+    "costUsd": 2.57742425,
+    "turns": 24,
+    "seconds": 380,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "verify",
+    "pass": true,
+    "checks": "0/0",
+    "judge": 5,
+    "judgeWhy": "All eleven ACs of spec 001 appear in the table with buckets and path:line evidence that checks out (errors.py:42/51/56/69, main.py:8, config.py:32/53, the eleven named tests exist, plan.md line 18 says --factory while create_app requires settings), real pytest output of 21 passed is shown and reproduces, and each drift row D1-D5 names which side changes and hands the decision back without editing; the only blemish is that AC-001-3 and AC-001-4 are split into clause rows landing in different buckets rather than one bucket per AC.",
+    "costUsd": 2.57048825,
+    "turns": 11,
+    "seconds": 375,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "checkpoint",
+    "pass": true,
+    "checks": "2/2",
+    "judge": 5,
+    "judgeWhy": "The Foundation row stays In progress, matching tasks.md (T001-01 to T001-05 ticked, T001-06 to T001-99 unchecked), and its built part names the three real suites (test_health.py, test_errors.py, test_config.py) which I confirmed run 21 passed; the frontend and .github directories are absent as the row's pending list and the reply state. The last-updated line is refreshed to 2026-10-31 with a reason, the Makefile deviation is accurately recorded, and the Gaps section lists the missing PRD, architecture, incomplete make check, unenforced coverage floors and the uncommitted docs/14.",
+    "costUsd": 1.11751675,
+    "turns": 12,
+    "seconds": 69,
+    "error": null,
+    "failing": []
   }
 ]

@@ -1,0 +1,19 @@
+{
+  "step": {
+    "id": "verify",
+    "prompt": "/crew-verify 001 Audit spec 001 against the code and tests; produce the conformance table. Do not fix anything; do not ask questions.",
+    "maxTurns": 60,
+    "checks": [],
+    "judge": "Read the reply. Score 5 if every AC of spec 001 is placed in exactly one bucket with path:line evidence and the real test output is shown, drift rows propose which side changes and stop. Score 3 if the table exists but evidence is thin. Score 1 if it asserts conformance without running anything."
+  },
+  "run": {
+    "cost": 2.57048825,
+    "turns": 11,
+    "error": null
+  },
+  "checks": [],
+  "judge": {
+    "score": 5,
+    "reason": "All eleven ACs of spec 001 appear in the table with buckets and path:line evidence that checks out (errors.py:42/51/56/69, main.py:8, config.py:32/53, the eleven named tests exist, plan.md line 18 says --factory while create_app requires settings), real pytest output of 21 passed is shown and reproduces, and each drift row D1-D5 names which side changes and hands the decision back without editing; the only blemish is that AC-001-3 and AC-001-4 are split into clause rows landing in different buckets rather than one bucket per AC."
+  }
+}
