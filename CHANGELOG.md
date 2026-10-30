@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1 — 2026-10-30
+
+- PyPI shows a Python-specific description (`README.pypi.md`) instead of the repository README.
+
 ## 0.1.0 — 2026-10-29
 
 - Wiki: 17 concept pages (`wiki/`) published to the GitHub wiki; logo and plugin icon; README in

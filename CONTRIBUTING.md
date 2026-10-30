@@ -15,7 +15,8 @@ this on day one".
 | `templates/` | AGENTS.md and the docs skeleton | `{{placeholders}}` filled by the CLI |
 | `lib/`, `bin/` | the Node CLI | zero dependencies, Node ≥ 18 |
 | `src/anycrew/` | the Python CLI | zero dependencies, Python ≥ 3.9; must stay byte-identical to the Node CLI (`python3 tests/test_parity.py`) |
-| `docs/` | the wiki | one question per page |
+| `docs/` | the design docs | one question per page |
+| `README.pypi.md` | the PyPI description | Python commands only; keep in step with README.md |
 
 ## Workflow
 

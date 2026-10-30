@@ -4,9 +4,9 @@ build-backend = "hatchling.build"
 
 [project]
 name = "anycrew"
-version = "0.1.0"
+version = "0.1.1"
 description = "One crew of specialist AI agents for any coding assistant. Spec-driven, test-first, security-reviewed, model-tiered. Installs into Claude Code, OpenAI Codex, Google Antigravity, Cursor, OpenCode and GitHub Copilot."
-readme = "README.md"
+readme = "README.pypi.md"
 license = "MIT"
 requires-python = ">=3.9"
 authors = [{ name = "anycrew contributors" }]
@@ -46,4 +46,4 @@ packages = ["src/anycrew"]
 "package.json" = "anycrew/pack/package.json"
 
 [tool.hatch.build.targets.sdist]
-include = ["src/anycrew", "agents", "skills", "rules", "templates", "presets", "hooks", "models.json", "package.json", "README.md", "LICENSE", "CHANGELOG.md"]
+include = ["src/anycrew", "agents", "skills", "rules", "templates", "presets", "hooks", "models.json", "package.json", "README.md", "README.pypi.md", "LICENSE", "CHANGELOG.md"]
