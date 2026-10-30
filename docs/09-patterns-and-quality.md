@@ -26,8 +26,9 @@ refactoring.guru taxonomy of smells); they are summaries for choosing, not tutor
   needs a pattern.
 - **`/crew-review`** reports a smell only when it makes a likely change expensive, and names the
   refactoring.
-- **`/crew-refactor`** (reviewer then implementer): audit by smell, rank by change frequency, plan
-  five refactorings as single commits with tests green before and after.
+- **`/crew-refactor`** (quality-engineer, balanced): audit by smell, measure complexity and coverage,
+  rank by change frequency, plan five refactorings as single commits with tests green before and
+  after, then add the lint or layer rule that stops the smell returning.
 
 ## Choosing one or two, not all
 

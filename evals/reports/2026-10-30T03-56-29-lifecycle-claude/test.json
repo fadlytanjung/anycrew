@@ -1,0 +1,41 @@
+{
+  "step": {
+    "id": "test",
+    "prompt": "/crew-test 001 Map every AC of spec 001 to a test; add the missing ones at the right layer; keep `make check` green. Do not ask questions.",
+    "maxTurns": 80,
+    "checks": [
+      {
+        "type": "cmd",
+        "run": "make check"
+      },
+      {
+        "type": "cmd",
+        "run": "grep -rlE 'ac001|AC-001' backend frontend --include=*.py --include=*.ts --include=*.tsx | head -1 | grep ."
+      }
+    ],
+    "judge": "Read the test files under backend/ and frontend/ and docs/specs/001-*/spec.md. Score 5 if every AC of spec 001 has a test named after it, tests use fakes (no network), and make check is green. Score 3 if most ACs are covered. Score 1 if tests were loosened or ACs are unmapped."
+  },
+  "run": {
+    "cost": 3.114199500000001,
+    "turns": 30,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "cmd",
+      "run": "make check",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "cmd",
+      "run": "grep -rlE 'ac001|AC-001' backend frontend --include=*.py --include=*.ts --include=*.tsx | head -1 | grep .",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 3,
+    "reason": "Only AC-001-3, -4 and -5 have tests named after them (test_health.py, test_errors.py, test_config.py; 21 passed, make check green, TestClient only, no network, no test loosened); AC-001-1, -2 and -6 through -11 are mapped in docs/15-testing.md as pending or manual with no test, and frontend/ does not exist, so most but not all ACs are covered."
+  }
+}

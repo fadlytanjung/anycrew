@@ -110,5 +110,17 @@
     "seconds": 104,
     "error": null,
     "failing": []
+  },
+  {
+    "id": "test",
+    "pass": true,
+    "checks": "2/2",
+    "judge": 3,
+    "judgeWhy": "Only AC-001-3, -4 and -5 have tests named after them (test_health.py, test_errors.py, test_config.py; 21 passed, make check green, TestClient only, no network, no test loosened); AC-001-1, -2 and -6 through -11 are mapped in docs/15-testing.md as pending or manual with no test, and frontend/ does not exist, so most but not all ACs are covered.",
+    "costUsd": 3.114199500000001,
+    "turns": 30,
+    "seconds": 578,
+    "error": null,
+    "failing": []
   }
 ]

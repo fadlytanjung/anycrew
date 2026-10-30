@@ -12,5 +12,6 @@ Project: `/private/tmp/claude-501/-Users-fjung-dev-anycrew/fdfe655a-9014-4ea2-9f
 | implement-1 | ✅ | 2/2 | 4 | $1.22 | 8 | 149s | Commit ccbc901 implements only T001-01 with trailers 'Tasks: T001-01' and 'AC: AC-001-3', ticks it in tasks.md, updates docs/20, and backend |
 | implement-2 | ✅ | 1/1 | 5 | $0.92 | 6 | 80s | T001-02 is ticked in docs/specs/001-foundation/tasks.md and has its own commit b4a2da4 (feat(001): record layout and layer conventions, Task |
 | implement-3 | ✅ | 3/3 | 3 | $1.13 | 11 | 104s | make check is green (2 passed) and backend/src/teamly/api/routes/health.py exposes GET /api/health tested in backend/tests/integration/test_ |
+| test | ✅ | 2/2 | 3 | $3.11 | 30 | 578s | Only AC-001-3, -4 and -5 have tests named after them (test_health.py, test_errors.py, test_config.py; 21 passed, make check green, TestClien |
 
-**6/8 steps passed · total cost $11.07**
+**7/9 steps passed · total cost $14.19**

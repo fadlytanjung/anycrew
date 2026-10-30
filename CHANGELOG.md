@@ -2,7 +2,7 @@
 
 ## 0.2.0 — 2026-10-31
 
-- `/crew-patterns` and `/crew-refactor` with catalogues of architecture styles, design patterns and code smells; architect, implementer and reviewer consult them.
+- `/crew-patterns` and `/crew-refactor` with catalogues of architecture styles, design patterns and code smells; a new `quality-engineer` agent (balanced) owns smell audits, refactoring and the rules that make them stick; architect, implementer and reviewer consult the catalogues.
 - Interactive `anycrew init`: asks which assistants (default: the ones detected) and which preset.
 - Agents load in Antigravity plugins (no `model`/`tools` fields in canonical agents); the Claude Code plugin ships generated tiered agents in `.claude-plugin/agents/`.
 - Evals: Antigravity runner and judge, Gemini API judge, per-step timeout, CI workflow with Anthropic workload identity federation.

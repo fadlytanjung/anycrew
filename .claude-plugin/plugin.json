@@ -34,6 +34,7 @@
     "./.claude-plugin/agents/doc-writer.md",
     "./.claude-plugin/agents/implementer.md",
     "./.claude-plugin/agents/product-manager.md",
+    "./.claude-plugin/agents/quality-engineer.md",
     "./.claude-plugin/agents/release-engineer.md",
     "./.claude-plugin/agents/researcher.md",
     "./.claude-plugin/agents/reviewer.md",

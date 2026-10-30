@@ -26,9 +26,10 @@
 
 ---
 
-anycrew installs a ready-made engineering team into the coding assistant you already use. Sixteen
+anycrew installs a ready-made engineering team into the coding assistant you already use. Seventeen
 agents (brainstormer, product manager, architect, designer, spec writer, implementer, tester,
-reviewer, security reviewer, debugger, AI engineer, release engineer, doc writer, scout, crew lead)
+quality engineer, reviewer, security reviewer, debugger, AI engineer, release engineer, doc writer,
+scout, crew lead)
 follow one method from idea to a deployed MVP, and leave behind the documents a team can review: a
 constitution, a PRD, ADRs, specs with acceptance criteria, and a status page that says what is
 really built. Each agent declares how much model it needs, so cheap work runs on cheap models.
@@ -103,7 +104,7 @@ Every term has a page in the [wiki](wiki/Home.md). The short version:
 
 | | |
 |---|---|
-| **16 agents** | each with a job, inputs, outputs, a procedure, rules, stop conditions and a **model tier** |
+| **17 agents** | each with a job, inputs, outputs, a procedure, rules, stop conditions and a **model tier** |
 | **24 skills** (`/crew-*`) | the workflow as slash commands: status, brainstorm, research, prd, architecture, **patterns**, adr, design, spec, plan, tasks, implement, test, **refactor**, review, security, verify, debug, checkpoint, deploy-check, docs, llm, sync, init |
 | **6 rules** | spec-driven process, architecture boundaries, security and data, LLM features, testing, docs and status; plus backend and frontend rules generated from your preset |
 | **Docs skeleton** | constitution, brainstorm, research, PRD, traceability, architecture, data model, API, frontend, design system, conventions, security, testing, infra, observability, delivery plan, status, ADRs, specs |
@@ -178,6 +179,7 @@ person at every gate. Agents never approve their own work.
 | reviewer | strong | findings with file:line and a failure scenario; drift audit |
 | security-reviewer | strong | threat model, OWASP and LLM top-10 audit, test per fix |
 | release-engineer | balanced | build, pipeline, deploy, rollback, observability, cost guardrails |
+| quality-engineer | balanced | smell audit, refactorings one commit at a time, lint and layer rules that make it stick |
 | doc-writer | fast | README, docs index, changelog, the status page |
 
 ## Model tiers
@@ -185,7 +187,7 @@ person at every gate. Agents never approve their own work.
 | Tier | Claude Code | Antigravity | Codex | OpenCode | Used by |
 |---|---|---|---|---|---|
 | fast | haiku, low effort | flash | low effort | claude-haiku | scout, doc-writer |
-| balanced | sonnet, medium | flash | medium | claude-sonnet | implementer, tester, researcher, designer, release-engineer |
+| balanced | sonnet, medium | flash | medium | claude-sonnet | implementer, tester, researcher, designer, release-engineer, quality-engineer |
 | strong | opus, high | pro | high | claude-opus | brainstormer, product-manager, architect, spec-writer, reviewer, security-reviewer, debugger, ai-engineer, crew-lead |
 
 Override any cell per project in `.anycrew/config.json` under `models`. Cursor and Copilot default

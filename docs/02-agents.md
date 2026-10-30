@@ -20,6 +20,7 @@ prompt: role, inputs, outputs, procedure, rules, stop-and-ask conditions.
 | reviewer | strong | verify | 00, 13, spec, rules | — | findings with evidence; drift table |
 | security-reviewer | strong | verify | 14, 05, 09, 10 | 14, tests | threat model, audit, test per fix |
 | release-engineer | balanced | ship | 05, 16, 17, 14 | 16, 17, Dockerfile, CI | build, pipeline, deploy, rollback, observability |
+| quality-engineer | balanced | build | 13, 15, 00 | code, lint/layer rules, 13 | smell audit, refactor one commit at a time, rules that make it stick |
 | doc-writer | fast | record | docs, README | README, 20, glossary, changelog | the record stays true |
 
 Numbers refer to `docs/NN-*.md` in the project ([06 Project layout](06-project-layout.md)).
