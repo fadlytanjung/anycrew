@@ -10,5 +10,17 @@
     "seconds": 31,
     "error": null,
     "failing": []
+  },
+  {
+    "id": "brainstorm",
+    "pass": true,
+    "checks": "4/4",
+    "judge": 5,
+    "judgeWhy": "docs/01-brainstorm-and-decision.md has weighted criteria (4/3/3) in section 1.2, an 8-row problem scan, 8 options (A–H), a scoring table with shown arithmetic (e.g. B: 20+12+15=47) plus rationale for non-obvious scores, a one-paragraph decision a stranger could repeat, explicit out-of-scope list with a week-by-week cut line, six risks each with mitigation and owner, and three name candidates with verdicts.",
+    "costUsd": 1.44381025,
+    "turns": 12,
+    "seconds": 291,
+    "error": null,
+    "failing": []
   }
 ]

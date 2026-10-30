@@ -1,0 +1,67 @@
+{
+  "step": {
+    "id": "brainstorm",
+    "prompt": "/crew-brainstorm Teamly: a small SaaS where a team keeps shared to-do lists (sign in, create a workspace, invite teammates, lists, tasks, assign, complete). Constraints: two developers, four weeks to a demo, Python FastAPI + React, Postgres, deploy on one cloud. Judged on: demoable in 3 minutes, technical quality, usefulness to a 5-person team. Do not ask me questions; make reasonable assumptions and mark them [assumed]. Write docs/01-brainstorm-and-decision.md and finish.",
+    "maxTurns": 60,
+    "checks": [
+      {
+        "type": "exists",
+        "path": "docs/01-brainstorm-and-decision.md"
+      },
+      {
+        "type": "grep",
+        "path": "docs/01-brainstorm-and-decision.md",
+        "pattern": "(?i)## .*decision"
+      },
+      {
+        "type": "grep",
+        "path": "docs/01-brainstorm-and-decision.md",
+        "pattern": "\\[assumed\\]|\\[verified"
+      },
+      {
+        "type": "grep",
+        "path": "docs/01-brainstorm-and-decision.md",
+        "pattern": "(?i)out of scope"
+      }
+    ],
+    "judge": "Read docs/01-brainstorm-and-decision.md. Score 5 if it has inputs with weighted criteria, a problem scan, 5+ options, a scoring table with arithmetic, a one-paragraph decision a stranger could repeat, out-of-scope and a cut line, risks with mitigations, and name candidates. Score 3 if the decision and scoring exist but sections are thin. Score 1 if it is a generic essay without scoring or decision."
+  },
+  "run": {
+    "cost": 1.44381025,
+    "turns": 12,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": "docs/01-brainstorm-and-decision.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/01-brainstorm-and-decision.md",
+      "pattern": "(?i)## .*decision",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/01-brainstorm-and-decision.md",
+      "pattern": "\\[assumed\\]|\\[verified",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/01-brainstorm-and-decision.md",
+      "pattern": "(?i)out of scope",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "docs/01-brainstorm-and-decision.md has weighted criteria (4/3/3) in section 1.2, an 8-row problem scan, 8 options (A–H), a scoring table with shown arithmetic (e.g. B: 20+12+15=47) plus rationale for non-obvious scores, a one-paragraph decision a stranger could repeat, explicit out-of-scope list with a week-by-week cut line, six risks each with mitigation and owner, and three name candidates with verdicts."
+  }
+}

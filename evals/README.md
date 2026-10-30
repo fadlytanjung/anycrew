@@ -35,7 +35,14 @@ you pass `--use-api-key` (that is what CI does after the Anthropic workload-iden
 `.github/workflows/evals.yml`). A preflight call per engine runs first and aborts if auth is broken.
 
 Runners: `claude` (Claude Code, `claude -p`), `agy` (Antigravity CLI, `agy -p`). Judges: `claude`,
-`agy`, `none`. Codex (`codex exec`) is planned; the case files are runner-agnostic.
+`agy`, `gemini` (Gemini API with `GEMINI_API_KEY`; the harness bundles the project files into the
+prompt, for CI where no Google login exists; model via `GEMINI_JUDGE_MODEL`), `none`. Codex
+(`codex exec`) is planned; the case files are runner-agnostic.
+
+**In CI** (`.github/workflows/evals.yml`, run from the Actions tab): Claude Code produces, authenticated
+through Anthropic workload identity federation (no stored key), and the judge is `gemini` by default
+(secret `GEMINI_API_KEY`), `claude`, or `none`. The federation identifiers are in the workflow;
+repository variables of the same names override them.
 
 ## Suites
 

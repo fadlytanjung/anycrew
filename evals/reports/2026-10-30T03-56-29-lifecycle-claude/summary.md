@@ -5,5 +5,6 @@ Project: `/private/tmp/claude-501/-Users-fjung-dev-anycrew/fdfe655a-9014-4ea2-9f
 | Step | Result | Checks | Judge | Cost | Turns | Time | Note |
 |---|---|---|---|---|---|---|---|
 | status | ✅ | 0/0 | 5 | $0.64 | 2 | 31s | The reply states the project is initialised (all anchor files exist, no crew-init needed), names the phase as Discover because docs/01 is mi |
+| brainstorm | ✅ | 4/4 | 5 | $1.44 | 12 | 291s | docs/01-brainstorm-and-decision.md has weighted criteria (4/3/3) in section 1.2, an 8-row problem scan, 8 options (A–H), a scoring table wit |
 
-**1/1 steps passed · total cost $0.64**
+**2/2 steps passed · total cost $2.09**

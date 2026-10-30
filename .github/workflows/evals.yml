@@ -1,8 +1,9 @@
 name: evals
 # Runs the end-to-end lifecycle eval in CI on demand. Claude Code authenticates through Anthropic
-# workload identity federation (GitHub OIDC → short-lived Anthropic token), so no API key is stored.
-# Set these repository variables (Settings → Secrets and variables → Actions → Variables):
-#   ANTHROPIC_FEDERATION_RULE_ID, ANTHROPIC_ORGANIZATION_ID, ANTHROPIC_SERVICE_ACCOUNT_ID, ANTHROPIC_WORKSPACE_ID
+# workload identity federation (GitHub OIDC → short-lived Anthropic token), so no Anthropic key is
+# stored. The federation identifiers below are not secrets (the trust is the OIDC token bound to this
+# repository); repository variables of the same names override them if they ever change.
+# The Gemini judge needs one secret: GEMINI_API_KEY (Settings → Secrets and variables → Actions → Secrets).
 on:
   workflow_dispatch:
     inputs:
@@ -15,6 +16,11 @@ on:
       budget:
         description: Max USD per step
         default: '6'
+      judge:
+        description: Judge engine (claude = Anthropic via federation, gemini = Gemini API key, none)
+        default: gemini
+        type: choice
+        options: [gemini, claude, none]
 
 permissions:
   id-token: write
@@ -45,10 +51,10 @@ jobs:
             core.exportVariable('JWT', token);
       - name: Exchange for an Anthropic access token
         env:
-          RULE: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
-          ORG: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
-          SVAC: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
-          WRK: ${{ vars.ANTHROPIC_WORKSPACE_ID }}
+          RULE: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID || 'fdrl_011NrJoMW46UZQoZvWjBoXQq' }}
+          ORG: ${{ vars.ANTHROPIC_ORGANIZATION_ID || '07ea708f-23e4-4e17-b5b0-0cf2cc45c101' }}
+          SVAC: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID || 'svac_01EyGkGSE6S387hiNzrL7xuX' }}
+          WRK: ${{ vars.ANTHROPIC_WORKSPACE_ID || 'wrkspc_01SMC75sRrvwUbuFAqrsoEPg' }}
         run: |
           resp=$(curl -sS https://api.anthropic.com/v1/oauth/token -H "content-type: application/json" --data @- <<JSON
           {
@@ -65,9 +71,11 @@ jobs:
           if [ -z "$token" ]; then echo "token exchange failed:"; printf '%s' "$resp" | jq 'with_entries(if (.key | test("token$")) then .value = "<redacted>" else . end)'; exit 1; fi
           echo "::add-mask::$token"
           echo "ANTHROPIC_AUTH_TOKEN=$token" >> "$GITHUB_ENV"
-      - name: Run the eval
+      - name: Run the eval (Claude produces, ${{ inputs.judge }} judges)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          node evals/run.mjs --suite "${{ inputs.suite }}" --runner claude --use-api-key --budget "${{ inputs.budget }}" \
+          node evals/run.mjs --suite "${{ inputs.suite }}" --runner claude --judge "${{ inputs.judge }}" --use-api-key --budget "${{ inputs.budget }}" \
             ${{ inputs.until && format('--until {0}', inputs.until) || '' }}
       - uses: actions/upload-artifact@v4
         if: always()

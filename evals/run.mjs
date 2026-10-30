@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // anycrew end-to-end eval harness. See evals/README.md.
-//   node evals/run.mjs --suite lifecycle --runner claude|agy [--judge claude|agy|none] [--dir <path>] [--until <stepId>] [--from <stepId>] [--keep] [--budget 5] [--use-api-key]
+//   node evals/run.mjs --suite lifecycle --runner claude|agy [--judge claude|agy|gemini|none] [--dir <path>] [--until <stepId>] [--from <stepId>] [--keep] [--budget 5] [--use-api-key]
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -11,7 +11,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = parse(process.argv.slice(2));
 const suiteId = args.suite ?? 'lifecycle';
 const runner = args.runner ?? 'claude';           // claude | agy
-const judgeWith = args.judge ?? (runner === 'agy' ? 'agy' : 'claude');   // claude | agy | none
+const judgeWith = args.judge ?? (runner === 'agy' ? 'agy' : 'claude');   // claude | agy | gemini | none
 const suite = JSON.parse(fs.readFileSync(path.join(ROOT, 'evals', 'cases', `${suiteId}.json`), 'utf8'));
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 const reportDir = path.join(ROOT, 'evals', 'reports', `${stamp}-${suiteId}-${runner}`);
@@ -31,6 +31,11 @@ delete ENV.CLAUDECODE; delete ENV.CLAUDE_CODE_ENTRYPOINT;
 
 // 0. Preflight: one cheap call per engine in use must succeed before any step runs.
 for (const engine of new Set([runner, judgeWith].filter((e) => e !== 'none'))) {
+  if (engine === 'gemini') {
+    const g = geminiAsk('Reply with the single word OK.');
+    if (!/OK/i.test(g.text)) { log(`preflight failed for gemini: ${g.error ?? g.text.slice(0, 200)}`); fs.rmSync(reportDir, { recursive: true, force: true }); process.exit(2); }
+    log(`preflight ok: gemini (${GEMINI_MODEL})`); continue;
+  }
   const r = engine === 'agy'
     ? spawnSync('agy', ['-p', 'Reply with the single word OK.', '--output-format', 'json'], { encoding: 'utf8', env: ENV, cwd: os.tmpdir() })
     : spawnSync('claude', ['-p', 'Reply with the single word OK.', '--output-format', 'json', '--max-turns', '1', '--no-session-persistence'], { encoding: 'utf8', env: ENV, cwd: os.tmpdir() });
@@ -104,8 +109,35 @@ function runAgy(prompt, { cwd }) {
   return { reply, cost: null, turns: json?.num_turns ?? null, tokens: json?.usage?.total_tokens ?? null, error: res.status || json?.status === 'FAILED' ? `exit ${res.status}: ${(json?.response ?? res.stderr ?? '').toString().slice(0, 400)}` : null };
 }
 
+// Gemini API judge (for CI, where no Google login exists): the harness bundles the project's docs,
+// contracts, spec folders, git log and the reply into one prompt. Needs GEMINI_API_KEY.
+const GEMINI_MODEL = process.env.GEMINI_JUDGE_MODEL ?? 'gemini-flash-latest';
+function geminiAsk(prompt) {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) return { text: '', error: 'GEMINI_API_KEY is not set' };
+  const body = JSON.stringify({ contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { temperature: 0 } });
+  const r = spawnSync('curl', ['-sS', '-X', 'POST', `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`, '-H', 'content-type: application/json', '-H', `x-goog-api-key: ${key}`, '--data-binary', '@-'], { input: body, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  try { const j = JSON.parse(r.stdout); if (j.error) return { text: '', error: `${j.error.status}: ${j.error.message}` }; return { text: j.candidates?.[0]?.content?.parts?.map((p) => p.text).join('') ?? '' }; }
+  catch { return { text: '', error: (r.stderr || r.stdout || '').slice(0, 200) }; }
+}
+function bundleProject(reply) {
+  const parts = [];
+  let size = 0;
+  const add = (label, text) => { if (size > 600_000) return; parts.push(`\n\n===== ${label} =====\n${text}`); size += text.length; };
+  add('agent reply', reply);
+  try { add('git log -5 --stat', execFileSync('git', ['log', '-5', '--stat'], { cwd: projectDir, encoding: 'utf8' })); } catch {}
+  const walk = (rel) => { const abs = path.join(projectDir, rel); if (!fs.existsSync(abs)) return; for (const d of fs.readdirSync(abs, { withFileTypes: true })) { const r = path.join(rel, d.name); if (d.isDirectory()) { if (!/node_modules|\.venv|\.git$|assets/.test(d.name)) walk(r); } else if (/\.(md|ya?ml|json|toml|py|ts|tsx|txt|cfg|ini|Makefile)$|^Makefile$/.test(d.name) && fs.statSync(path.join(projectDir, r)).size < 60_000) add(r, fs.readFileSync(path.join(projectDir, r), 'utf8')); } };
+  for (const top of ['docs', 'contracts', 'backend', 'frontend', 'Makefile', 'AGENTS.md', 'README.md']) { const abs = path.join(projectDir, top); if (fs.existsSync(abs)) (fs.statSync(abs).isDirectory() ? walk(top) : add(top, fs.readFileSync(abs, 'utf8'))); }
+  return parts.join('');
+}
+
 function judgeStep(step, reply) {
   if (judgeWith === 'none') return null;
+  if (judgeWith === 'gemini') {
+    const g = geminiAsk(`You are grading the output of a coding agent step. The project's files, git log and the agent's final reply follow the rubric. Grade only from that material.\n\nRubric: ${step.judge}\n\nAnswer with exactly one line of JSON: {"score": <1-5>, "reason": "<one or two sentences naming the evidence>"}${bundleProject(reply)}`);
+    const m = /\{\s*"score"\s*:\s*(\d)\s*,\s*"reason"\s*:\s*"([\s\S]*?)"\s*\}/.exec(g.text ?? '');
+    return m ? { score: Number(m[1]), reason: m[2], by: 'gemini' } : { score: 0, reason: `judge gave no JSON: ${g.error ?? String(g.text).slice(0, 200)}`, by: 'gemini' };
+  }
   const prompt = `You are grading the output of a coding agent step inside the project at the current directory. Read the files the rubric names (and the git log when it says so). The agent's final reply is in the file .anycrew-eval-reply.md. Do not change any file.\n\nRubric: ${step.judge}\n\nAnswer with exactly one line of JSON: {"score": <1-5>, "reason": "<one or two sentences naming the evidence>"}`;
   fs.writeFileSync(path.join(projectDir, '.anycrew-eval-reply.md'), reply);
   if (judgeWith === 'agy') {
