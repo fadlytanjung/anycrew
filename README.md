@@ -90,8 +90,8 @@ Every term has a page in the [wiki](wiki/Home.md). The short version:
 | **Spec · plan · tasks** | what and why · how and which files · ordered test-first checklist | `docs/specs/NNN-name/`, the unit of work |
 | **Implementation status** | the only doc that says what is actually built, with the test that proves it | `docs/20`, kept true by `/crew-checkpoint` |
 | **Gate** | a point where a person decides before the next phase | decision, P0 scope, ADRs, spec Ready, production deploy |
-| **Agent** | a specialist with its own prompt, tools and model the assistant delegates to | 16 in `agents/` |
-| **Skill** | a procedure loaded on demand, typed as `/name` | 22 `/crew-*` in `skills/` |
+| **Agent** | a specialist with its own prompt, tools and model the assistant delegates to | 17 in `agents/` |
+| **Skill** | a procedure loaded on demand, typed as `/name` | 24 `/crew-*` in `skills/` |
 | **Rule** | always-on or path-scoped guidance | 6 in `rules/`, plus stack rules from your preset |
 | **Tier** | how much model an agent needs: `fast`, `balanced`, `strong` | mapped per assistant in `models.json` |
 | **Preset** | a JSON description of a stack: commands, layout, conventions | `presets/`, or your own file |
