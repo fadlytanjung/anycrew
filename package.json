@@ -17,8 +17,8 @@
     "presets",
     "hooks",
     "models.json",
-    "README.md",
-    "LICENSE"
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
     "validate": "node scripts/validate.mjs",
@@ -26,7 +26,9 @@
     "list": "node bin/anycrew.mjs list",
     "test:parity": "python3 tests/test_parity.py",
     "bump": "node scripts/bump.mjs",
-    "release:check": "node scripts/release-check.mjs"
+    "release:check": "node scripts/release-check.mjs",
+    "prepack": "cp README.md .README.repo.md && cp README.npm.md README.md",
+    "postpack": "mv .README.repo.md README.md"
   },
   "engines": {
     "node": ">=18"

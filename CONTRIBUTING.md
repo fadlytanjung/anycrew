@@ -16,7 +16,7 @@ this on day one".
 | `lib/`, `bin/` | the Node CLI | zero dependencies, Node ≥ 18 |
 | `src/anycrew/` | the Python CLI | zero dependencies, Python ≥ 3.9; must stay byte-identical to the Node CLI (`python3 tests/test_parity.py`) |
 | `docs/` | the design docs | one question per page |
-| `README.pypi.md` | the PyPI description | Python commands only; keep in step with README.md |
+| `README.pypi.md`, `README.npm.md` | the PyPI and npm descriptions | Python-only / Node-only commands; keep in step with README.md (npm swaps it in during `prepack`) |
 
 ## Workflow
 
