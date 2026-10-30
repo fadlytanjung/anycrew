@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "anycrew",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "One crew of specialist agents for any coding assistant: a spec-driven workflow (brainstorm, PRD, architecture, spec, implement, test, review, security, debug, release, docs) with per-agent model tiers. Skills in skills/, agents in agents/, rules in rules/.",
   "author": {
     "name": "anycrew contributors",
@@ -20,9 +20,9 @@
   "homepage": "https://github.com/fadlytanjung/anycrew",
   "repository": "https://github.com/fadlytanjung/anycrew",
   "suggestedPrompts": [
-    "/crew-status \u2014 where is this project and what is next?",
-    "/crew-brainstorm \u2014 turn my idea into a documented decision",
-    "/crew-spec \u2014 specify the next feature before coding it"
+    "/crew-status — where is this project and what is next?",
+    "/crew-brainstorm — turn my idea into a documented decision",
+    "/crew-spec — specify the next feature before coding it"
   ],
   "logo": "assets/icon.svg"
 }

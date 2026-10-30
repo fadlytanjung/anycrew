@@ -1,6 +1,6 @@
 {
   "name": "anycrew",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "One crew of specialist agents (brainstorm, PRD, architecture, spec, implement, test, review, security, debug, LLM features, release, docs) with a spec-driven workflow and per-agent model tiers. Installs into Claude Code, Codex, Antigravity, Cursor, OpenCode and Copilot.",
   "author": {
     "name": "anycrew contributors",

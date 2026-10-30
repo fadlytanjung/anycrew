@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 — unreleased
+## 0.2.0 — 2026-10-31
 
 - `/crew-patterns` and `/crew-refactor` with catalogues of architecture styles, design patterns and code smells; architect, implementer and reviewer consult them.
 - Interactive `anycrew init`: asks which assistants (default: the ones detected) and which preset.
