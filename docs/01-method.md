@@ -11,9 +11,9 @@ documents those products kept.
 | Setup | `/crew-init` | crew-lead | `AGENTS.md`, `docs/00`, `docs/20`, rules, hooks | check command runs |
 | Discover | `/crew-brainstorm`, `/crew-research` | brainstormer (strong), researcher (balanced) | `docs/01`, `docs/02` | a person approves the decision |
 | Define | `/crew-prd` | product-manager (strong) | `docs/03`, `docs/04` | P0 fits the deadline; IDs exist |
-| Design | `/crew-architecture`, `/crew-adr`, `/crew-design`, `/crew-llm` | architect, designer, ai-engineer | `docs/05`, `09`, `10`, `11`, `12`, `06`, ADRs, `contracts/` | constitution check; ADRs approved |
+| Design | `/crew-architecture`, `/crew-patterns`, `/crew-adr`, `/crew-design`, `/crew-llm` | architect, designer, ai-engineer | `docs/05`, `09`, `10`, `11`, `12`, `06`, ADRs, `contracts/`, pattern table in `docs/13` | constitution check; ADRs approved |
 | Specify | `/crew-spec`, `/crew-plan`, `/crew-tasks` | spec-writer (strong) | `docs/specs/NNN-*/{spec,plan,tasks}.md` | every AC testable; tasks small and ordered |
-| Build | `/crew-implement`, `/crew-test`, `/crew-debug` | implementer, tester (balanced), debugger (strong) | code, tests, ticked tasks | check command green; one task, one commit |
+| Build | `/crew-implement`, `/crew-test`, `/crew-debug`, `/crew-refactor` | implementer, tester (balanced), debugger, reviewer (strong) | code, tests, ticked tasks | check command green; one task, one commit |
 | Verify | `/crew-review`, `/crew-security`, `/crew-verify` | reviewer, security-reviewer (strong) | findings, conformance table, `docs/14` | no Critical open; drift decided by a person |
 | Ship | `/crew-deploy-check` | release-engineer (balanced) | `docs/16`, `docs/17`, checklist | checklist complete; rollback known; person approves prod |
 | Record | `/crew-checkpoint`, `/crew-docs` | doc-writer (fast) | `docs/20`, README, changelog | status matches the tree |

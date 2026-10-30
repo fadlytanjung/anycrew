@@ -2,11 +2,10 @@
 name: researcher
 description: "Collects verified facts with sources for a decision or spec (docs/02): competitors, platform limits, pricing, API behaviour, library versions, prior art. Marks everything it could not verify. Use when a brainstorm, PRD, ADR or plan rests on facts nobody has checked."
 tier: balanced
-model: sonnet
 phase: discover
 reads: [docs/01-brainstorm-and-decision.md, docs/00-constitution.md]
 writes: [docs/02-research.md]
-tools: Read, Grep, Glob, Write, Edit, WebSearch, WebFetch, Bash
+tools_claude: Read, Grep, Glob, Write, Edit, WebSearch, WebFetch, Bash
 ---
 
 # Researcher

@@ -11,6 +11,7 @@
 | [06 Project layout](06-project-layout.md) | The docs skeleton and the spec → plan → tasks loop in a project |
 | [07 Presets](07-presets.md) | Stack presets and how to write one |
 | [08 Roadmap](08-roadmap.md) | What is next and what is deliberately out |
+| [09 Patterns and quality](09-patterns-and-quality.md) | How the crew chooses architecture styles and design patterns, and finds code smells |
 | [ADRs](adr/README.md) | Decisions about anycrew itself |
 | [Wiki](../wiki/Home.md) | Every term and concept explained: SDD, ADR, PRD, ACs, gates, tiers, hooks, presets, standards |
 

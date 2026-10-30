@@ -16,8 +16,9 @@ order below.
 8. [Agents, Skills and Rules](Agents-Skills-Rules.md): the three kinds of customisation
 9. [Model Tiers](Model-Tiers.md): fast, balanced, strong
 10. [Gates and Human-in-the-Loop](Gates-and-Human-in-the-Loop.md)
-11. [Hooks](Hooks.md), [Presets](Presets.md), [Standards](Standards.md)
-12. [Glossary](Glossary.md) and [FAQ](FAQ.md)
+11. [Patterns and Quality](Patterns-and-Quality.md): architecture styles, design patterns, code smells
+12. [Hooks](Hooks.md), [Presets](Presets.md), [Standards](Standards.md)
+13. [Glossary](Glossary.md) and [FAQ](FAQ.md)
 
 ## Where things live
 

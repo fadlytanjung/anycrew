@@ -31,16 +31,18 @@ Numbers refer to `docs/NN-*.md` in the project ([06 Project layout](06-project-l
 name: implementer                 # equals the file name
 description: "…when to use…"      # ≤ 1024 chars; this is what the assistant reads to delegate
 tier: balanced                    # fast | balanced | strong  (portable)
-model: sonnet                     # Claude alias derived from the tier; validated against models.json
 phase: build
 reads: [AGENTS.md, docs/00-constitution.md]
 writes: [source code, tests]
-tools: Read, Grep, Glob, Write, Edit, Bash   # Claude tool syntax; other tools ignore it
+tools_claude: Read, Grep, Glob, Write, Edit, Bash   # Claude tool allow-list; other tools ignore it
 ---
 ```
 
-`tier` is the portable field. `model` exists so the repository doubles as a Claude Code plugin
-without a build step; `npm run validate` fails if it drifts from `models.json`.
+`tier` is the portable field; no canonical agent carries a `model` (Antigravity rejects anything but
+its own tier names, and Claude aliases would age). Per-tool models are generated: `anycrew init`
+writes them into a project, and `npm run build:claude` writes `.claude-plugin/agents/` so the
+Claude Code plugin install gets tiers too. The root `agents/` folder is what Antigravity loads from
+the plugin, with `model: inherit`.
 
 ## Customising
 

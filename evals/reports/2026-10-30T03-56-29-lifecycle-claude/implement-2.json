@@ -1,0 +1,33 @@
+{
+  "step": {
+    "id": "implement-2",
+    "prompt": "/crew-implement 001 Continue with the next unchecked task of spec 001. Do not ask questions.",
+    "maxTurns": 120,
+    "checks": [
+      {
+        "type": "grep",
+        "glob": "docs/specs/001-*/tasks.md",
+        "pattern": "- \\[x\\] \\*\\*T001-02"
+      }
+    ],
+    "judge": "Read docs/specs/001-*/tasks.md and `git log -3 --stat`. Score 5 if the second task is ticked with its own commit and test, 3 if ticked without a test, 1 if nothing moved."
+  },
+  "run": {
+    "cost": 0.9231625999999999,
+    "turns": 6,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "grep",
+      "glob": "docs/specs/001-*/tasks.md",
+      "pattern": "- \\[x\\] \\*\\*T001-02",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "T001-02 is ticked in docs/specs/001-foundation/tasks.md and has its own commit b4a2da4 (feat(001): record layout and layer conventions, Tasks: T001-02) adding docs/13-conventions.md; the commit contains no test, but T001-02 is a non-TDD docs-only task that specifies no test, and the reply reports make check green (1 passed)."
+  }
+}

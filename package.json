@@ -21,14 +21,15 @@
     "README.md"
   ],
   "scripts": {
-    "validate": "node scripts/validate.mjs",
+    "validate": "node scripts/build-claude.mjs >/dev/null && node scripts/validate.mjs",
     "test": "node scripts/validate.mjs && node scripts/smoke.mjs",
     "list": "node bin/anycrew.mjs list",
     "test:parity": "python3 tests/test_parity.py",
     "bump": "node scripts/bump.mjs",
     "release:check": "node scripts/release-check.mjs",
     "prepack": "cp README.md .README.repo.md && cp README.npm.md README.md",
-    "postpack": "mv .README.repo.md README.md"
+    "postpack": "mv .README.repo.md README.md",
+    "build:claude": "node scripts/build-claude.mjs"
   },
   "engines": {
     "node": ">=18"

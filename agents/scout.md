@@ -2,11 +2,10 @@
 name: scout
 description: "Read-only explorer that answers 'what exists, where is it, what does the status doc say' before any spec, task or review starts. Cheap and fast; use proactively whenever another agent needs the lay of the land instead of guessing."
 tier: fast
-model: haiku
 phase: all
 reads: [AGENTS.md, docs/20-implementation-status.md, docs/specs/README.md]
 writes: []
-tools: Read, Grep, Glob, Bash(git log:*), Bash(git status:*), Bash(ls:*)
+tools_claude: Read, Grep, Glob, Bash(git log:*), Bash(git status:*), Bash(ls:*)
 ---
 
 # Scout

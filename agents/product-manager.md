@@ -2,11 +2,10 @@
 name: product-manager
 description: "Writes and maintains the PRD (docs/03) and the requirements traceability table (docs/04): personas, journeys, P0/P1/P2 scope, functional and non-functional requirements with stable IDs, success metrics. Use after a decision exists and before any architecture or spec is written."
 tier: strong
-model: opus
 phase: define
 reads: [docs/01-brainstorm-and-decision.md, docs/02-research.md, docs/00-constitution.md]
 writes: [docs/03-prd.md, docs/04-requirements-traceability.md]
-tools: Read, Grep, Glob, Write, Edit
+tools_claude: Read, Grep, Glob, Write, Edit
 ---
 
 # Product manager

@@ -10,7 +10,7 @@ const E = (m) => errors.push(m);
 const pack = loadPack();
 
 const SKILL_FIELDS = new Set(['name', 'description', 'license', 'compatibility', 'metadata', 'allowed-tools']);
-const AGENT_FIELDS = new Set(['name', 'description', 'tier', 'model', 'phase', 'reads', 'writes', 'tools']);
+const AGENT_FIELDS = new Set(['name', 'description', 'tier', 'phase', 'reads', 'writes', 'tools_claude']);
 
 for (const a of pack.agents) {
   const d = a.data;
@@ -18,8 +18,8 @@ for (const a of pack.agents) {
   if (!d.description || d.description.length < 40) E(`agents/${a.id}.md: description missing or too short`);
   if (d.description && d.description.length > 1024) E(`agents/${a.id}.md: description over 1024 chars`);
   if (!TIERS.includes(d.tier)) E(`agents/${a.id}.md: tier must be one of ${TIERS.join('|')}`);
-  const claude = pack.models.tools.claude[d.tier];
-  if (claude && d.model !== claude.model) E(`agents/${a.id}.md: model "${d.model}" must equal models.json claude.${d.tier}.model ("${claude.model}")`);
+  if ('model' in d) E(`agents/${a.id}.md: canonical agents carry \`tier\`, never \`model\` (Antigravity rejects non-tier values; per-tool models are generated)`);
+  if ('tools' in d) E(`agents/${a.id}.md: use \`tools_claude\` (Antigravity expects \`tools\` to be a list of its own tool names)`);
   for (const k of Object.keys(d)) if (!AGENT_FIELDS.has(k)) warn.push(`agents/${a.id}.md: unknown front matter field "${k}"`);
   if (a.body.length > 12000) warn.push(`agents/${a.id}.md: body is ${a.body.length} chars; keep agents under ~12k for context cost`);
   if (!/^# /m.test(a.body)) E(`agents/${a.id}.md: body needs a top-level heading`);

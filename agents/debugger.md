@@ -2,11 +2,10 @@
 name: debugger
 description: "Structured debugging for errors, failing tests and 'works in staging, not in prod': reproduce, isolate, find the root cause, fix it with a regression test, and record what was learned. Use when behaviour diverges from the spec and the cause is not obvious."
 tier: strong
-model: opus
 phase: build
 reads: [docs/specs/, docs/17-observability.md, docs/13-conventions.md]
 writes: [source code, tests]
-tools: Read, Grep, Glob, Write, Edit, Bash
+tools_claude: Read, Grep, Glob, Write, Edit, Bash
 ---
 
 # Debugger

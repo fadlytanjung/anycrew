@@ -1,0 +1,89 @@
+{
+  "step": {
+    "id": "prd",
+    "prompt": "/crew-prd Write the PRD for the decision in docs/01. Do not ask questions; mark assumptions. Keep P0 small enough for a 3-minute demo. Write docs/03-prd.md and docs/04-requirements-traceability.md and finish.",
+    "maxTurns": 60,
+    "checks": [
+      {
+        "type": "exists",
+        "path": "docs/03-prd.md"
+      },
+      {
+        "type": "exists",
+        "path": "docs/04-requirements-traceability.md"
+      },
+      {
+        "type": "grep",
+        "path": "docs/03-prd.md",
+        "pattern": "FR-00[1-9]"
+      },
+      {
+        "type": "grep",
+        "path": "docs/03-prd.md",
+        "pattern": "NFR-00[1-9]"
+      },
+      {
+        "type": "grep",
+        "path": "docs/03-prd.md",
+        "pattern": "(?i)cut line"
+      },
+      {
+        "type": "grep",
+        "path": "docs/04-requirements-traceability.md",
+        "pattern": "FR-001"
+      }
+    ],
+    "judge": "Read docs/03-prd.md and docs/04-requirements-traceability.md. Score 5 if personas have jobs and success moments, journeys are numbered steps, P0/P1/P2 are explicit with a one-sentence cut line, every FR/NFR is one testable 'must' sentence with a priority, metrics have targets, there is a constitution check, no technologies are named in requirements, and docs/04 has one row per requirement. Score 3 if IDs exist but requirements are vague or scope is not prioritised. Score 1 if it is a feature list."
+  },
+  "run": {
+    "cost": 1.5255230000000004,
+    "turns": 14,
+    "error": "exit 1: "
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": "docs/03-prd.md",
+      "ok": false,
+      "detail": "missing docs/03-prd.md"
+    },
+    {
+      "type": "exists",
+      "path": "docs/04-requirements-traceability.md",
+      "ok": false,
+      "detail": "missing docs/04-requirements-traceability.md"
+    },
+    {
+      "type": "grep",
+      "path": "docs/03-prd.md",
+      "pattern": "FR-00[1-9]",
+      "ok": false,
+      "detail": "docs/03-prd.md: /FR-00[1-9]/ not found"
+    },
+    {
+      "type": "grep",
+      "path": "docs/03-prd.md",
+      "pattern": "NFR-00[1-9]",
+      "ok": false,
+      "detail": "docs/03-prd.md: /NFR-00[1-9]/ not found"
+    },
+    {
+      "type": "grep",
+      "path": "docs/03-prd.md",
+      "pattern": "(?i)cut line",
+      "ok": false,
+      "detail": "docs/03-prd.md: /(?i)cut line/ not found"
+    },
+    {
+      "type": "grep",
+      "path": "docs/04-requirements-traceability.md",
+      "pattern": "FR-001",
+      "ok": false,
+      "detail": "docs/04-requirements-traceability.md: /FR-001/ not found"
+    }
+  ],
+  "judge": {
+    "score": 1,
+    "reason": "docs/03-prd.md and docs/04-requirements-traceability.md do not exist; the docs/ folder holds only the constitution, brainstorm, status and specs template, and the agent's reply in .anycrew-eval-reply.md is just 'Request timed out', so no PRD, personas, prioritised scope, requirements or traceability rows were produced."
+  }
+}

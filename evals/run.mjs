@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // anycrew end-to-end eval harness. See evals/README.md.
-//   node evals/run.mjs --suite lifecycle --runner claude|agy [--judge claude|agy|gemini|none] [--dir <path>] [--until <stepId>] [--from <stepId>] [--keep] [--budget 5] [--use-api-key]
+//   node evals/run.mjs --suite lifecycle --runner claude|agy [--judge claude|agy|gemini|none] [--dir <path>] [--until <stepId>] [--from <stepId>] [--keep] [--budget 5] [--step-timeout 45] [--use-api-key]
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -18,6 +18,7 @@ const reportDir = path.join(ROOT, 'evals', 'reports', `${stamp}-${suiteId}-${run
 fs.mkdirSync(reportDir, { recursive: true });
 const projectDir = path.resolve(args.dir ?? fs.mkdtempSync(path.join(os.tmpdir(), `anycrew-eval-${suiteId}-`)));
 const budgetPerStep = Number(args.budget ?? 6);
+const stepTimeoutMs = Number(args.stepTimeout ?? 45) * 60 * 1000;   // minutes; a hung API call must not block the suite
 const log = (...a) => { const line = a.join(' '); console.log(line); fs.appendFileSync(path.join(reportDir, 'run.log'), line + '\n'); };
 
 log(`anycrew eval · suite ${suiteId} · runner ${runner}\nproject: ${projectDir}\nreport:  ${reportDir}`);
@@ -78,7 +79,7 @@ for (const step of suite.steps) {
   const r = { id: step.id, pass, checks: `${checksOk}/${checks.length}`, judge: judge?.score ?? null, judgeWhy: judge?.reason ?? null, costUsd: run.cost, turns: run.turns, seconds, error: run.error, failing: checks.filter((c) => !c.ok).map((c) => c.detail) };
   results.push(r);
   fs.writeFileSync(path.join(reportDir, `${step.id}.json`), JSON.stringify({ step, run: { ...run, reply: undefined }, checks, judge }, null, 2));
-  log(`${pass ? 'PASS' : 'FAIL'}  checks ${r.checks}  judge ${r.judge ?? '-'}  $${run.cost?.toFixed(2) ?? '?'}  ${run.turns ?? '?'} turns  ${seconds}s${r.failing.length ? '\n  ' + r.failing.join('\n  ') : ''}${judge ? '\n  judge: ' + judge.reason : ''}`);
+  log(`${pass ? 'PASS' : 'FAIL'}  checks ${r.checks}  judge ${r.judge ?? '-'}  $${run.cost?.toFixed(2) ?? '?'}  ${run.turns ?? '?'} turns  ${seconds}s${run.error ? '\n  error: ' + run.error : ''}${r.failing.length ? '\n  ' + r.failing.join('\n  ') : ''}${judge ? '\n  judge: ' + judge.reason : ''}`);
   writeSummary(results);
   if (args.until === step.id) break;
 }
@@ -95,15 +96,17 @@ function runStep(step) {
   const cmd = ['claude', '-p', step.prompt, '--output-format', 'json', '--permission-mode', 'acceptEdits',
     '--allowedTools', 'Read,Write,Edit,MultiEdit,Glob,Grep,Bash,Agent,TodoWrite,WebSearch,WebFetch',
     '--max-turns', String(step.maxTurns ?? 60), '--max-budget-usd', String(budgetPerStep), '--no-session-persistence'];
-  const res = spawnSync(cmd[0], cmd.slice(1), { cwd: projectDir, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: ENV });
+  const res = spawnSync(cmd[0], cmd.slice(1), { cwd: projectDir, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: ENV, timeout: stepTimeoutMs, killSignal: 'SIGTERM' });
   let json = null;
   try { json = JSON.parse(res.stdout); } catch { /* text fallback */ }
+  const timedOut = res.error?.code === 'ETIMEDOUT' || res.signal === 'SIGTERM';
   const reply = json?.result ?? res.stdout ?? '';
-  return { reply, cost: json?.total_cost_usd ?? null, turns: json?.num_turns ?? null, error: res.status ? `exit ${res.status}: ${(res.stderr || '').slice(0, 400)}` : (json?.is_error ? String(json.result).slice(0, 400) : null) };
+  const error = timedOut ? `step timed out after ${stepTimeoutMs / 60000} min (killed)` : res.status ? `exit ${res.status}: ${(res.stderr || json?.result || '').toString().slice(0, 400)}` : (json?.is_error ? String(json.result).slice(0, 400) : null);
+  return { reply: timedOut ? `(timed out)\n${reply}` : reply, cost: json?.total_cost_usd ?? null, turns: json?.num_turns ?? null, error };
 }
 
 function runAgy(prompt, { cwd }) {
-  const res = spawnSync('agy', ['-p', prompt, '--output-format', 'json'], { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: ENV });
+  const res = spawnSync('agy', ['-p', prompt, '--output-format', 'json'], { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: ENV, timeout: stepTimeoutMs, killSignal: 'SIGTERM' });
   let json = null; try { json = JSON.parse(res.stdout); } catch {}
   const reply = json?.response ?? res.stdout ?? '';
   return { reply, cost: null, turns: json?.num_turns ?? null, tokens: json?.usage?.total_tokens ?? null, error: res.status || json?.status === 'FAILED' ? `exit ${res.status}: ${(json?.response ?? res.stderr ?? '').toString().slice(0, 400)}` : null };
@@ -187,7 +190,7 @@ function globSync(pattern) {
 }
 
 function writeSummary(results) {
-  const rows = results.map((r) => `| ${r.id} | ${r.pass ? '✅' : '❌'} | ${r.checks} | ${r.judge ?? '-'} | ${r.costUsd != null ? '$' + r.costUsd.toFixed(2) : '-'} | ${r.turns ?? '-'} | ${r.seconds}s | ${(r.failing[0] ?? r.judgeWhy ?? '').replace(/\|/g, '/').slice(0, 140)} |`);
+  const rows = results.map((r) => `| ${r.id} | ${r.pass ? '✅' : '❌'} | ${r.checks} | ${r.judge ?? '-'} | ${r.costUsd != null ? '$' + r.costUsd.toFixed(2) : '-'} | ${r.turns ?? '-'} | ${r.seconds}s | ${(r.error ?? r.failing[0] ?? r.judgeWhy ?? '').replace(/\|/g, '/').slice(0, 140)} |`);
   const total = results.reduce((n, r) => n + (r.costUsd ?? 0), 0);
   const md = `# anycrew eval · ${suiteId} · ${runner} · ${stamp}\n\nProject: \`${projectDir}\`\n\n| Step | Result | Checks | Judge | Cost | Turns | Time | Note |\n|---|---|---|---|---|---|---|---|\n${rows.join('\n')}\n\n**${results.filter((r) => r.pass).length}/${results.length} steps passed · total cost $${total.toFixed(2)}**\n`;
   fs.writeFileSync(path.join(reportDir, 'summary.md'), md);

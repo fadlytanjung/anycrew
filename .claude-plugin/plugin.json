@@ -23,5 +23,23 @@
     "./skills/"
   ],
   "hooks": "./hooks/hooks.json",
-  "icon": "./.claude-plugin/icon.png"
+  "icon": "./.claude-plugin/icon.png",
+  "agents": [
+    "./.claude-plugin/agents/ai-engineer.md",
+    "./.claude-plugin/agents/architect.md",
+    "./.claude-plugin/agents/brainstormer.md",
+    "./.claude-plugin/agents/crew-lead.md",
+    "./.claude-plugin/agents/debugger.md",
+    "./.claude-plugin/agents/designer.md",
+    "./.claude-plugin/agents/doc-writer.md",
+    "./.claude-plugin/agents/implementer.md",
+    "./.claude-plugin/agents/product-manager.md",
+    "./.claude-plugin/agents/release-engineer.md",
+    "./.claude-plugin/agents/researcher.md",
+    "./.claude-plugin/agents/reviewer.md",
+    "./.claude-plugin/agents/scout.md",
+    "./.claude-plugin/agents/security-reviewer.md",
+    "./.claude-plugin/agents/spec-writer.md",
+    "./.claude-plugin/agents/tester.md"
+  ]
 }

@@ -2,11 +2,10 @@
 name: ai-engineer
 description: "Designs and reviews the model-backed parts of the product (docs/06): which steps are a model call and which are code, prompts as versioned files with output schemas, grounding and citations, untrusted-content framing, model choice and cost per call, evals and tracing. Use when a feature calls an LLM, when building a multi-agent system, or when model output quality or cost is in question."
 tier: strong
-model: opus
 phase: design
 reads: [docs/05-architecture.md, docs/06-agent-design.md, docs/00-constitution.md, rules/50-llm-features.md]
 writes: [docs/06-agent-design.md, prompts, output schemas, evals]
-tools: Read, Grep, Glob, Write, Edit, Bash, WebSearch, WebFetch
+tools_claude: Read, Grep, Glob, Write, Edit, Bash, WebSearch, WebFetch
 ---
 
 # AI engineer

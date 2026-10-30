@@ -95,13 +95,16 @@ Every term has a page in the [wiki](wiki/Home.md). The short version:
 | **Tier** | how much model an agent needs: `fast`, `balanced`, `strong` | mapped per assistant in `models.json` |
 | **Preset** | a JSON description of a stack: commands, layout, conventions | `presets/`, or your own file |
 | **Hook** | a command the assistant runs at an event, e.g. after a file edit | lint-after-edit, wired into each assistant |
+| **Architecture style** | the shape of the system: layered, hexagonal, clean, modular monolith, microservices, event-driven, CQRS, pipeline | chosen with `/crew-patterns` from a catalogue with choose/avoid columns; recorded as an ADR |
+| **Design pattern** | a named solution to a recurring design problem (factory, strategy, state, repository, outbox, …) | picked per problem with `/crew-patterns`; recorded in `docs/13` so every implementer uses the same one |
+| **Code smell** | a symptom that makes code expensive to change (long function, feature envy, float money, prompt in code, …) | found and refactored one commit at a time with `/crew-refactor` |
 
 ## What you get
 
 | | |
 |---|---|
 | **16 agents** | each with a job, inputs, outputs, a procedure, rules, stop conditions and a **model tier** |
-| **22 skills** (`/crew-*`) | the workflow as slash commands: status, brainstorm, research, prd, architecture, adr, design, spec, plan, tasks, implement, test, review, security, verify, debug, checkpoint, deploy-check, docs, llm, sync, init |
+| **24 skills** (`/crew-*`) | the workflow as slash commands: status, brainstorm, research, prd, architecture, **patterns**, adr, design, spec, plan, tasks, implement, test, **refactor**, review, security, verify, debug, checkpoint, deploy-check, docs, llm, sync, init |
 | **6 rules** | spec-driven process, architecture boundaries, security and data, LLM features, testing, docs and status; plus backend and frontend rules generated from your preset |
 | **Docs skeleton** | constitution, brainstorm, research, PRD, traceability, architecture, data model, API, frontend, design system, conventions, security, testing, infra, observability, delivery plan, status, ADRs, specs |
 | **Presets** | `python-fastapi-react`, `node-typescript-next`, `go-service`, `generic`; write your own in one JSON file |
@@ -121,7 +124,7 @@ uvx anycrew list        # agents, tiers and the model each assistant will use
 ```
 
 Then open your assistant in the folder and type `/crew-status`. For a new idea, `/crew-brainstorm`;
-for an existing codebase, `/crew-spec`.
+for an existing codebase, `/crew-spec`. Not sure which architecture or patterns fit? `/crew-patterns`.
 
 ## Install the pack globally
 

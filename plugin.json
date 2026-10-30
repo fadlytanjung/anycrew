@@ -20,8 +20,9 @@
   "homepage": "https://github.com/fadlytanjung/anycrew",
   "repository": "https://github.com/fadlytanjung/anycrew",
   "suggestedPrompts": [
-    "/crew-status — where is this project and what is next?",
-    "/crew-brainstorm — turn my idea into a documented decision",
-    "/crew-spec — specify the next feature before coding it"
-  ]
+    "/crew-status \u2014 where is this project and what is next?",
+    "/crew-brainstorm \u2014 turn my idea into a documented decision",
+    "/crew-spec \u2014 specify the next feature before coding it"
+  ],
+  "logo": "assets/icon.svg"
 }

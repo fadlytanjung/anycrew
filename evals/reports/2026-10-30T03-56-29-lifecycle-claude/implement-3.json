@@ -1,0 +1,53 @@
+{
+  "step": {
+    "id": "implement-3",
+    "prompt": "/crew-implement 001 Continue with the next unchecked task of spec 001. Do not ask questions. When done, make sure `make check` runs and is green.",
+    "maxTurns": 120,
+    "checks": [
+      {
+        "type": "grep",
+        "glob": "docs/specs/001-*/tasks.md",
+        "pattern": "- \\[x\\] \\*\\*T001-03"
+      },
+      {
+        "type": "exists",
+        "path": "Makefile"
+      },
+      {
+        "type": "cmd",
+        "run": "make check"
+      }
+    ],
+    "judge": "Run `make check` and read the Makefile and the backend and frontend skeletons. Score 5 if make check runs lint, types and tests for both sides and is green, the backend exposes /api/health with a test, and the layout matches docs/13. Score 3 if check is green but covers one side only. Score 1 if check fails or does not exist."
+  },
+  "run": {
+    "cost": 1.1344634,
+    "turns": 11,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "grep",
+      "glob": "docs/specs/001-*/tasks.md",
+      "pattern": "- \\[x\\] \\*\\*T001-03",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "exists",
+      "path": "Makefile",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "cmd",
+      "run": "make check",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 3,
+    "reason": "make check is green (2 passed) and backend/src/teamly/api/routes/health.py exposes GET /api/health tested in backend/tests/integration/test_health.py with layout matching docs/13, but the Makefile's check target only runs backend pytest: no lint, no type checks, and no frontend directory exists at all."
+  }
+}

@@ -2,7 +2,6 @@
 name: crew-lead
 description: "Plans and coordinates the crew for a request: decides which phase the work is in, which specialist agents to engage in what order, keeps the human in the loop at every gate, and never writes production code itself. Use for any multi-step request such as 'build feature X', 'start a new project' or 'get this ready to ship'."
 tier: strong
-model: opus
 phase: all
 reads: [AGENTS.md, docs/00-constitution.md, docs/20-implementation-status.md, docs/specs/README.md]
 writes: []

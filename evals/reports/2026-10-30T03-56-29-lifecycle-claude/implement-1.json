@@ -1,0 +1,43 @@
+{
+  "step": {
+    "id": "implement-1",
+    "prompt": "/crew-implement 001 Implement the first unchecked task of spec 001 test-first, run the check command, tick the task and commit. Do not ask questions. If the check command does not exist yet, creating it is part of this task.",
+    "maxTurns": 120,
+    "checks": [
+      {
+        "type": "grep",
+        "glob": "docs/specs/001-*/tasks.md",
+        "pattern": "- \\[x\\] \\*\\*T001-01"
+      },
+      {
+        "type": "cmd",
+        "run": "git log --oneline | grep -E 'feat\\(001\\)'"
+      }
+    ],
+    "judge": "Read docs/specs/001-*/tasks.md, the git log (`git log -3 --stat`) and the files the first task created. Score 5 if exactly one task was implemented, a test exists that names its AC, the commit message is feat(001): ... with Tasks: and AC: trailers, and no unrelated files changed. Score 3 if the task is done but the commit or test discipline slipped. Score 1 if several tasks were lumped or nothing was committed."
+  },
+  "run": {
+    "cost": 1.2152398999999998,
+    "turns": 8,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "grep",
+      "glob": "docs/specs/001-*/tasks.md",
+      "pattern": "- \\[x\\] \\*\\*T001-01",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "cmd",
+      "run": "git log --oneline | grep -E 'feat\\(001\\)'",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 4,
+    "reason": "Commit ccbc901 implements only T001-01 with trailers 'Tasks: T001-01' and 'AC: AC-001-3', ticks it in tasks.md, updates docs/20, and backend/tests/integration/test_health.py::test_ac001_3_health_returns_ok_and_version names the AC. The only slip is that a 6-line Makefile and .gitignore (T001-09's files) were pulled forward so `make check` could exist, which the reply discloses."
+  }
+}

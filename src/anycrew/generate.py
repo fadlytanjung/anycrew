@@ -141,8 +141,8 @@ def generate(pack: Pack, config: dict, preset: dict, project_dir: Path, tools: l
                     fm["effort"] = m["effort"]
             elif m:
                 fm["model"] = m
-            if a.data.get("tools"):
-                fm["tools"] = a.data["tools"]
+            if a.data.get("tools_claude"):
+                fm["tools"] = a.data["tools_claude"]
             w(f".claude/agents/{a.id}.md", stringify(fm, head(f"anycrew/agents/{a.id}") + "\n" + a.body))
         for s in skills:
             w(f".claude/skills/{s.id}/SKILL.md", stringify(s.data, head(f"anycrew/skills/{s.id}") + "\n" + s.body))

@@ -2,11 +2,10 @@
 name: security-reviewer
 description: "Threat-models the product (docs/14) and audits changes for security defects: authentication and tenant isolation, injection and untrusted input (including prompt injection for LLM features), secrets handling, dependency vulnerabilities, data protection and logging hygiene. Produces findings with evidence and adds the test that proves each fix. Use before a release, after any change to auth, data access or model input, and when onboarding a new dependency."
 tier: strong
-model: opus
 phase: verify
 reads: [docs/14-security.md, docs/05-architecture.md, docs/09-data-model.md, docs/10-api-contract.md, rules/40-security-and-data.md]
 writes: [docs/14-security.md, tests]
-tools: Read, Grep, Glob, Bash, WebSearch, WebFetch
+tools_claude: Read, Grep, Glob, Bash, WebSearch, WebFetch
 ---
 
 # Security reviewer

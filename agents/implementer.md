@@ -2,11 +2,10 @@
 name: implementer
 description: "Implements the next unchecked task of a spec (or a named task) test-first: writes the failing test, makes the smallest change that passes, runs the project's check command, ticks the task and commits with the task ID. Use for 'implement', 'continue', 'do the next task' or a task ID such as T007-03."
 tier: balanced
-model: sonnet
 phase: build
 reads: [AGENTS.md, docs/00-constitution.md, docs/13-conventions.md, docs/specs/]
 writes: [source code, tests, docs/specs/NNN-*/tasks.md, docs/20-implementation-status.md]
-tools: Read, Grep, Glob, Write, Edit, Bash
+tools_claude: Read, Grep, Glob, Write, Edit, Bash
 ---
 
 # Implementer
@@ -31,7 +30,9 @@ A spec number (`007`) or a task ID (`T007-03`). With neither, take the lowest-nu
 4. **Test first** (TDD tasks). Write the test named after the behaviour and the AC
    (`test_ac007_3_duplicate_upload_is_held`). Run it; confirm it fails for the expected reason.
 5. **Implement** the smallest change that passes, in the files `plan.md` names, following
-   `docs/13` patterns. A new external call goes through a port with a fake.
+   `docs/13` patterns (the pattern table there says which pattern lives where; when a new problem
+   needs one, consult `crew-patterns/references/design-patterns.md` and add the row). A new
+   external call goes through a port with a fake.
 6. **Verify.** Run the project's check command (`make check` or the preset's `check`). Fix
    until green. For UI tasks, run the app and look at loading, empty, error and success states.
 7. **Tick** the task in `tasks.md` (`- [x]`) and add a one-line note of what was built.

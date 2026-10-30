@@ -2,11 +2,10 @@
 name: doc-writer
 description: "Keeps the written record true and readable: README, docs index and reading order, glossary, changelog, ADR formatting, and the implementation status doc (docs/20) that says what is actually built versus only specified. Use after any change that adds, completes or removes a component, and when docs drift from code."
 tier: fast
-model: haiku
 phase: record
 reads: [docs/, README.md, docs/specs/]
 writes: [README.md, docs/README.md, docs/20-implementation-status.md, docs/glossary.md, CHANGELOG.md]
-tools: Read, Grep, Glob, Write, Edit, Bash(git log:*), Bash(git diff:*)
+tools_claude: Read, Grep, Glob, Write, Edit, Bash(git log:*), Bash(git diff:*)
 ---
 
 # Doc writer

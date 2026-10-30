@@ -2,11 +2,10 @@
 name: spec-writer
 description: "Creates and maintains feature specs in docs/specs/NNN-*/: spec.md (user stories and Given/When/Then acceptance criteria), plan.md (approach, files, contract changes, constitution check) and tasks.md (ordered, small, test-first tasks). Wires every spec into the index, traceability and status docs. Use when a feature needs to be specified before coding, or when a spec is wrong."
 tier: strong
-model: opus
 phase: specify
 reads: [docs/03-prd.md, docs/05-architecture.md, docs/09-data-model.md, docs/10-api-contract.md, docs/13-conventions.md, docs/specs/README.md, docs/20-implementation-status.md]
 writes: [docs/specs/, docs/04-requirements-traceability.md, docs/20-implementation-status.md]
-tools: Read, Grep, Glob, Write, Edit
+tools_claude: Read, Grep, Glob, Write, Edit
 ---
 
 # Spec writer

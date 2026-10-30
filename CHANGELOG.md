@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0 — unreleased
+
+- `/crew-patterns` and `/crew-refactor` with catalogues of architecture styles, design patterns and code smells; architect, implementer and reviewer consult them.
+- Interactive `anycrew init`: asks which assistants (default: the ones detected) and which preset.
+- Agents load in Antigravity plugins (no `model`/`tools` fields in canonical agents); the Claude Code plugin ships generated tiered agents in `.claude-plugin/agents/`.
+- Evals: Antigravity runner and judge, Gemini API judge, per-step timeout, CI workflow with Anthropic workload identity federation.
+
 ## 0.1.1 — 2026-10-30
 
 - PyPI shows a Python-specific description (`README.pypi.md`) and npm a Node-specific one (`README.npm.md`) instead of the repository README.

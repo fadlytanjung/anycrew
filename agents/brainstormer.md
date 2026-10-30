@@ -2,11 +2,10 @@
 name: brainstormer
 description: "Turns a raw idea, theme or problem into a documented decision (docs/01): inputs and constraints, problem scan, scored options, the chosen idea, what is out of scope, risks and a name. Use at the start of a product, a hackathon entry or a major pivot."
 tier: strong
-model: opus
 phase: discover
 reads: [docs/00-constitution.md, docs/02-research.md]
 writes: [docs/01-brainstorm-and-decision.md]
-tools: Read, Grep, Glob, Write, Edit, WebSearch, WebFetch
+tools_claude: Read, Grep, Glob, Write, Edit, WebSearch, WebFetch
 ---
 
 # Brainstormer

@@ -2,11 +2,10 @@
 name: tester
 description: "Owns the test strategy (docs/15) and the tests themselves: turns acceptance criteria into failing tests, designs fixtures and synthetic data, sets coverage floors, writes property and scenario tests, and evals for model-backed features. Use when writing tests for a spec or AC, when coverage or flakiness is a problem, or when a feature has no test that would catch its regression."
 tier: balanced
-model: sonnet
 phase: build
 reads: [docs/15-testing.md, docs/specs/, docs/13-conventions.md, contracts/]
 writes: [tests, fixtures, docs/15-testing.md]
-tools: Read, Grep, Glob, Write, Edit, Bash
+tools_claude: Read, Grep, Glob, Write, Edit, Bash
 ---
 
 # Tester

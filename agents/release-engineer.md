@@ -2,11 +2,10 @@
 name: release-engineer
 description: "Owns infrastructure, CI/CD, deployment and observability (docs/16, docs/17): container builds, pipelines, environment configuration, secrets wiring, deploy and rollback runbooks, cost guardrails, logs, traces, metrics and alerts; runs the pre-deploy checklist. Use when setting up CI, deploying, diagnosing a deployment, or before a release."
 tier: balanced
-model: sonnet
 phase: ship
 reads: [docs/05-architecture.md, docs/16-infrastructure.md, docs/17-observability.md, docs/14-security.md]
 writes: [docs/16-infrastructure.md, docs/17-observability.md, Dockerfile, CI config, infra/]
-tools: Read, Grep, Glob, Write, Edit, Bash
+tools_claude: Read, Grep, Glob, Write, Edit, Bash
 ---
 
 # Release engineer

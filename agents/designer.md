@@ -2,11 +2,10 @@
 name: designer
 description: "Defines the product's information architecture, screens and states (docs/11) and its design system (docs/12): tokens, type, layout, components, responsive rules, accessibility and content style; produces low-fidelity mocks that implementers reproduce. Use before any UI spec and whenever a screen is added or changed."
 tier: balanced
-model: sonnet
 phase: design
 reads: [docs/03-prd.md, docs/05-architecture.md, docs/10-api-contract.md]
 writes: [docs/11-frontend.md, docs/12-design-system.md, contracts/design/tokens.json, design/mocks/]
-tools: Read, Grep, Glob, Write, Edit, Bash
+tools_claude: Read, Grep, Glob, Write, Edit, Bash
 ---
 
 # Designer

@@ -15,7 +15,8 @@ HELP = f"""anycrew — one crew of specialist agents for any coding assistant
 
 Usage:
   anycrew init   [--preset <id|file>] [--tools a,b|all] [--name <project>] [--purpose "<text>"]
-                 [--dir <path>] [--all-docs] [--force]
+                 [--dir <path>] [--all-docs] [--force] [--yes]
+                 (in a terminal without --tools/--preset it asks; --yes takes the detected defaults)
   anycrew sync   [--tools a,b|all] [--dir <path>] [--force]
   anycrew doctor [--dir <path>]
   anycrew list   [--dir <path>]
@@ -108,8 +109,30 @@ def _resolve_tools(opt, project_dir: Path) -> list[str]:
     return found or ["claude", "codex", "antigravity"]
 
 
+def _ask_init(project_dir: Path, opts: dict, pack) -> dict:
+    """Ask the few questions init needs when run without flags in a terminal. Developers usually use
+    one or two assistants, so the default is what is detected, never everything."""
+    if opts.get("yes") or opts.get("tools") or opts.get("preset") or not sys.stdin.isatty():
+        return opts
+    d = _detect(project_dir)
+    detected = [t for t in TOOLS if d[t]["cli"] or d[t]["dir"]]
+
+    def ask(q: str, default: str) -> str:
+        a = input(f"{q}{f' [{default}]' if default else ''}: ").strip()
+        return a or default
+
+    print(f"Assistants: {', '.join(TOOLS)}  (detected: {', '.join(detected) or 'none'})")
+    tools = ask("Which assistants should anycrew generate files for (comma-separated, or all)", ",".join(detected) or "claude")
+    print(f"Presets: {', '.join(pack.presets)}")
+    preset = ask("Stack preset", "generic")
+    name = ask("Project name", opts.get("name") or project_dir.name)
+    purpose = ask("One-sentence purpose", opts.get("purpose") or "")
+    return {**opts, "tools": tools, "preset": preset, "name": name, "purpose": purpose}
+
+
 def _init(project_dir: Path, opts) -> int:
     pack = load_pack()
+    opts = _ask_init(project_dir, opts, pack)
     preset = load_preset(pack, opts.get("preset"))
     existing = _read_config(project_dir) or {}
     tools = _resolve_tools(opts.get("tools"), project_dir)

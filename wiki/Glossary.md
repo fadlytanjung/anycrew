@@ -10,12 +10,15 @@ One line per term. Each links to its page when there is one.
 | **Agent Plugins** | An open packaging spec (`plugin.json` + `skills/` + `mcp.json`) read by Codex, Cursor and Copilot. [More](Standards.md) |
 | **Agent Skills** | The open `SKILL.md` format for skills, read by nearly every assistant. [More](Standards.md) |
 | **AGENTS.md** | The plain-Markdown agent guide at a repository root, read by every assistant. [More](Standards.md) |
+| **Architecture style** | The shape of a system (layered, hexagonal, modular monolith, event-driven, …); chosen with `/crew-patterns` and recorded as an ADR. [More](Patterns-and-Quality.md) |
 | **Assistant** (harness, tool) | The coding agent product you type into: Claude Code, Codex, Antigravity, Cursor, OpenCode, Copilot. |
 | **Balanced** | The middle model tier: implement, test, research, routine review. [More](Model-Tiers.md) |
 | **Check command** | The one command that runs every merge gate: lint, types, layer rules, tests. Comes from the preset, e.g. `make check`. |
+| **Code smell** | A symptom that makes code expensive to change; found and refactored with `/crew-refactor`. [More](Patterns-and-Quality.md) |
 | **Constitution** | The short list of principles every change is checked against; changing one needs an ADR. [More](Constitution.md) |
 | **Crew** | anycrew's set of agents working under one method. The **crew lead** routes work between them. |
 | **Cut line** | The sentence in the PRD that says what the demo shows if only P0 ships. |
+| **Design pattern** | A named solution to a recurring design problem (factory, strategy, state, repository, outbox, …); picked per problem and recorded in `docs/13`. [More](Patterns-and-Quality.md) |
 | **Fast** | The cheapest model tier: read, search, summarise, status updates. [More](Model-Tiers.md) |
 | **FR / NFR** | Functional / non-functional requirement, `FR-NNN` / `NFR-NNN`, defined in the PRD. [More](Product-Requirements-Document.md) |
 | **Gate** | A point where a person decides before the next phase starts: the decision, P0 scope, ADRs, spec Ready, production deploy. [More](Gates-and-Human-in-the-Loop.md) |

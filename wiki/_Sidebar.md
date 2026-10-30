@@ -13,6 +13,7 @@
 - [Spec, Plan and Tasks](Spec-Plan-Tasks.md)
 - [Implementation Status](Implementation-Status.md)
 - [Gates and Human-in-the-Loop](Gates-and-Human-in-the-Loop.md)
+- [Patterns and Quality](Patterns-and-Quality.md)
 
 **Mechanics**
 - [Agents, Skills and Rules](Agents-Skills-Rules.md)

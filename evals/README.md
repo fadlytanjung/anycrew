@@ -32,7 +32,9 @@ node evals/run.mjs --suite lifecycle --runner claude --judge agy
 **Auth.** Runners and judges use the logins already on the machine: Claude Code's claude.ai login
 and Antigravity's Google login. A stray `ANTHROPIC_API_KEY` / `ANTHROPIC_AUTH_TOKEN` is ignored unless
 you pass `--use-api-key` (that is what CI does after the Anthropic workload-identity exchange, see
-`.github/workflows/evals.yml`). A preflight call per engine runs first and aborts if auth is broken.
+`.github/workflows/evals.yml`). A preflight call per engine runs first and aborts if auth is broken. Each step is killed after
+`--step-timeout` minutes (default 45) and recorded as a failure, so a hung API call cannot stall the
+suite; re-run just that step with `--from <id> --until <id>` against the same `--dir`.
 
 Runners: `claude` (Claude Code, `claude -p`), `agy` (Antigravity CLI, `agy -p`). Judges: `claude`,
 `agy`, `gemini` (Gemini API with `GEMINI_API_KEY`; the harness bundles the project files into the

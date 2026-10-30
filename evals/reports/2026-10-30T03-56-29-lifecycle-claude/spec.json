@@ -1,0 +1,117 @@
+{
+  "step": {
+    "id": "spec",
+    "prompt": "/crew-spec Create spec 001 (the foundation: repository layout, Makefile with setup/dev/check/test, FastAPI app skeleton with /api/health, React/Vite skeleton, lint and type gates, CI) as the first spec from the architect's build order. Do not ask questions. Mark it Ready. Write docs/specs/001-*/spec.md, plan.md, tasks.md, wire the index, traceability and status, and finish.",
+    "maxTurns": 60,
+    "checks": [
+      {
+        "type": "count",
+        "glob": "docs/specs/001-*/spec.md",
+        "min": 1
+      },
+      {
+        "type": "count",
+        "glob": "docs/specs/001-*/plan.md",
+        "min": 1
+      },
+      {
+        "type": "count",
+        "glob": "docs/specs/001-*/tasks.md",
+        "min": 1
+      },
+      {
+        "type": "grep",
+        "glob": "docs/specs/001-*/spec.md",
+        "pattern": "AC-001-1"
+      },
+      {
+        "type": "grep",
+        "glob": "docs/specs/001-*/tasks.md",
+        "pattern": "T001-01"
+      },
+      {
+        "type": "grep",
+        "glob": "docs/specs/001-*/tasks.md",
+        "pattern": "\\*\\*TDD\\*\\*"
+      },
+      {
+        "type": "grep",
+        "path": "docs/specs/README.md",
+        "pattern": "001"
+      },
+      {
+        "type": "grep",
+        "path": "docs/20-implementation-status.md",
+        "pattern": "001"
+      }
+    ],
+    "judge": "Read docs/specs/001-*/spec.md, plan.md and tasks.md. Score 5 if ACs are Given/When/Then with pinned values, the plan's first slice is a vertical slice with real file paths and a constitution check, tasks are small, ordered, name files and ACs, mark TDD where logic exists, and end with the status-update task; and the spec is wired into docs/specs/README.md, docs/04 and docs/20. Score 3 if the structure exists but ACs are untestable or tasks are coarse. Score 1 otherwise."
+  },
+  "run": {
+    "cost": 2.91366375,
+    "turns": 23,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "count",
+      "glob": "docs/specs/001-*/spec.md",
+      "min": 1,
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "count",
+      "glob": "docs/specs/001-*/plan.md",
+      "min": 1,
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "count",
+      "glob": "docs/specs/001-*/tasks.md",
+      "min": 1,
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "glob": "docs/specs/001-*/spec.md",
+      "pattern": "AC-001-1",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "glob": "docs/specs/001-*/tasks.md",
+      "pattern": "T001-01",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "glob": "docs/specs/001-*/tasks.md",
+      "pattern": "\\*\\*TDD\\*\\*",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/specs/README.md",
+      "pattern": "001",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/20-implementation-status.md",
+      "pattern": "001",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "spec.md has 11 Given/When/Then ACs with pinned values (exact health body, problem+json shape, TEAMLY_ENV enum, make check order); plan.md Slice 1 is a contract→FastAPI→React vertical slice listing real paths plus a P1–P8 constitution check; tasks.md has 15 ordered tasks each naming files and ACs, TDD on T001-01/03/04/05/08, closing with T001-99 status update; the 001 row appears in docs/specs/README.md, docs/04 (pending PRD) and docs/20 (Specified)."
+  }
+}
