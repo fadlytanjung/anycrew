@@ -1,0 +1,28 @@
+[
+  {
+    "id": "prd",
+    "pass": true,
+    "checks": "6/6",
+    "judge": 5,
+    "judgeWhy": "docs/03 has a persona table with Job and Success moment columns, numbered J1–J3 journeys, §4.1–4.3 P0/P1/P2 with an explicit one-sentence 'Cut line', 40 FRs and 16 NFRs each one 'must' sentence with a Priority column and no named technologies, §7 metrics with targets, and a §8 constitution check; docs/04 has exactly one row per FR-001–040 and NFR-001–016.",
+    "costUsd": 2.9079538499999997,
+    "turns": 19,
+    "seconds": 546,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "architecture",
+    "pass": false,
+    "checks": "7/8",
+    "judge": 0,
+    "judgeWhy": "judge gave no JSON: You've hit your 5-hour limit · resets 5am (Asia/Kuala_Lumpur)",
+    "costUsd": 2.76520225,
+    "turns": 21,
+    "seconds": 368,
+    "error": "exit 1: You've hit your 5-hour limit · resets 5am (Asia/Kuala_Lumpur)",
+    "failing": [
+      "docs/adr/ADR-0*.md: 0 < 2"
+    ]
+  }
+]

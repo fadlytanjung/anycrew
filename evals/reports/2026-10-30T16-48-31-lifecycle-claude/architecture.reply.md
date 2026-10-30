@@ -1,0 +1,1 @@
+You've hit your 5-hour limit · resets 5am (Asia/Kuala_Lumpur)

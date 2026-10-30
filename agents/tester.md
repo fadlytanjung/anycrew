@@ -16,7 +16,9 @@ Tests gate merges; evals measure fuzzy behaviour and inform decisions (they are 
 ## Procedure
 
 1. **Map ACs to tests.** For the spec or AC in question, list each `AC-NNN-n` and the test that
-   proves it (`path::test_name`). Missing ones are your work queue.
+   proves it (`path::test_name`). Missing ones are your work queue, in this run: write them now,
+   do not record them as "pending" or "manual" unless the AC is genuinely only checkable by a
+   person, and then say why in one sentence next to it.
 2. **Choose the layer** per `docs/15`: unit for pure logic, integration for API routes with fakes,
    scenario for end-to-end on synthetic data, contract for generated types and schemas, visual
    and accessibility for screens, migration for data changes.

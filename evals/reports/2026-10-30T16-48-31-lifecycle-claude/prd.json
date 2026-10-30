@@ -1,0 +1,90 @@
+{
+  "step": {
+    "id": "prd",
+    "prompt": "/crew-prd Write the PRD for the decision in docs/01. Do not ask questions; mark assumptions. Keep P0 small enough for a 3-minute demo. Write docs/03-prd.md and docs/04-requirements-traceability.md and finish.",
+    "maxTurns": 60,
+    "checks": [
+      {
+        "type": "exists",
+        "path": "docs/03-prd.md"
+      },
+      {
+        "type": "exists",
+        "path": "docs/04-requirements-traceability.md"
+      },
+      {
+        "type": "grep",
+        "path": "docs/03-prd.md",
+        "pattern": "FR-00[1-9]"
+      },
+      {
+        "type": "grep",
+        "path": "docs/03-prd.md",
+        "pattern": "NFR-00[1-9]"
+      },
+      {
+        "type": "grep",
+        "path": "docs/03-prd.md",
+        "pattern": "(?i)cut line"
+      },
+      {
+        "type": "grep",
+        "path": "docs/04-requirements-traceability.md",
+        "pattern": "FR-001"
+      }
+    ],
+    "judge": "Read docs/03-prd.md and docs/04-requirements-traceability.md. Score 5 if personas have jobs and success moments, journeys are numbered steps, P0/P1/P2 are explicit with a one-sentence cut line, every FR/NFR is one testable 'must' sentence with a priority, metrics have targets, there is a constitution check, no technologies are named in requirements, and docs/04 has one row per requirement. Score 3 if IDs exist but requirements are vague or scope is not prioritised. Score 1 if it is a feature list."
+  },
+  "run": {
+    "cost": 2.9079538499999997,
+    "turns": 19,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": "docs/03-prd.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "exists",
+      "path": "docs/04-requirements-traceability.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/03-prd.md",
+      "pattern": "FR-00[1-9]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/03-prd.md",
+      "pattern": "NFR-00[1-9]",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/03-prd.md",
+      "pattern": "(?i)cut line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/04-requirements-traceability.md",
+      "pattern": "FR-001",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "docs/03 has a persona table with Job and Success moment columns, numbered J1–J3 journeys, §4.1–4.3 P0/P1/P2 with an explicit one-sentence 'Cut line', 40 FRs and 16 NFRs each one 'must' sentence with a Priority column and no named technologies, §7 metrics with targets, and a §8 constitution check; docs/04 has exactly one row per FR-001–040 and NFR-001–016.",
+    "by": "claude"
+  }
+}

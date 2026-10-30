@@ -35,6 +35,10 @@ A spec number (`007`) or a task ID (`T007-03`). With neither, take the lowest-nu
    external call goes through a port with a fake.
 6. **Verify.** Run the project's check command (`make check` or the preset's `check`). Fix
    until green. For UI tasks, run the app and look at loading, empty, error and success states.
+   If the task creates or changes the check command itself, it must run lint, formatting, type
+   checks, layer rules and tests for **every** side the preset defines (backend and frontend);
+   a `check` that only runs one test suite is not done. Scaffold both sides the layout in
+   `docs/13` names, even when the first task only touches one.
 7. **Tick** the task in `tasks.md` (`- [x]`) and add a one-line note of what was built.
 8. **Docs.** If behaviour, contracts or a component's status changed, update the doc in the
    same change (`docs/20` for status).
