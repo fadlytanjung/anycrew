@@ -15,7 +15,7 @@ decision. The gates and IDs pay off most when the whole loop is used.
 to it by hand. Your own agents coexist with the crew.
 
 **Why Markdown and JSON, no YAML config?**
-So that `npx anycrew` runs with zero dependencies on any machine and in CI. See ADR-003.
+So that `uvx anycrew` and `npx anycrew` run with zero dependencies on any machine and in CI. See ADR-003.
 
 **Why are skills prefixed `crew-`?**
 They land in `.agents/skills` next to your own and other packs'. `review` or `plan` would collide.
@@ -29,7 +29,7 @@ Yes: override the tier mapping in `.anycrew/config.json` under `models`. The tie
 the role needs; the mapping says what you are willing to pay.
 
 **How do I update the crew in a project?**
-Upgrade the package and run `npx anycrew sync`. Generated files are rewritten; your edits to
+Upgrade the package and run `anycrew sync`. Generated files are rewritten; your edits to
 unmarked files are kept and reported.
 
 **Does it send any data anywhere?**

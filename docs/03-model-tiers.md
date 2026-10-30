@@ -49,7 +49,7 @@ Notes:
 }
 ```
 
-Then `npx anycrew sync`. `npx anycrew list` shows the effective mapping.
+Then `anycrew sync`. `anycrew list` shows the effective mapping.
 
 ## Choosing a tier for a new agent
 

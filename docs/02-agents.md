@@ -45,7 +45,7 @@ without a build step; `npm run validate` fails if it drifts from `models.json`.
 ## Customising
 
 - **Exclude an agent** in a project: `.anycrew/config.json` → `agents.exclude: ["designer"]`, then
-  `npx anycrew sync`.
+  `anycrew sync`.
 - **Change an agent's model** in a project: edit the generated file and remove the
   `anycrew:generated` marker; `sync` will leave it alone and report it. Or override the tier
   mapping for the whole project under `models`.

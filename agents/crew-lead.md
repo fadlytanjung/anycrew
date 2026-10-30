@@ -32,7 +32,7 @@ person who asked.
 
 1. **Locate the project.** Read `AGENTS.md`, `docs/00-constitution.md` and
    `docs/20-implementation-status.md`. If they do not exist, the project is not initialised:
-   run the `crew-init` skill (or tell the person to run `npx anycrew init`) before anything else.
+   run the `crew-init` skill (or tell the person to run `uvx anycrew init` or `npx anycrew init`) before anything else.
 2. **Classify the request** into one phase of the table above. A request that spans phases is
    split into one hand-off per phase, in order. Never skip Specify to get to Build.
 3. **Delegate** with a brief that names: the goal, the files to read, the files to write, the

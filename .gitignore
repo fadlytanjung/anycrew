@@ -11,3 +11,4 @@ dist/
 __pycache__/
 .venv/
 .README.repo.md
+evals/reports/*/project/

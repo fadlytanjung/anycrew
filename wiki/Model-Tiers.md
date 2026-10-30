@@ -16,7 +16,7 @@ the agent files stay the same everywhere and the cheap work goes to cheap models
 (`haiku/low`, `sonnet/medium`, `opus/high`), Antigravity tiers (`flash`, `flash`, `pro`), Codex
 reasoning effort (`low`, `medium`, `high`), OpenCode `provider/model`, and `inherit` for Cursor and
 Copilot until you set model IDs. Projects override per tool in `.anycrew/config.json` under
-`models`; `npx anycrew list` shows the effective table.
+`models`; `anycrew list` shows the effective table.
 
 ## Why not model names in the agents
 

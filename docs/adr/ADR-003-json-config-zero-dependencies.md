@@ -17,6 +17,6 @@ targets Node ≥ 18. Front matter is parsed by a deliberately small reader that 
 anycrew's own files use.
 
 ## Consequences
-- Good: `npx anycrew init` works offline after the first fetch; nothing to audit in `node_modules`.
+- Good: `uvx anycrew init` and `npx anycrew init` work offline after the first fetch; nothing to audit in `node_modules`.
 - Bad: the front matter reader is not general YAML; the validator keeps canonical files inside the
   supported subset.

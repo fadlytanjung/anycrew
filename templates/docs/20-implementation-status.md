@@ -11,7 +11,7 @@ _Last updated: {{date}} — initialised by anycrew._
 
 | Component | Spec | Status | Notes (tests, deviations) |
 |---|---|---|---|
-| Repository, docs skeleton, agent guide | — | Built | `npx anycrew init` |
+| Repository, docs skeleton, agent guide | — | Built | `anycrew init` |
 
 ## Gaps
 

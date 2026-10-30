@@ -9,14 +9,15 @@ metadata:
 
 # Initialise the crew in this repository
 
-Prefer the CLI when Node is available; it is idempotent and only writes generated files:
+Prefer the CLI (`uvx anycrew …` with Python, or `npx anycrew …` with Node); it is idempotent and
+only writes generated files:
 
 ```bash
-npx anycrew init --preset <python-fastapi-react|node-typescript-next|go-service|generic> \
+anycrew init --preset <python-fastapi-react|node-typescript-next|go-service|generic> \
   --tools <claude,codex,antigravity,cursor,opencode,copilot> --name "<project>"
 ```
 
-Without Node, do the same by hand:
+Without either runtime, do the same by hand:
 
 1. **Ask three things** if not given: the project name and one-sentence purpose, the stack
    preset (or "generic"), and which assistants the team uses.

@@ -1,6 +1,6 @@
 # 04 — Tool matrix
 
-What each assistant reads, what `npx anycrew init` / `sync` writes for it, and how far it has been
+What each assistant reads, what `anycrew init` / `sync` writes for it, and how far it has been
 verified. Formats were checked against each vendor's documentation on 2026-10-29; **verified** means
 exercised in that assistant with the generated files, **documented** means the format matches the
 vendor docs but has not been exercised yet.

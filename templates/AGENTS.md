@@ -3,8 +3,8 @@
 {{purpose}}
 
 This file is the shared context for any coding agent working in this repository. It is generated
-by anycrew (`npx anycrew init`); edit the sections marked *project* freely and keep the rest in
-sync with `npx anycrew sync`. Always-on rules live in `.agents/rules/`; repeatable procedures live
+by anycrew (`anycrew init`); edit the sections marked *project* freely and keep the rest in
+sync with `anycrew sync`. Always-on rules live in `.agents/rules/`; repeatable procedures live
 in `.agents/skills/` (invoke with `/<skill-name>`); specialist agents live in `.agents/agents/`
 and the assistant-specific folders.
 

@@ -1,0 +1,150 @@
+{
+  "id": "lifecycle",
+  "project": {
+    "name": "teamly",
+    "purpose": "Teamly is a small SaaS where a team keeps shared to-do lists: sign in, create a workspace, invite teammates, create lists and tasks, assign and complete them.",
+    "preset": "python-fastapi-react"
+  },
+  "steps": [
+    {
+      "id": "status",
+      "prompt": "/crew-status",
+      "maxTurns": 15,
+      "checks": [],
+      "judge": "The reply reports the project as initialised, identifies the phase as Discover (no docs/01 yet) and recommends /crew-brainstorm next. Score 5 if all three, 3 if phase or recommendation is off, 1 if it did not read the project."
+    },
+    {
+      "id": "brainstorm",
+      "prompt": "/crew-brainstorm Teamly: a small SaaS where a team keeps shared to-do lists (sign in, create a workspace, invite teammates, lists, tasks, assign, complete). Constraints: two developers, four weeks to a demo, Python FastAPI + React, Postgres, deploy on one cloud. Judged on: demoable in 3 minutes, technical quality, usefulness to a 5-person team. Do not ask me questions; make reasonable assumptions and mark them [assumed]. Write docs/01-brainstorm-and-decision.md and finish.",
+      "maxTurns": 60,
+      "checks": [
+        { "type": "exists", "path": "docs/01-brainstorm-and-decision.md" },
+        { "type": "grep", "path": "docs/01-brainstorm-and-decision.md", "pattern": "(?i)## .*decision" },
+        { "type": "grep", "path": "docs/01-brainstorm-and-decision.md", "pattern": "\\[assumed\\]|\\[verified" },
+        { "type": "grep", "path": "docs/01-brainstorm-and-decision.md", "pattern": "(?i)out of scope" }
+      ],
+      "judge": "Read docs/01-brainstorm-and-decision.md. Score 5 if it has inputs with weighted criteria, a problem scan, 5+ options, a scoring table with arithmetic, a one-paragraph decision a stranger could repeat, out-of-scope and a cut line, risks with mitigations, and name candidates. Score 3 if the decision and scoring exist but sections are thin. Score 1 if it is a generic essay without scoring or decision."
+    },
+    {
+      "id": "prd",
+      "prompt": "/crew-prd Write the PRD for the decision in docs/01. Do not ask questions; mark assumptions. Keep P0 small enough for a 3-minute demo. Write docs/03-prd.md and docs/04-requirements-traceability.md and finish.",
+      "maxTurns": 60,
+      "checks": [
+        { "type": "exists", "path": "docs/03-prd.md" },
+        { "type": "exists", "path": "docs/04-requirements-traceability.md" },
+        { "type": "grep", "path": "docs/03-prd.md", "pattern": "FR-00[1-9]" },
+        { "type": "grep", "path": "docs/03-prd.md", "pattern": "NFR-00[1-9]" },
+        { "type": "grep", "path": "docs/03-prd.md", "pattern": "(?i)cut line" },
+        { "type": "grep", "path": "docs/04-requirements-traceability.md", "pattern": "FR-001" }
+      ],
+      "judge": "Read docs/03-prd.md and docs/04-requirements-traceability.md. Score 5 if personas have jobs and success moments, journeys are numbered steps, P0/P1/P2 are explicit with a one-sentence cut line, every FR/NFR is one testable 'must' sentence with a priority, metrics have targets, there is a constitution check, no technologies are named in requirements, and docs/04 has one row per requirement. Score 3 if IDs exist but requirements are vague or scope is not prioritised. Score 1 if it is a feature list."
+    },
+    {
+      "id": "architecture",
+      "prompt": "/crew-architecture Design Teamly from docs/03 using the python-fastapi-react preset: FastAPI + Postgres backend, React/Vite frontend, one cloud. Do not ask questions. Write docs/05-architecture.md, docs/09-data-model.md, docs/10-api-contract.md, contracts/openapi.yaml, docs/13-conventions.md and at least two ADRs in docs/adr/, then list the specs to write in build order, and finish.",
+      "maxTurns": 80,
+      "checks": [
+        { "type": "exists", "path": "docs/05-architecture.md" },
+        { "type": "exists", "path": "docs/09-data-model.md" },
+        { "type": "exists", "path": "docs/10-api-contract.md" },
+        { "type": "exists", "path": "contracts/openapi.yaml" },
+        { "type": "exists", "path": "docs/13-conventions.md" },
+        { "type": "count", "glob": "docs/adr/ADR-0*.md", "min": 2 },
+        { "type": "grep", "path": "docs/05-architecture.md", "pattern": "```mermaid" },
+        { "type": "grep", "path": "docs/05-architecture.md", "pattern": "(?i)constitution check" }
+      ],
+      "judge": "Read docs/05-architecture.md, docs/09-data-model.md, docs/10-api-contract.md, contracts/openapi.yaml, docs/13-conventions.md and docs/adr/*. Score 5 if containers and flows are diagrammed, layers have an allowed-imports table with the domain pure and ports/adapters named, the data model has entities with IDs, tenancy and state tables, the OpenAPI file is valid-looking YAML with auth, errors with stable codes and the P0 resources, ADRs follow context/options/decision/consequences with honest trade-offs and pinned versions, and a build-order list of specs exists. Score 3 if the shape is right but values are vague ('the latest'). Score 1 if it is prose without contracts."
+    },
+    {
+      "id": "spec",
+      "prompt": "/crew-spec Create spec 001 (the foundation: repository layout, Makefile with setup/dev/check/test, FastAPI app skeleton with /api/health, React/Vite skeleton, lint and type gates, CI) as the first spec from the architect's build order. Do not ask questions. Mark it Ready. Write docs/specs/001-*/spec.md, plan.md, tasks.md, wire the index, traceability and status, and finish.",
+      "maxTurns": 60,
+      "checks": [
+        { "type": "count", "glob": "docs/specs/001-*/spec.md", "min": 1 },
+        { "type": "count", "glob": "docs/specs/001-*/plan.md", "min": 1 },
+        { "type": "count", "glob": "docs/specs/001-*/tasks.md", "min": 1 },
+        { "type": "grep", "glob": "docs/specs/001-*/spec.md", "pattern": "AC-001-1" },
+        { "type": "grep", "glob": "docs/specs/001-*/tasks.md", "pattern": "T001-01" },
+        { "type": "grep", "glob": "docs/specs/001-*/tasks.md", "pattern": "\\*\\*TDD\\*\\*" },
+        { "type": "grep", "path": "docs/specs/README.md", "pattern": "001" },
+        { "type": "grep", "path": "docs/20-implementation-status.md", "pattern": "001" }
+      ],
+      "judge": "Read docs/specs/001-*/spec.md, plan.md and tasks.md. Score 5 if ACs are Given/When/Then with pinned values, the plan's first slice is a vertical slice with real file paths and a constitution check, tasks are small, ordered, name files and ACs, mark TDD where logic exists, and end with the status-update task; and the spec is wired into docs/specs/README.md, docs/04 and docs/20. Score 3 if the structure exists but ACs are untestable or tasks are coarse. Score 1 otherwise."
+    },
+    {
+      "id": "implement-1",
+      "prompt": "/crew-implement 001 Implement the first unchecked task of spec 001 test-first, run the check command, tick the task and commit. Do not ask questions. If the check command does not exist yet, creating it is part of this task.",
+      "maxTurns": 120,
+      "checks": [
+        { "type": "grep", "glob": "docs/specs/001-*/tasks.md", "pattern": "- \\[x\\] \\*\\*T001-01" },
+        { "type": "cmd", "run": "git log --oneline | grep -E 'feat\\(001\\)'" }
+      ],
+      "judge": "Read docs/specs/001-*/tasks.md, the git log (`git log -3 --stat`) and the files the first task created. Score 5 if exactly one task was implemented, a test exists that names its AC, the commit message is feat(001): ... with Tasks: and AC: trailers, and no unrelated files changed. Score 3 if the task is done but the commit or test discipline slipped. Score 1 if several tasks were lumped or nothing was committed."
+    },
+    {
+      "id": "implement-2",
+      "prompt": "/crew-implement 001 Continue with the next unchecked task of spec 001. Do not ask questions.",
+      "maxTurns": 120,
+      "checks": [
+        { "type": "grep", "glob": "docs/specs/001-*/tasks.md", "pattern": "- \\[x\\] \\*\\*T001-02" }
+      ],
+      "judge": "Read docs/specs/001-*/tasks.md and `git log -3 --stat`. Score 5 if the second task is ticked with its own commit and test, 3 if ticked without a test, 1 if nothing moved."
+    },
+    {
+      "id": "implement-3",
+      "prompt": "/crew-implement 001 Continue with the next unchecked task of spec 001. Do not ask questions. When done, make sure `make check` runs and is green.",
+      "maxTurns": 120,
+      "checks": [
+        { "type": "grep", "glob": "docs/specs/001-*/tasks.md", "pattern": "- \\[x\\] \\*\\*T001-03" },
+        { "type": "exists", "path": "Makefile" },
+        { "type": "cmd", "run": "make check" }
+      ],
+      "judge": "Run `make check` and read the Makefile and the backend and frontend skeletons. Score 5 if make check runs lint, types and tests for both sides and is green, the backend exposes /api/health with a test, and the layout matches docs/13. Score 3 if check is green but covers one side only. Score 1 if check fails or does not exist."
+    },
+    {
+      "id": "test",
+      "prompt": "/crew-test 001 Map every AC of spec 001 to a test; add the missing ones at the right layer; keep `make check` green. Do not ask questions.",
+      "maxTurns": 80,
+      "checks": [
+        { "type": "cmd", "run": "make check" },
+        { "type": "cmd", "run": "grep -rlE 'ac001|AC-001' backend frontend --include=*.py --include=*.ts --include=*.tsx | head -1 | grep ." }
+      ],
+      "judge": "Read the test files under backend/ and frontend/ and docs/specs/001-*/spec.md. Score 5 if every AC of spec 001 has a test named after it, tests use fakes (no network), and make check is green. Score 3 if most ACs are covered. Score 1 if tests were loosened or ACs are unmapped."
+    },
+    {
+      "id": "review",
+      "prompt": "/crew-review Review everything committed for spec 001 against its spec and the constitution. Report findings in the required format. Do not fix anything; do not ask questions.",
+      "maxTurns": 60,
+      "checks": [],
+      "judge": "Read the reply. Score 5 if it shows real command output from the check command and tests, lists findings ranked by severity each with path:line, a concrete scenario, the AC or principle violated and a one-line fix, and includes the conformance table (conformant/untested/drift/missing/undocumented) with evidence. Score 3 if findings exist but lack scenarios or evidence. Score 1 if it is style nitpicks or praise without verification."
+    },
+    {
+      "id": "security",
+      "prompt": "/crew-security Write the threat model in docs/14-security.md for Teamly and audit the repository as it stands. Report findings with evidence. Do not ask questions.",
+      "maxTurns": 80,
+      "checks": [
+        { "type": "exists", "path": "docs/14-security.md" },
+        { "type": "grep", "path": "docs/14-security.md", "pattern": "(?i)trust boundar" },
+        { "type": "grep", "path": "docs/14-security.md", "pattern": "C1" }
+      ],
+      "judge": "Read docs/14-security.md and the reply. Score 5 if assets, actors and trust boundaries are drawn, each boundary has a control with the test that proves it, the audit covers auth and tenancy, untrusted input, secrets, dependencies and data protection with real evidence (commands run, files cited), findings carry severity and a fix with a test, and residual risks have an owner. Score 3 if the model exists but the audit is generic. Score 1 if it is a checklist copied without looking at the code."
+    },
+    {
+      "id": "verify",
+      "prompt": "/crew-verify 001 Audit spec 001 against the code and tests; produce the conformance table. Do not fix anything; do not ask questions.",
+      "maxTurns": 60,
+      "checks": [],
+      "judge": "Read the reply. Score 5 if every AC of spec 001 is placed in exactly one bucket with path:line evidence and the real test output is shown, drift rows propose which side changes and stop. Score 3 if the table exists but evidence is thin. Score 1 if it asserts conformance without running anything."
+    },
+    {
+      "id": "checkpoint",
+      "prompt": "/crew-checkpoint Update docs/20-implementation-status.md to match the tree after spec 001's work. Do not ask questions.",
+      "maxTurns": 40,
+      "checks": [
+        { "type": "grep", "path": "docs/20-implementation-status.md", "pattern": "001" },
+        { "type": "grep", "path": "docs/20-implementation-status.md", "pattern": "(?i)last updated" }
+      ],
+      "judge": "Read docs/20-implementation-status.md and docs/specs/001-*/tasks.md. Score 5 if every spec-001 component row has a status that matches the ticked tasks and tests, every Built row names its test suite, the date is refreshed and gaps are listed. Score 3 if statuses are right but suites are not named. Score 1 if rows were promoted without evidence."
+    }
+  ]
+}

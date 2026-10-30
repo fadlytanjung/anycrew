@@ -1,6 +1,6 @@
 # 06 — Project layout
 
-What a project looks like after `npx anycrew init`, and how the documents relate.
+What a project looks like after `anycrew init`, and how the documents relate.
 
 ## Files anycrew creates once and never overwrites
 
@@ -56,7 +56,7 @@ docs/specs/007-review-queue/
 
 Everything under `.agents/`, `.claude/`, `.codex/`, `.cursor/`, `.opencode/`, `.github/agents`,
 `.github/instructions`, `.github/hooks`, `CLAUDE.md` and `.anycrew/hooks/` carries the
-`anycrew:generated` marker. `npx anycrew sync` rewrites only those. Remove the marker from a file
+`anycrew:generated` marker. `anycrew sync` rewrites only those. Remove the marker from a file
 to take it over; `sync` will report it as skipped.
 
 Commit the generated files: teammates and CI should see the same crew without running anycrew.

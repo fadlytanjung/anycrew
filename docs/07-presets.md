@@ -36,7 +36,7 @@ work in your stack the way your team does.
 }
 ```
 
-Use it with `npx anycrew init --preset ./presets/rails-hotwire.json`. The conventions become
+Use it with `anycrew init --preset ./presets/rails-hotwire.json`. The conventions become
 `20-backend` and `30-frontend` rules scoped to the globs, and `docs/13-conventions.md` section 4.
 Send a PR if the preset would help others.
 

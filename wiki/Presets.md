@@ -26,7 +26,7 @@ anycrew boilerplate-agnostic: your stack is a description, not a template you mu
 ## Your own
 
 Copy a shipped preset, change the fields, and run
-`npx anycrew init --preset ./my-preset.json`. A good preset's conventions are the ten sentences a
+`anycrew init --preset ./my-preset.json`. A good preset's conventions are the ten sentences a
 senior engineer would tell a new hire on day one, not a style guide.
 
 ## Related

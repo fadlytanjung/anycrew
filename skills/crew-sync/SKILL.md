@@ -10,10 +10,11 @@ metadata:
 # Sync the generated files
 
 ```bash
-npx anycrew sync            # regenerate for the tools in .anycrew/config.json
-npx anycrew sync --tools claude,cursor
-npx anycrew doctor          # which assistants are installed and which files they will read
-npx anycrew list            # agents with their tier and the model each tool will use
+# run with `uvx anycrew …` (Python) or `npx anycrew …` (Node); both are the same tool
+anycrew sync            # regenerate for the tools in .anycrew/config.json
+anycrew sync --tools claude,cursor
+anycrew doctor          # which assistants are installed and which files they will read
+anycrew list            # agents with their tier and the model each tool will use
 ```
 
 Only files that carry the `anycrew:generated` marker are rewritten; hand-written files are

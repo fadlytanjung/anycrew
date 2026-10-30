@@ -16,7 +16,7 @@ HOOK_REL = ".anycrew/hooks/lint-after-edit.sh"
 
 
 def head(src: str) -> str:
-    return f"<!-- {MARKER} from {src} — edit the source and run `npx anycrew sync` -->\n"
+    return f"<!-- {MARKER} from {src} — edit the source and run `anycrew sync` -->\n"
 
 
 def fill(text: str, vars: dict[str, str]) -> str:
@@ -157,7 +157,7 @@ def generate(pack: Pack, config: dict, preset: dict, project_dir: Path, tools: l
     if "codex" in tools:
         for a in agents:
             m = model_for(pack.models, over, "codex", a.data["tier"]) or {}
-            lines = [f"# {MARKER} from anycrew/agents/{a.id} — edit the source and run `npx anycrew sync`",
+            lines = [f"# {MARKER} from anycrew/agents/{a.id} — edit the source and run `anycrew sync`",
                      f"name = {json.dumps(a.data['name'], ensure_ascii=False)}",
                      f"description = {json.dumps(a.data['description'], ensure_ascii=False)}"]
             if m.get("model"):
