@@ -5,8 +5,8 @@ name: release
 # (`npm run bump -- X.Y.Z` sets every version field; see CONTRIBUTING.md "Releasing").
 #
 # Both registries use trusted publishing (GitHub OIDC), so no long-lived secrets are stored:
-#   PyPI: project → Publishing → GitHub: owner fadlytanjung, repo anycrew, workflow release.yml, environment release
-#   npm:  package → Settings → Publishing access → GitHub Actions: repo anycrew, workflow release.yml, environment release
+#   PyPI: project → Publishing → GitHub: owner fadlytanjung, repo anycrew, workflow release.yml (environment: leave empty)
+#   npm:  package → Settings → Publishing access → GitHub Actions: repo anycrew, workflow release.yml (environment: leave empty)
 # Until npm trusted publishing is configured, an NPM_TOKEN secret is used as the fallback.
 # A version that already exists on a registry is skipped, so re-running a release is safe.
 on:
@@ -29,21 +29,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version: '3.12'
-      - uses: astral-sh/setup-uv@v5
       - name: Tag and manifests agree on the version
         id: v
         run: node scripts/release-check.mjs "${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
       - run: npm test
-      - run: python tests/test_parity.py
+      - run: uv run --no-project python tests/test_parity.py
 
   npm:
     needs: verify
     if: needs.verify.outputs.on_npm == 'false'
     runs-on: ubuntu-latest
-    environment: release
     permissions:
       contents: read
       id-token: write
@@ -63,7 +61,6 @@ jobs:
     needs: verify
     if: needs.verify.outputs.on_pypi == 'false'
     runs-on: ubuntu-latest
-    environment: release
     permissions:
       contents: read
       id-token: write

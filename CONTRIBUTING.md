@@ -39,5 +39,5 @@ Every release goes to npm and PyPI from one tag; `.github/workflows/release.yml`
    publishes to whichever registry does not have that version yet, and creates the GitHub Release
    with the wheel and sdist attached. Re-running it is safe.
 
-Both registries use trusted publishing (GitHub OIDC) through the `release` environment; no
+Both registries use trusted publishing (GitHub OIDC) configured against `release.yml`; no
 long-lived tokens are stored. `npm run release:check` runs the same version check locally.

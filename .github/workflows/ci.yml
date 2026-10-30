@@ -25,12 +25,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version: ${{ matrix.python }}
-      - uses: astral-sh/setup-uv@v5
       - name: Python and Node CLIs generate identical projects
-        run: python tests/test_parity.py
+        run: uv run --no-project python tests/test_parity.py
       - name: Build the wheel and run it
         run: |
           uv build
