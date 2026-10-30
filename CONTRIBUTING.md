@@ -26,7 +26,17 @@ this on day one".
 4. For a new agent: add the file, reference it from at least one skill, add it to `docs/02-agents.md`.
 5. Keep prose plain. No marketing language in agents, skills or docs.
 
-## Versioning
+## Releasing
 
-`package.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` and `plugin.json`
-carry the same version; `npm run validate` checks it.
+Every release goes to npm and PyPI from one tag; `.github/workflows/release.yml` does the work.
+
+1. `npm run bump -- X.Y.Z` sets the version in `package.json`, `pyproject.toml`, both plugin
+   manifests and the marketplace file.
+2. Add a `## X.Y.Z — YYYY-MM-DD` section to `CHANGELOG.md` (it becomes the GitHub Release notes).
+3. Commit to `main`, then `git tag vX.Y.Z && git push origin vX.Y.Z`.
+4. The workflow verifies the tag matches every version field, runs `npm test` and the parity test,
+   publishes to whichever registry does not have that version yet, and creates the GitHub Release
+   with the wheel and sdist attached. Re-running it is safe.
+
+Both registries use trusted publishing (GitHub OIDC) through the `release` environment; no
+long-lived tokens are stored. `npm run release:check` runs the same version check locally.

@@ -10,3 +10,4 @@
 - CLI: `init`, `sync`, `doctor`, `list`, `presets`; generators for Claude Code, Codex, Antigravity,
   Cursor, OpenCode and GitHub Copilot.
 - Manifests for Claude Code plugins/marketplace and the Agent Plugins spec.
+- Release pipeline: one tag publishes to npm and PyPI (trusted publishing) and creates the GitHub Release.

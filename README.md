@@ -35,15 +35,16 @@ really built. Each agent declares how much model it needs, so cheap work runs on
 
 ```bash
 uvx anycrew init            # Python: uv (or `pipx run anycrew init`, or `pip install anycrew`)
-npx anycrew init            # Node: npm (or `npx github:fadlytanjung/anycrew init` straight from this repo)
+npx anycrew init            # Node: npm
 ```
 
 Both CLIs are the same tool: one canonical pack, two zero-dependency ports that generate
 byte-identical projects (the CI proves it on every commit). Use whichever runtime you already have.
 
-> **Status: 0.1.0, early.** Claude Code and Antigravity outputs are verified end to end; Codex,
-> Cursor, OpenCode and Copilot outputs follow their documentation and are being exercised next.
-> See the [tool matrix](docs/04-tool-matrix.md). Feedback and PRs welcome.
+> **Status: 0.1.0, early.** Published on [PyPI](https://pypi.org/project/anycrew/) and
+> [npm](https://www.npmjs.com/package/anycrew). Claude Code and Antigravity outputs are verified end
+> to end; Codex, Cursor, OpenCode and Copilot outputs follow their documentation and are being
+> exercised next. See the [tool matrix](docs/04-tool-matrix.md). Feedback and PRs welcome.
 
 ## Contents
 
@@ -245,6 +246,12 @@ More in the [wiki FAQ](wiki/FAQ.md).
 0.2: exercise Codex, Cursor, OpenCode and Copilot outputs for real; eval cases per agent; a shared
 MCP server list; Gemini CLI extension. 0.3: Windsurf/Devin, Cline, Kiro, Amp, Augment; `upgrade`;
 an example project built end to end. Full list: [docs/08-roadmap.md](docs/08-roadmap.md).
+
+## Releases
+
+Every tag `vX.Y.Z` on `main` publishes the same version to PyPI and npm and creates a GitHub
+Release with the wheel and sdist attached; notes come from [CHANGELOG.md](CHANGELOG.md). The
+process is in [CONTRIBUTING.md](CONTRIBUTING.md#releasing).
 
 ## Contributing
 

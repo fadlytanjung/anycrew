@@ -24,7 +24,9 @@
     "validate": "node scripts/validate.mjs",
     "test": "node scripts/validate.mjs && node scripts/smoke.mjs",
     "list": "node bin/anycrew.mjs list",
-    "test:parity": "python3 tests/test_parity.py"
+    "test:parity": "python3 tests/test_parity.py",
+    "bump": "node scripts/bump.mjs",
+    "release:check": "node scripts/release-check.mjs"
   },
   "engines": {
     "node": ">=18"

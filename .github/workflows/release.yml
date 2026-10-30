@@ -1,0 +1,93 @@
+name: release
+# Publishes anycrew to npm and PyPI and creates the GitHub Release.
+#
+# Trigger: push a tag `vX.Y.Z` that matches the version in package.json and pyproject.toml
+# (`npm run bump -- X.Y.Z` sets every version field; see CONTRIBUTING.md "Releasing").
+#
+# Both registries use trusted publishing (GitHub OIDC), so no long-lived secrets are stored:
+#   PyPI: project → Publishing → GitHub: owner fadlytanjung, repo anycrew, workflow release.yml, environment release
+#   npm:  package → Settings → Publishing access → GitHub Actions: repo anycrew, workflow release.yml, environment release
+# Until npm trusted publishing is configured, an NPM_TOKEN secret is used as the fallback.
+# A version that already exists on a registry is skipped, so re-running a release is safe.
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+      on_npm: ${{ steps.v.outputs.on_npm }}
+      on_pypi: ${{ steps.v.outputs.on_pypi }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: astral-sh/setup-uv@v5
+      - name: Tag and manifests agree on the version
+        id: v
+        run: node scripts/release-check.mjs "${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+      - run: npm test
+      - run: python tests/test_parity.py
+
+  npm:
+    needs: verify
+    if: needs.verify.outputs.on_npm == 'false'
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@latest
+      - name: Publish to npm (trusted publishing; NPM_TOKEN as fallback)
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  pypi:
+    needs: verify
+    if: needs.verify.outputs.on_pypi == 'false'
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv build
+      - name: Publish to PyPI (trusted publishing)
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  github-release:
+    needs: [verify, npm, pypi]
+    if: always() && needs.verify.result == 'success' && needs.npm.result != 'failure' && needs.pypi.result != 'failure'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv build
+      - name: Release notes from CHANGELOG.md
+        run: node scripts/release-notes.mjs "${{ needs.verify.outputs.version }}" > notes.md && cat notes.md
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: anycrew ${{ needs.verify.outputs.version }}
+          body_path: notes.md
+          files: dist/*
