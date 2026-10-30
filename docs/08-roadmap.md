@@ -2,7 +2,7 @@
 
 ## 0.1 (now)
 
-- 16 agents, 22 skills, 6 rules, 4 presets, docs skeleton, lint hook, CLI with six targets.
+- 17 agents, 24 skills, 6 rules, 4 presets, docs skeleton, lint hook, CLI with six targets.
 - Manifests for Claude Code and Agent Plugins.
 
 ## 0.2

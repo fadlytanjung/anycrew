@@ -8,7 +8,7 @@ easy to confuse. anycrew uses all three, each for one job.
 | **What it is** | a specialist with its own system prompt, tools and model, run in its own context | a procedure loaded on demand, usually typed as `/name` | guidance loaded as context, always or by path |
 | **Answers** | *who* does the work | *how* a task is done, step by step | *what* must always hold |
 | **Lifetime** | one delegated task | one invocation | the whole session (or while matching files are open) |
-| **anycrew ships** | 16 (`agents/`) | 22 `/crew-*` (`skills/`) | 6 + stack rules (`rules/`) |
+| **anycrew ships** | 17 (`agents/`) | 24 `/crew-*` (`skills/`) | 6 + stack rules (`rules/`) |
 | **Where assistants read it** | `.claude/agents`, `.agents/agents`, `.codex/agents`, `.cursor/agents`, `.opencode/agents`, `.github/agents` | `.agents/skills` (most), `.claude/skills` | `.agents/rules`, `.claude/rules`, `.cursor/rules`, `.github/instructions` |
 
 ## Agent
