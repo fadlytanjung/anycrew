@@ -1,0 +1,76 @@
+name: evals
+# Runs the end-to-end lifecycle eval in CI on demand. Claude Code authenticates through Anthropic
+# workload identity federation (GitHub OIDC → short-lived Anthropic token), so no API key is stored.
+# Set these repository variables (Settings → Secrets and variables → Actions → Variables):
+#   ANTHROPIC_FEDERATION_RULE_ID, ANTHROPIC_ORGANIZATION_ID, ANTHROPIC_SERVICE_ACCOUNT_ID, ANTHROPIC_WORKSPACE_ID
+on:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Eval suite (evals/cases/<suite>.json)
+        default: lifecycle
+      until:
+        description: Stop after this step id (empty = all)
+        default: ''
+      budget:
+        description: Max USD per step
+        default: '6'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  lifecycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: '3.12'
+      - name: Install Claude Code and the preset's toolchain
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          claude --version
+      - name: Fetch GitHub OIDC token
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const token = await core.getIDToken('https://api.anthropic.com');
+            core.setSecret(token);
+            core.exportVariable('JWT', token);
+      - name: Exchange for an Anthropic access token
+        env:
+          RULE: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
+          ORG: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
+          SVAC: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
+          WRK: ${{ vars.ANTHROPIC_WORKSPACE_ID }}
+        run: |
+          resp=$(curl -sS https://api.anthropic.com/v1/oauth/token -H "content-type: application/json" --data @- <<JSON
+          {
+            "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+            "assertion": "$JWT",
+            "federation_rule_id": "$RULE",
+            "organization_id": "$ORG",
+            "service_account_id": "$SVAC",
+            "workspace_id": "$WRK"
+          }
+          JSON
+          )
+          token=$(printf '%s' "$resp" | jq -r '.access_token // empty')
+          if [ -z "$token" ]; then echo "token exchange failed:"; printf '%s' "$resp" | jq 'with_entries(if (.key | test("token$")) then .value = "<redacted>" else . end)'; exit 1; fi
+          echo "::add-mask::$token"
+          echo "ANTHROPIC_AUTH_TOKEN=$token" >> "$GITHUB_ENV"
+      - name: Run the eval
+        run: |
+          node evals/run.mjs --suite "${{ inputs.suite }}" --runner claude --use-api-key --budget "${{ inputs.budget }}" \
+            ${{ inputs.until && format('--until {0}', inputs.until) || '' }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-report
+          path: evals/reports/

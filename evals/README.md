@@ -22,11 +22,20 @@ node evals/run.mjs --suite lifecycle --runner claude --until spec     # stop aft
 node evals/run.mjs --suite lifecycle --runner claude --dir ./tmp/teamly --keep
 ```
 
-The Claude runner uses your claude.ai login; a stray `ANTHROPIC_API_KEY` is ignored unless you
-pass `--use-api-key`. A preflight call runs first and aborts the run if auth is broken.
+```bash
+# Antigravity (Gemini) as the producing assistant, Antigravity as the judge: no API key needed
+node evals/run.mjs --suite lifecycle --runner agy
+# Claude produces, Gemini judges (cross-vendor grading)
+node evals/run.mjs --suite lifecycle --runner claude --judge agy
+```
 
-Runners: `claude` (Claude Code, `claude -p`). Antigravity (`agy -p`) and Codex (`codex exec`) are
-planned; the case files are runner-agnostic.
+**Auth.** Runners and judges use the logins already on the machine: Claude Code's claude.ai login
+and Antigravity's Google login. A stray `ANTHROPIC_API_KEY` / `ANTHROPIC_AUTH_TOKEN` is ignored unless
+you pass `--use-api-key` (that is what CI does after the Anthropic workload-identity exchange, see
+`.github/workflows/evals.yml`). A preflight call per engine runs first and aborts if auth is broken.
+
+Runners: `claude` (Claude Code, `claude -p`), `agy` (Antigravity CLI, `agy -p`). Judges: `claude`,
+`agy`, `none`. Codex (`codex exec`) is planned; the case files are runner-agnostic.
 
 ## Suites
 

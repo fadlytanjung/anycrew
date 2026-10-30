@@ -1,0 +1,19 @@
+{
+  "step": {
+    "id": "status",
+    "prompt": "/crew-status",
+    "maxTurns": 15,
+    "checks": [],
+    "judge": "The reply reports the project as initialised, identifies the phase as Discover (no docs/01 yet) and recommends /crew-brainstorm next. Score 5 if all three, 3 if phase or recommendation is off, 1 if it did not read the project."
+  },
+  "run": {
+    "cost": 0.6437603249999999,
+    "turns": 2,
+    "error": null
+  },
+  "checks": [],
+  "judge": {
+    "score": 5,
+    "reason": "The reply states the project is initialised (all anchor files exist, no crew-init needed), names the phase as Discover because docs/01 is missing, and recommends /crew-brainstorm next; the docs tree confirms only 00-constitution, 20-implementation-status, README, glossary, adr and a specs template exist."
+  }
+}
