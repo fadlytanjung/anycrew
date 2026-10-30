@@ -21,6 +21,25 @@ const log = (...a) => { const line = a.join(' '); console.log(line); fs.appendFi
 
 log(`anycrew eval · suite ${suiteId} · runner ${runner}\nproject: ${projectDir}\nreport:  ${reportDir}`);
 
+// Claude Code prefers ANTHROPIC_API_KEY over the claude.ai login when both exist. The eval uses the
+// login (your subscription) unless --use-api-key is passed, so a stray key with no credit cannot
+// silently break every step.
+const ENV = { ...process.env, CLAUDE_PROJECT_DIR: projectDir };
+if (!args.useApiKey) delete ENV.ANTHROPIC_API_KEY;
+delete ENV.CLAUDECODE; delete ENV.CLAUDE_CODE_ENTRYPOINT;
+
+// 0. Preflight: one cheap call must succeed before any step runs.
+{
+  const pre = spawnSync('claude', ['-p', 'Reply with the single word OK.', '--output-format', 'json', '--max-turns', '1', '--no-session-persistence'], { encoding: 'utf8', env: ENV, cwd: os.tmpdir() });
+  let j = null; try { j = JSON.parse(pre.stdout); } catch {}
+  if (pre.status !== 0 || j?.is_error || !/OK/i.test(j?.result ?? '')) {
+    log(`preflight failed: ${(j?.result ?? pre.stderr ?? pre.stdout ?? '').toString().slice(0, 300)}`);
+    fs.rmSync(reportDir, { recursive: true, force: true });
+    process.exit(2);
+  }
+  log(`preflight ok (${j.model ?? 'model unknown'}, $${(j.total_cost_usd ?? 0).toFixed(3)})`);
+}
+
 // 1. Initialise the project with the local anycrew (the same files users get).
 if (!fs.existsSync(path.join(projectDir, '.anycrew', 'config.json'))) {
   fs.mkdirSync(projectDir, { recursive: true });
@@ -67,7 +86,7 @@ function runStep(step) {
   const cmd = ['claude', '-p', step.prompt, '--output-format', 'json', '--permission-mode', 'acceptEdits',
     '--allowedTools', 'Read,Write,Edit,MultiEdit,Glob,Grep,Bash,Agent,TodoWrite,WebSearch,WebFetch',
     '--max-turns', String(step.maxTurns ?? 60), '--max-budget-usd', String(budgetPerStep), '--no-session-persistence'];
-  const res = spawnSync(cmd[0], cmd.slice(1), { cwd: projectDir, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: { ...process.env, CLAUDE_PROJECT_DIR: projectDir } });
+  const res = spawnSync(cmd[0], cmd.slice(1), { cwd: projectDir, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: ENV });
   let json = null;
   try { json = JSON.parse(res.stdout); } catch { /* text fallback */ }
   const reply = json?.result ?? res.stdout ?? '';
@@ -77,7 +96,7 @@ function runStep(step) {
 function judgeStep(step, reply) {
   const prompt = `You are grading the output of a coding agent step inside the project at the current directory. Read the files the rubric names (and the git log when it says so). The agent's final reply is in the file .anycrew-eval-reply.md. Do not change any file.\n\nRubric: ${step.judge}\n\nAnswer with exactly one line of JSON: {"score": <1-5>, "reason": "<one or two sentences naming the evidence>"}`;
   fs.writeFileSync(path.join(projectDir, '.anycrew-eval-reply.md'), reply);
-  const res = spawnSync('claude', ['-p', prompt, '--output-format', 'json', '--permission-mode', 'plan', '--allowedTools', 'Read,Glob,Grep,Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(make check:*)', '--max-turns', '30', '--max-budget-usd', '2', '--no-session-persistence'], { cwd: projectDir, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  const res = spawnSync('claude', ['-p', prompt, '--output-format', 'json', '--permission-mode', 'plan', '--allowedTools', 'Read,Glob,Grep,Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(make check:*)', '--max-turns', '30', '--max-budget-usd', '2', '--no-session-persistence'], { cwd: projectDir, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024, env: ENV });
   try { fs.unlinkSync(path.join(projectDir, '.anycrew-eval-reply.md')); } catch {}
   let text = res.stdout;
   try { text = JSON.parse(res.stdout).result ?? text; } catch {}

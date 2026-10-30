@@ -22,6 +22,9 @@ node evals/run.mjs --suite lifecycle --runner claude --until spec     # stop aft
 node evals/run.mjs --suite lifecycle --runner claude --dir ./tmp/teamly --keep
 ```
 
+The Claude runner uses your claude.ai login; a stray `ANTHROPIC_API_KEY` is ignored unless you
+pass `--use-api-key`. A preflight call runs first and aborts the run if auth is broken.
+
 Runners: `claude` (Claude Code, `claude -p`). Antigravity (`agy -p`) and Codex (`codex exec`) are
 planned; the case files are runner-agnostic.
 
