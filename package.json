@@ -29,7 +29,8 @@
     "release:check": "node scripts/release-check.mjs",
     "prepack": "cp README.md .README.repo.md && cp README.npm.md README.md",
     "postpack": "mv .README.repo.md README.md",
-    "build:claude": "node scripts/build-claude.mjs"
+    "build:claude": "node scripts/build-claude.mjs",
+    "eval:latest": "node scripts/eval-latest.mjs"
   },
   "engines": {
     "node": ">=18"

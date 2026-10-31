@@ -88,6 +88,7 @@ for (const step of suite.steps) {
 try { fs.cpSync(projectDir, path.join(reportDir, 'project'), { recursive: true, filter: (s) => !/node_modules|\.venv|\.git$|__pycache__|\.pytest_cache|\.ruff_cache|dist/.test(s) }); } catch {}
 if (!args.keep && !args.dir) { log(`\n(project kept at ${projectDir}; delete it when done)`); }
 log(`\nreport: ${reportDir}/summary.md`);
+try { execFileSync('node', [path.join(ROOT, 'scripts', 'eval-latest.mjs'), suiteId, runner], { stdio: 'ignore' }); log(`latest per step: ${path.join(ROOT, 'evals', 'reports', 'LATEST.md')}`); } catch {}
 process.exit(results.every((r) => r.pass) ? 0 : 1);
 
 // ---------------------------------------------------------------------------
@@ -190,7 +191,7 @@ function globSync(pattern) {
 }
 
 function writeSummary(results) {
-  const rows = results.map((r) => `| ${r.id} | ${r.pass ? '✅' : '❌'} | ${r.checks} | ${r.judge ?? '-'} | ${r.costUsd != null ? '$' + r.costUsd.toFixed(2) : '-'} | ${r.turns ?? '-'} | ${r.seconds}s | ${(r.error ?? r.failing[0] ?? r.judgeWhy ?? '').replace(/\|/g, '/').slice(0, 140)} |`);
+  const rows = results.map((r) => `| ${r.id} | ${r.pass ? '✅' : '❌'} | ${r.checks} | ${r.judge ?? '-'} | ${r.costUsd != null ? '$' + r.costUsd.toFixed(2) : '-'} | ${r.turns ?? '-'} | ${r.seconds}s | ${(r.pass ? (r.judgeWhy ?? '') : (r.error ?? r.failing[0] ?? r.judgeWhy ?? '')).replace(/\|/g, '/').slice(0, 140)} |`);
   const total = results.reduce((n, r) => n + (r.costUsd ?? 0), 0);
   const md = `# anycrew eval · ${suiteId} · ${runner} · ${stamp}\n\nProject: \`${projectDir}\`\n\n| Step | Result | Checks | Judge | Cost | Turns | Time | Note |\n|---|---|---|---|---|---|---|---|\n${rows.join('\n')}\n\n**${results.filter((r) => r.pass).length}/${results.length} steps passed · total cost $${total.toFixed(2)}**\n`;
   fs.writeFileSync(path.join(reportDir, 'summary.md'), md);

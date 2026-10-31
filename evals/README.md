@@ -58,6 +58,9 @@ A case is a JSON object: `id`, `prompt` (sent to the assistant), `checks` (deter
 
 ## Reading a report
 
+`evals/reports/LATEST.md` holds the most recent result per step across all run folders (a re-run
+after a provider timeout replaces the earlier attempt there; `npm run eval:latest` rebuilds it).
+
 `PASS` means every deterministic check passed and the judge scored ≥ 3. The summary table shows,
 per step: checks passed/total, judge score, cost and duration. Failures list the first failing
 check or the judge's reason, so a regression in an agent or skill points at the file to fix.
