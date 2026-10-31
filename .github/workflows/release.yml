@@ -88,4 +88,6 @@ jobs:
           tag_name: v${{ needs.verify.outputs.version }}
           name: anycrew ${{ needs.verify.outputs.version }}
           body_path: notes.md
-          files: dist/*
+          files: |
+            dist/*.whl
+            dist/*.tar.gz
