@@ -4,6 +4,7 @@
 
 - `anycrew init` asks for the architecture style (`--architecture`, `anycrew styles`) and seeds a Proposed `docs/adr/ADR-001`; `docs/13-conventions.md` is created at init; `/crew-patterns` confirms or supersedes the ADR and records patterns in the config.
 - Evals: `skills` suite covering every remaining skill, interactive-init test, plugin manifest validation in CI.
+- Interactive-init test no longer hangs CI on Linux: it answers only real prompts (a heading ending in ":" was mistaken for one) and kills the child on timeout.
 - Implementer: when no check command exists yet, it pulls the gate task forward and creates the smallest `make check` instead of reporting the gate as unavailable (found by the skills eval).
 
 ## 0.2.1 — 2026-10-31

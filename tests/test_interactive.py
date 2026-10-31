@@ -1,12 +1,19 @@
 """Drives `anycrew init` through a pseudo-terminal for both CLIs and checks that the answers (assistants,
 preset, name, purpose, architecture style) are honoured: only the chosen assistants are generated and
-ADR-001 carries the chosen style. Run: python3 tests/test_interactive.py"""
+ADR-001 carries the chosen style. Run: python3 tests/test_interactive.py
+
+An answer is sent only when the last line of output is one of init's real questions (a pty may deliver a
+heading that ends with ":" as its own chunk; Node's readline drops input that arrives before a question is
+asked, so answering a heading would leave the last question unanswered and the child waiting forever).
+The child is killed after an idle or overall deadline so a regression fails instead of hanging CI."""
 from __future__ import annotations
 
 import json
 import os
 import pty
+import re
 import select
+import signal
 import sys
 import tempfile
 import time
@@ -14,6 +21,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 ANSWERS = ["claude,antigravity", "go-service", "event-driven", "itest", "A pseudo-terminal test."]
+PROMPT = re.compile(r"(Which assistants|Stack preset|Architecture style|Project name|One-sentence purpose)[^\n]*: ?$")
+ANSI = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]")  # readline moves the cursor after the prompt text
+IDLE_SECONDS, TOTAL_SECONDS = 30, 120
 
 
 def drive(cmd: list[str], cwd: str) -> str:
@@ -22,7 +32,9 @@ def drive(cmd: list[str], cwd: str) -> str:
         os.chdir(cwd)
         os.environ["PYTHONPATH"] = str(ROOT / "src")
         os.execvp(cmd[0], cmd)
-    out, i, last = b"", 0, time.time()
+    out, i, start = b"", 0, time.time()
+    last = start
+    killed = False
     while True:
         r, _, _ = select.select([fd], [], [], 0.5)
         if r:
@@ -34,14 +46,19 @@ def drive(cmd: list[str], cwd: str) -> str:
                 break
             out += chunk
             last = time.time()
-            if chunk.rstrip().endswith(b":") and i < len(ANSWERS):
+            tail = ANSI.sub("", out.decode(errors="replace")).replace("\r", "").rstrip(" ")
+            if i < len(ANSWERS) and PROMPT.search(tail.split("\n")[-1]):
                 time.sleep(0.2)
                 os.write(fd, (ANSWERS[i] + "\n").encode())
+                out += b"\n"  # so the answered prompt is no longer the last line
                 i += 1
-        elif time.time() - last > 30:
+        elif time.time() - last > IDLE_SECONDS or time.time() - start > TOTAL_SECONDS:
+            killed = True
+            os.kill(pid, signal.SIGKILL)
             break
     os.waitpid(pid, 0)
-    return out.decode(errors="replace")
+    text = out.decode(errors="replace")
+    return text + ("\n[test killed the child: no prompt answered for %ss]" % IDLE_SECONDS if killed else "")
 
 
 def main() -> int:
@@ -62,6 +79,7 @@ def main() -> int:
                     "only chosen dirs": sorted(p.name for p in Path(d).iterdir() if p.name.startswith(".")) == [".agents", ".anycrew", ".claude"],
                     "adr-001": "Event-driven" in (Path(d) / "docs/adr/ADR-001-architecture-style.md").read_text(),
                     "asked architecture": "Architecture style" in out,
+                    "not killed": "[test killed" not in out,
                 }
                 bad = [k for k, v in checks.items() if not v]
                 ok = not bad

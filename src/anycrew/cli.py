@@ -133,7 +133,7 @@ def _ask_init(project_dir: Path, opts: dict, pack) -> dict:
     tools = ask("Which assistants should anycrew generate files for (comma-separated, or all)", ",".join(detected) or "claude")
     print(f"Presets: {', '.join(pack.presets)}")
     preset = ask("Stack preset", "generic")
-    print("Architecture style (recorded as a Proposed ADR-001; /crew-patterns confirms it later):")
+    print("Choose an architecture style. It is recorded as a Proposed ADR-001 and /crew-patterns confirms it later.")
     for sid, st in pack.architectures["styles"].items():
         print(f"  {sid:<18} {st['name']}: {st['choose_when']}")
     architecture = ask("Architecture style", opts.get("architecture") or pack.architectures["default"])
