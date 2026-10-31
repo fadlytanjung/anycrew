@@ -39,6 +39,11 @@ Every release goes to npm and PyPI from one tag; `.github/workflows/release.yml`
 4. The workflow verifies the tag matches every version field, runs `npm test` and the parity test,
    publishes to whichever registry does not have that version yet, and creates the GitHub Release
    with the wheel and sdist attached. Re-running it is safe.
+5. **Approve the npm release.** npm stages releases published from CI (staged publishing) and
+   hides them until a maintainer approves with 2FA: open the package on npmjs.com → *Staged
+   Packages* → approve, or run `npm stage list anycrew` then `npm stage approve <stage-id>` (npm ≥
+   11.15). Until then `npm view anycrew version` still shows the previous release while PyPI and
+   the GitHub Release are already live.
 
 Both registries use trusted publishing (GitHub OIDC) configured against `release.yml`; no
 long-lived tokens are stored. `npm run release:check` runs the same version check locally.

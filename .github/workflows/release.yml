@@ -56,6 +56,9 @@ jobs:
         run: npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Remind that npm stages CI releases until a maintainer approves
+        run: |
+          echo "::notice title=npm release staged::npm hides releases published from CI until a maintainer approves them with 2FA. Approve on npmjs.com (anycrew → Staged Packages) or with 'npm stage list anycrew' and 'npm stage approve <stage-id>'. PyPI and the GitHub Release are live immediately."
 
   pypi:
     needs: verify
