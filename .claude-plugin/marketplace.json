@@ -9,10 +9,10 @@
   "plugins": [
     {
       "name": "anycrew",
-      "source": "./",
+      "source": "./plugins/claude",
       "description": "Spec-driven agent crew with per-agent model tiers: brainstorm, PRD, architecture, spec, implement, test, review, security, debug, LLM features, release, docs.",
       "category": "development",
-      "version": "0.2.0"
+      "version": "0.2.1"
     }
   ]
 }

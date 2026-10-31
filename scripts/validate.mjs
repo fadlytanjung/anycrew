@@ -62,7 +62,7 @@ for (const t of TOOLS) {
 for (const tier of TIERS) if (!pack.models.tiers[tier]?.purpose) E(`models.json: tiers.${tier}.purpose missing`);
 
 const pkg = JSON.parse(fs.readFileSync(path.join(PACK_ROOT, 'package.json'), 'utf8'));
-for (const f of ['.claude-plugin/plugin.json', 'plugin.json']) {
+for (const f of ['plugins/claude/.claude-plugin/plugin.json', 'plugin.json']) {
   const j = JSON.parse(fs.readFileSync(path.join(PACK_ROOT, f), 'utf8'));
   if (j.version !== pkg.version) E(`${f}: version ${j.version} != package.json ${pkg.version}`);
   if (j.name !== 'anycrew') E(`${f}: name must be anycrew`);

@@ -10,7 +10,7 @@ const tag = (process.argv[2] ?? '').replace(/^refs\/tags\//, '');
 const versions = {
   'package.json': JSON.parse(read('package.json')).version,
   'pyproject.toml': /^version\s*=\s*"([^"]+)"/m.exec(read('pyproject.toml'))?.[1],
-  '.claude-plugin/plugin.json': JSON.parse(read('.claude-plugin/plugin.json')).version,
+  'plugins/claude/.claude-plugin/plugin.json': JSON.parse(read('plugins/claude/.claude-plugin/plugin.json')).version,
   '.claude-plugin/marketplace.json': JSON.parse(read('.claude-plugin/marketplace.json')).plugins[0].version,
   'plugin.json': JSON.parse(read('plugin.json')).version,
 };

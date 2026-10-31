@@ -1,0 +1,23 @@
+{
+  "name": "anycrew",
+  "version": "0.2.1",
+  "description": "One crew of specialist agents (brainstorm, PRD, architecture, patterns, spec, implement, test, refactor, review, security, debug, LLM features, release, docs) with a spec-driven workflow and per-agent model tiers.",
+  "author": {
+    "name": "anycrew contributors",
+    "url": "https://github.com/fadlytanjung/anycrew"
+  },
+  "homepage": "https://github.com/fadlytanjung/anycrew",
+  "repository": "https://github.com/fadlytanjung/anycrew",
+  "license": "MIT",
+  "keywords": [
+    "agents",
+    "skills",
+    "spec-driven",
+    "tdd",
+    "security",
+    "mvp",
+    "model-tiers",
+    "tool-agnostic"
+  ],
+  "icon": "./.claude-plugin/icon.png"
+}

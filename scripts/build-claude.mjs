@@ -1,16 +1,21 @@
-// Writes the Claude Code plugin's agents (.claude-plugin/agents/*.md) from the canonical agents with
-// the default tier mapping, and lists them in .claude-plugin/plugin.json. Run after editing agents/.
+// Builds the Claude Code plugin at plugins/claude/ from the canonical pack: tiered agents (Claude's
+// loader reads only the plugin's default agents/ folder, so they must live in their own plugin root),
+// a copy of the skills, the hooks and the manifest. The marketplace (.claude-plugin/marketplace.json)
+// points at this folder. Run after editing agents/, skills/, hooks/ or the version; validation checks
+// that the folder is fresh.
 import fs from 'node:fs';
 import path from 'node:path';
 import { loadPack, PACK_ROOT } from '../lib/pack.mjs';
-import { claudePluginAgents } from '../lib/generate.mjs';
+import { claudePluginFiles } from '../lib/generate.mjs';
 
 const pack = loadPack();
-const built = claudePluginAgents(pack);
-fs.mkdirSync(path.join(PACK_ROOT, '.claude-plugin', 'agents'), { recursive: true });
-for (const [file, content] of Object.entries(built)) fs.writeFileSync(path.join(PACK_ROOT, file), content);
-const mp = path.join(PACK_ROOT, '.claude-plugin', 'plugin.json');
-const manifest = JSON.parse(fs.readFileSync(mp, 'utf8'));
-manifest.agents = Object.keys(built).map((f) => `./${f}`);
-fs.writeFileSync(mp, JSON.stringify(manifest, null, 2) + '\n');
-console.log(`${Object.keys(built).length} plugin agents written; manifest updated`);
+const out = path.join(PACK_ROOT, 'plugins', 'claude');
+fs.rmSync(out, { recursive: true, force: true });
+const files = claudePluginFiles(pack);
+for (const [rel, content] of Object.entries(files)) {
+  const p = path.join(out, rel);
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  if (Buffer.isBuffer(content)) fs.writeFileSync(p, content); else fs.writeFileSync(p, content);
+  if (rel.endsWith('.sh')) fs.chmodSync(p, 0o755);
+}
+console.log(`plugins/claude: ${Object.keys(files).length} files written (${pack.agents.length} agents, ${pack.skills.length} skills)`);

@@ -1,10 +1,15 @@
 # Changelog
 
+## 0.2.1 — 2026-10-31
+
+- Claude Code plugin loads its 17 tiered agents again: the plugin is now a generated root at `plugins/claude/` that the marketplace points to (Claude reads agents only from a plugin's own `agents/` folder; the repository root stays canonical for Antigravity and Codex).
+- GitHub Release assets are the wheel and sdist only.
+
 ## 0.2.0 — 2026-10-31
 
 - `/crew-patterns` and `/crew-refactor` with catalogues of architecture styles, design patterns and code smells; a new `quality-engineer` agent (balanced) owns smell audits, refactoring and the rules that make them stick; architect, implementer and reviewer consult the catalogues.
 - Interactive `anycrew init`: asks which assistants (default: the ones detected) and which preset.
-- Agents load in Antigravity plugins (no `model`/`tools` fields in canonical agents); the Claude Code plugin ships generated tiered agents in `.claude-plugin/agents/`.
+- Agents load in Antigravity plugins (no `model`/`tools` fields in canonical agents); the Claude Code plugin is a generated root at `plugins/claude/` with tiered agents.
 - Evals: Antigravity runner and judge, Gemini API judge, per-step timeout, CI workflow with Anthropic workload identity federation.
 
 ## 0.1.1 — 2026-10-30

@@ -41,8 +41,9 @@ tools_claude: Read, Grep, Glob, Write, Edit, Bash   # Claude tool allow-list; ot
 
 `tier` is the portable field; no canonical agent carries a `model` (Antigravity rejects anything but
 its own tier names, and Claude aliases would age). Per-tool models are generated: `anycrew init`
-writes them into a project, and `npm run build:claude` writes `.claude-plugin/agents/` so the
-Claude Code plugin install gets tiers too. The root `agents/` folder is what Antigravity loads from
+writes them into a project, and `npm run build:claude` writes the Claude Code plugin to
+`plugins/claude/` (tiered agents, skills, hooks), which the marketplace points at, so a plugin install
+gets tiers too. The root `agents/` folder is what Antigravity loads from
 the plugin, with `model: inherit`.
 
 ## Customising
