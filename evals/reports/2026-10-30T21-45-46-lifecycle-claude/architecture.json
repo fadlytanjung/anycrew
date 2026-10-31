@@ -1,0 +1,108 @@
+{
+  "step": {
+    "id": "architecture",
+    "prompt": "/crew-architecture Design Teamly from docs/03 using the python-fastapi-react preset: FastAPI + Postgres backend, React/Vite frontend, one cloud. Do not ask questions. Write docs/05-architecture.md, docs/09-data-model.md, docs/10-api-contract.md, contracts/openapi.yaml, docs/13-conventions.md and at least two ADRs in docs/adr/, then list the specs to write in build order, and finish.",
+    "maxTurns": 80,
+    "checks": [
+      {
+        "type": "exists",
+        "path": "docs/05-architecture.md"
+      },
+      {
+        "type": "exists",
+        "path": "docs/09-data-model.md"
+      },
+      {
+        "type": "exists",
+        "path": "docs/10-api-contract.md"
+      },
+      {
+        "type": "exists",
+        "path": "contracts/openapi.yaml"
+      },
+      {
+        "type": "exists",
+        "path": "docs/13-conventions.md"
+      },
+      {
+        "type": "count",
+        "glob": "docs/adr/ADR-0*.md",
+        "min": 2
+      },
+      {
+        "type": "grep",
+        "path": "docs/05-architecture.md",
+        "pattern": "```mermaid"
+      },
+      {
+        "type": "grep",
+        "path": "docs/05-architecture.md",
+        "pattern": "(?i)constitution check"
+      }
+    ],
+    "judge": "Read docs/05-architecture.md, docs/09-data-model.md, docs/10-api-contract.md, contracts/openapi.yaml, docs/13-conventions.md and docs/adr/*. Score 5 if containers and flows are diagrammed, layers have an allowed-imports table with the domain pure and ports/adapters named, the data model has entities with IDs, tenancy and state tables, the OpenAPI file is valid-looking YAML with auth, errors with stable codes and the P0 resources, ADRs follow context/options/decision/consequences with honest trade-offs and pinned versions, and a build-order list of specs exists. Score 3 if the shape is right but values are vague ('the latest'). Score 1 if it is prose without contracts."
+  },
+  "run": {
+    "cost": 3.8717955,
+    "turns": 24,
+    "error": "step timed out after 45 min (killed)"
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": "docs/05-architecture.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "exists",
+      "path": "docs/09-data-model.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "exists",
+      "path": "docs/10-api-contract.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "exists",
+      "path": "contracts/openapi.yaml",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "exists",
+      "path": "docs/13-conventions.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "count",
+      "glob": "docs/adr/ADR-0*.md",
+      "min": 2,
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/05-architecture.md",
+      "pattern": "```mermaid",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/05-architecture.md",
+      "pattern": "(?i)constitution check",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "docs/05 has Mermaid container and sequence diagrams plus a 16-spec build-order table; docs/13 has a backend allowed-imports table with a pure domain and named ports/adapters; docs/09 has an ER diagram, per-entity ID/tenancy/state tables and constraints; contracts/openapi.yaml parses (3.1.0, 17 paths) with a cookie security scheme, a Problem schema enumerating 13 stable codes and every P0 resource; the three ADRs follow context/options/decision/consequences with explicit Bad consequences and [assumed] markers, though exact versions are major-only (SQLAlchemy 2, Python 3.12) and deferred to the lockfile.",
+    "by": "claude"
+  }
+}

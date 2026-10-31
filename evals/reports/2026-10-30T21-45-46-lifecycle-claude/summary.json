@@ -1,0 +1,14 @@
+[
+  {
+    "id": "architecture",
+    "pass": true,
+    "checks": "8/8",
+    "judge": 5,
+    "judgeWhy": "docs/05 has Mermaid container and sequence diagrams plus a 16-spec build-order table; docs/13 has a backend allowed-imports table with a pure domain and named ports/adapters; docs/09 has an ER diagram, per-entity ID/tenancy/state tables and constraints; contracts/openapi.yaml parses (3.1.0, 17 paths) with a cookie security scheme, a Problem schema enumerating 13 stable codes and every P0 resource; the three ADRs follow context/options/decision/consequences with explicit Bad consequences and [assumed] markers, though exact versions are major-only (SQLAlchemy 2, Python 3.12) and deferred to the lockfile.",
+    "costUsd": 3.8717955,
+    "turns": 24,
+    "seconds": 8148,
+    "error": "step timed out after 45 min (killed)",
+    "failing": []
+  }
+]
