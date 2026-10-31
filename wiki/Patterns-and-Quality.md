@@ -16,6 +16,9 @@ choice.
 
 ## Choosing an architecture style
 
+`anycrew init` asks for it first (default: modular monolith with hexagonal modules; `undecided` is
+allowed) and records it as a Proposed ADR-001, so no spec starts without a shape.
+
 Name the forces first: team size and horizon, which parts change weekly, the external systems, where
 reads must reflect the last write, the real load, who is on call. Then pick the simplest style that
 handles them. Most MVPs are a **modular monolith with hexagonal modules**; document and agent products

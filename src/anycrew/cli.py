@@ -14,8 +14,8 @@ CONFIG_REL = Path(".anycrew") / "config.json"
 HELP = f"""anycrew — one crew of specialist agents for any coding assistant
 
 Usage:
-  anycrew init   [--preset <id|file>] [--tools a,b|all] [--name <project>] [--purpose "<text>"]
-                 [--dir <path>] [--all-docs] [--force] [--yes]
+  anycrew init   [--preset <id|file>] [--tools a,b|all] [--architecture <style>] [--name <project>]
+                 [--purpose "<text>"] [--dir <path>] [--all-docs] [--force] [--yes]
                  (in a terminal without --tools/--preset it asks; --yes takes the detected defaults)
   anycrew sync   [--tools a,b|all] [--dir <path>] [--force]
   anycrew doctor [--dir <path>]
@@ -24,7 +24,7 @@ Usage:
   anycrew --version | --help
 
 Tools: {', '.join(TOOLS)}   (default: the assistants detected on this machine or in the repo)
-Presets: see `anycrew presets`.
+Presets: see `anycrew presets`.   Architecture styles: see `anycrew styles`.
 """
 
 
@@ -49,6 +49,8 @@ def main(argv: list[str] | None = None) -> int:
             return _list(project_dir)
         if cmd == "presets":
             return _presets()
+        if cmd == "styles":
+            return _styles()
         print(f'unknown command "{cmd}"\n{HELP}', file=sys.stderr)
         return 2
     except SystemExit as e:
@@ -75,6 +77,12 @@ def _parse_args(argv):
             cmd = a
         i += 1
     return cmd, opts
+
+
+def _valid_style(pack, sid: str) -> str:
+    if sid not in pack.architectures["styles"]:
+        raise SystemExit(f'anycrew: unknown architecture style "{sid}" (known: {", ".join(pack.architectures["styles"])})')
+    return sid
 
 
 def _read_config(project_dir: Path):
@@ -125,9 +133,13 @@ def _ask_init(project_dir: Path, opts: dict, pack) -> dict:
     tools = ask("Which assistants should anycrew generate files for (comma-separated, or all)", ",".join(detected) or "claude")
     print(f"Presets: {', '.join(pack.presets)}")
     preset = ask("Stack preset", "generic")
+    print("Architecture style (recorded as a Proposed ADR-001; /crew-patterns confirms it later):")
+    for sid, st in pack.architectures["styles"].items():
+        print(f"  {sid:<18} {st['name']}: {st['choose_when']}")
+    architecture = ask("Architecture style", opts.get("architecture") or pack.architectures["default"])
     name = ask("Project name", opts.get("name") or project_dir.name)
     purpose = ask("One-sentence purpose", opts.get("purpose") or "")
-    return {**opts, "tools": tools, "preset": preset, "name": name, "purpose": purpose}
+    return {**opts, "tools": tools, "preset": preset, "name": name, "purpose": purpose, "architecture": architecture}
 
 
 def _init(project_dir: Path, opts) -> int:
@@ -149,6 +161,8 @@ def _init(project_dir: Path, opts) -> int:
         "agents": existing.get("agents", {"exclude": []}),
         "skills": existing.get("skills", {"exclude": []}),
         "hooks": existing.get("hooks", {"lint_after_edit": preset.get("hooks", {}).get("lint_after_edit", True) is not False}),
+        "architecture": {"style": _valid_style(pack, opts.get("architecture") or (existing.get("architecture") or {}).get("style") or "undecided"),
+                         "patterns": (existing.get("architecture") or {}).get("patterns", [])},
     }
     (project_dir / ".anycrew").mkdir(parents=True, exist_ok=True)
     (project_dir / CONFIG_REL).write_text(json.dumps(config, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -239,6 +253,14 @@ def _list(project_dir: Path) -> int:
         print(line(r))
     print("\nTiers: " + "\n       ".join(f"{t} = {pack.models['tiers'][t]['purpose']}" for t in TIERS))
     print(f"Skills ({len(pack.skills)}): " + " ".join("/" + s.id for s in pack.skills))
+    return 0
+
+
+def _styles() -> int:
+    pack = load_pack()
+    for sid, st in pack.architectures["styles"].items():
+        print(f"{sid:<18} {st['name']}\n{'':<18} choose when: {st['choose_when']}\n{'':<18} avoid when:  {st['avoid_when']}")
+    print(f"\ndefault: {pack.architectures['default']}")
     return 0
 
 

@@ -15,15 +15,19 @@ Delegate to the **scout** (fast tier). Read only; change nothing.
    `docs/specs/README.md`, `.anycrew/config.json`. Missing → recommend `crew-init`.
 2. Phase detection: no `docs/01` → Discover; no `docs/03` → Define; no `docs/05` → Design;
    no spec folders → Specify; unchecked tasks → Build; all ticked, no review report → Verify.
-3. Current spec: the lowest-numbered spec with unchecked tasks whose dependencies are done;
+3. Architecture: if `docs/adr/ADR-001-architecture-style.md` is still **Proposed** (the style picked
+   at init) and the PRD exists, recommend `/crew-patterns` before the first spec; if the style is
+   `undecided`, recommend it right after `/crew-prd`.
+4. Current spec: the lowest-numbered spec with unchecked tasks whose dependencies are done;
    its next task ID and the ACs it serves.
-4. Recent activity: last five commits by spec prefix; uncommitted changes.
-5. Open items: Critical or High findings in the latest review or security report, if any.
+5. Recent activity: last five commits by spec prefix; uncommitted changes.
+6. Open items: Critical or High findings in the latest review or security report, if any.
 
 Report:
 
 ```
 Project: <name> — phase: <phase>
+Architecture: <style> (ADR-001 Proposed/Accepted) — patterns in docs/13: <n>
 Current spec: NNN <title> — next task: TNNN-nn (AC-NNN-n)
 Status doc: last updated <date>; <n> Built, <n> In progress, <n> Specified
 Open findings: <n critical, n high> (or none)

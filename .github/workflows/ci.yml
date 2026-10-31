@@ -30,7 +30,22 @@ jobs:
           python-version: ${{ matrix.python }}
       - name: Python and Node CLIs generate identical projects
         run: uv run --no-project python tests/test_parity.py
+      - name: Interactive init asks and honours the answers (both CLIs)
+        run: uv run --no-project python tests/test_interactive.py
       - name: Build the wheel and run it
         run: |
           uv build
           uvx --from dist/anycrew-*.whl anycrew --version
+  plugin-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Claude Code plugin and marketplace manifests validate
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          claude plugin validate .
+      - name: Generated Claude plugin is fresh
+        run: node scripts/build-claude.mjs && git diff --exit-code -- plugins/claude

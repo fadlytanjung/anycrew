@@ -19,6 +19,7 @@ and the assistant-specific folders.
 | Data shapes | `docs/09-data-model.md` |
 | Code layout and patterns | `docs/13-conventions.md` |
 | What is already built | `docs/20-implementation-status.md` |
+| Architecture style and the patterns in use | `docs/adr/ADR-001-architecture-style.md`, `docs/13-conventions.md` §3 |
 | Decisions and their trade-offs | `docs/adr/` |
 
 If code and docs disagree, **stop and fix the doc first** (or ask), then change the code.

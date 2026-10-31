@@ -39,7 +39,7 @@ def main() -> int:
         with tempfile.TemporaryDirectory() as tmp:
             a, b = Path(tmp) / "py", Path(tmp) / "node"
             a.mkdir(); b.mkdir()
-            args = ["init", "--preset", preset, "--tools", "all", "--name", "smoke", "--purpose", "Parity check."]
+            args = ["init", "--preset", preset, "--tools", "all", "--architecture", "modular-monolith", "--name", "smoke", "--purpose", "Parity check."]
             run(PY, *args, "--dir", str(a))
             run(NODE, *args, "--dir", str(b))
             d = diff_dirs(a, b)
@@ -59,7 +59,7 @@ def main() -> int:
                 failures += 1
                 print(f"FAIL {preset}: hand-written file not preserved")
             print(f"ok  {preset}")
-    for cmd in (["list"], ["presets"], ["--version"]):
+    for cmd in (["list"], ["presets"], ["styles"], ["--version"]):
         if run(PY, *cmd) != run(NODE, *cmd):
             failures += 1
             print(f"FAIL output differs for {cmd}")

@@ -40,6 +40,7 @@ class Pack:
     presets: dict[str, dict[str, Any]]
     docs_templates: list[tuple[str, str]]
     hook_script: str
+    architectures: dict[str, Any]
 
     def template(self, rel: str) -> str:
         return (self.root / "templates" / rel).read_text(encoding="utf-8")
@@ -69,7 +70,8 @@ def load_pack() -> Pack:
     docs_root = root / "templates" / "docs"
     docs = [(str(f.relative_to(docs_root)), f.read_text(encoding="utf-8")) for f in sorted(docs_root.rglob("*")) if f.is_file()]
     hook = (root / "hooks" / "scripts" / "lint-after-edit.sh").read_text(encoding="utf-8")
-    return Pack(root, pkg["version"], models, _md_items(root / "agents"), skills, _md_items(root / "rules"), presets, docs, hook)
+    architectures = json.loads((root / "catalog" / "architectures.json").read_text(encoding="utf-8"))
+    return Pack(root, pkg["version"], models, _md_items(root / "agents"), skills, _md_items(root / "rules"), presets, docs, hook, architectures)
 
 
 def model_for(models: dict, overrides: dict | None, tool: str, tier: str) -> Any:

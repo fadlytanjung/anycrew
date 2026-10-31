@@ -16,6 +16,13 @@ The catalogues are written in anycrew's own words from well-known sources (the G
 catalogue, Fowler's refactoring and enterprise patterns, hexagonal and clean architecture, the
 refactoring.guru taxonomy of smells); they are summaries for choosing, not tutorials.
 
+## The first decision happens at init
+
+`anycrew init` asks for the architecture style (or `--architecture <style>`; `anycrew styles` lists
+them with choose/avoid guidance) and writes it as a **Proposed** `docs/adr/ADR-001`. Specs therefore
+never start without a shape; `/crew-patterns` confirms or supersedes the ADR once the PRD states the
+forces, and records the chosen patterns in `docs/13` and `.anycrew/config.json`.
+
 ## How the crew uses them
 
 - **`/crew-patterns`** (architect, strong): names the forces, shortlists two styles, recommends one,

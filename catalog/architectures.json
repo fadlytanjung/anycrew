@@ -1,0 +1,76 @@
+{
+  "$comment": "Architecture styles offered by `anycrew init` and `/crew-patterns`. Same rows as skills/crew-patterns/references/architecture-styles.md, kept machine-readable so init can seed ADR-001.",
+  "default": "modular-monolith",
+  "styles": {
+    "modular-monolith": {
+      "name": "Modular monolith with hexagonal modules",
+      "shape": "One deployable; strict module boundaries (own tables, public API per module, no cross-module imports); inside each module a pure domain behind ports, adapters for I/O.",
+      "choose_when": "A startup or mid-size team wants microservice discipline without the operations cost; integrations should be swappable and testable without infrastructure.",
+      "avoid_when": "Modules need independent scaling or release today, or the product is a throwaway prototype with no logic worth protecting.",
+      "watch_for": "Shared tables across modules; a 'common' module that becomes everything; adapters leaking SDK types into the domain."
+    },
+    "layered": {
+      "name": "Layered (n-tier)",
+      "shape": "Presentation -> application -> domain -> data, each layer calling only the one below.",
+      "choose_when": "A small team builds a CRUD-heavy product with few integrations.",
+      "avoid_when": "Business rules keep leaking into controllers or SQL; several entry points share use cases.",
+      "watch_for": "Anaemic domain; 'utils' layers; every change touching every layer."
+    },
+    "hexagonal": {
+      "name": "Hexagonal (ports and adapters)",
+      "shape": "A pure domain in the middle; ports define what it needs; adapters implement them for databases, APIs and UIs.",
+      "choose_when": "Tests must run without infrastructure and providers (model vendors, payments, storage) must be swappable.",
+      "avoid_when": "Throwaway prototypes with no logic worth protecting.",
+      "watch_for": "Port explosion; adapters leaking SDK types into the domain."
+    },
+    "clean": {
+      "name": "Clean / onion architecture",
+      "shape": "Hexagonal with explicit rings: entities, use cases, interface adapters, frameworks; dependencies point inward.",
+      "choose_when": "Several entry points (API, CLI, jobs) share the same use cases.",
+      "avoid_when": "A single thin API over a database.",
+      "watch_for": "Ceremony: use-case classes that only forward calls."
+    },
+    "microservices": {
+      "name": "Microservices",
+      "shape": "Independently deployed services, each owning its data, talking over APIs or events.",
+      "choose_when": "Several teams need independent release cadences and parts of the system have proven, different scaling needs.",
+      "avoid_when": "Fewer than about three teams, or the domain boundaries are still moving.",
+      "watch_for": "A distributed monolith; chatty synchronous calls; no observability."
+    },
+    "event-driven": {
+      "name": "Event-driven",
+      "shape": "Producers emit facts; consumers react; a broker or log in between.",
+      "choose_when": "Workflows span steps that may fail independently, need fan-out, audit trails or integrations.",
+      "avoid_when": "Strict read-your-writes expectations everywhere.",
+      "watch_for": "Invisible coupling through event schemas; missing idempotency; no replay story."
+    },
+    "cqrs": {
+      "name": "CQRS (optionally with event sourcing)",
+      "shape": "Separate write model (commands) and read models (queries); optionally events as the source of truth with projected read models.",
+      "choose_when": "Complex write rules with many read shapes, audit requirements or temporal queries.",
+      "avoid_when": "Simple CRUD, or a team unfamiliar with projections.",
+      "watch_for": "Eventual-consistency surprises in the UI; projection rebuild cost."
+    },
+    "pipeline": {
+      "name": "Pipeline / workflow",
+      "shape": "Ordered stages with explicit state, idempotency keys and retries; the shape of document processing and agent systems.",
+      "choose_when": "Long-running, multi-step jobs: LLM pipelines, document processing, ETL.",
+      "avoid_when": "Request/response features.",
+      "watch_for": "Stages mutating shared state; non-idempotent retries; large payloads in state."
+    },
+    "serverless": {
+      "name": "Serverless / functions",
+      "shape": "Functions triggered by HTTP or events, with managed scaling.",
+      "choose_when": "Spiky load, glue between managed services, little operations capacity.",
+      "avoid_when": "Long-running processes, heavy local state, latency-sensitive paths.",
+      "watch_for": "Cold starts; vendor lock-in; sprawl without a map."
+    },
+    "undecided": {
+      "name": "Undecided",
+      "shape": "To be chosen with /crew-patterns once the PRD exists.",
+      "choose_when": "The forces (team, change rate, integrations, consistency, scale) are not known yet.",
+      "avoid_when": "Code is about to be written: decide first.",
+      "watch_for": "Starting specs before the shape is chosen."
+    }
+  }
+}

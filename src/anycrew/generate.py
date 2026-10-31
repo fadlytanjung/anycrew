@@ -23,8 +23,11 @@ def fill(text: str, vars: dict[str, str]) -> str:
     return re.sub(r"\{\{([a-z_]+)\}\}", lambda m: vars.get(m.group(1), "{{" + m.group(1) + "}}"), text)
 
 
-def template_vars(config: dict, preset: dict) -> dict[str, str]:
+def template_vars(config: dict, preset: dict, pack: Pack | None = None) -> dict[str, str]:
     c = {**preset.get("commands", {}), **config.get("commands", {})}
+    style_id = (config.get("architecture") or {}).get("style") or "undecided"
+    styles = (pack.architectures.get("styles", {}) if pack else {})
+    style = styles.get(style_id) or styles.get("undecided") or {}
     l = preset.get("layout", {})
     backend = l.get("backend")
     sketch = [
@@ -54,6 +57,12 @@ def template_vars(config: dict, preset: dict) -> dict[str, str]:
         "backend_conventions": f"### Backend\n{bullets(bc)}" if bc else "",
         "frontend_conventions": f"### Frontend\n{bullets(fc)}" if fc else "",
         "date": _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%d"),
+        "style_id": style_id,
+        "style_name": style.get("name", style_id),
+        "style_shape": style.get("shape", ""),
+        "style_choose": style.get("choose_when", ""),
+        "style_avoid": style.get("avoid_when", ""),
+        "style_watch": style.get("watch_for", ""),
     }
 
 
@@ -90,7 +99,7 @@ def _json(obj: Any) -> str:
 
 
 def generate(pack: Pack, config: dict, preset: dict, project_dir: Path, tools: list[str], force: bool, report: Report) -> Report:
-    vars = template_vars(config, preset)
+    vars = template_vars(config, preset, pack)
     rules = effective_rules(pack, preset)
     agents = _selected(pack.agents, config.get("agents", {}).get("exclude"))
     skills = _selected(pack.skills, config.get("skills", {}).get("exclude"))
@@ -290,15 +299,29 @@ def _merge_cursor_hooks(file: Path, report: Report) -> None:
 
 
 ESSENTIAL_DOCS = {
-    "README.md", "00-constitution.md", "20-implementation-status.md", "glossary.md",
+    "README.md", "00-constitution.md", "13-conventions.md", "20-implementation-status.md", "glossary.md",
     "adr/README.md", "adr/ADR-template.md", "specs/README.md",
     "specs/NNN-template/spec.md", "specs/NNN-template/plan.md", "specs/NNN-template/tasks.md",
 }
 
 
+ADR1 = "adr/ADR-001-architecture-style.md"
+
+
 def scaffold_docs(pack: Pack, config: dict, preset: dict, project_dir: Path, report: Report, all_docs: bool = False) -> None:
-    vars = template_vars(config, preset)
+    vars = template_vars(config, preset, pack)
     for rel, text in pack.docs_templates:
+        if rel == ADR1:
+            continue  # seeded below, only with a style
         if not all_docs and rel not in ESSENTIAL_DOCS:
             continue
         write_if_missing(project_dir / "docs" / rel, fill(text, vars), report)
+    # The architecture style chosen at init becomes a Proposed ADR-001 so specs never start without a shape.
+    style = (config.get("architecture") or {}).get("style")
+    if style and style != "undecided":
+        t = next((text for rel, text in pack.docs_templates if rel == ADR1), None)
+        if t and write_if_missing(project_dir / "docs" / ADR1, fill(t, vars), report):
+            idx = project_dir / "docs" / "adr" / "README.md"
+            cur = read_if(idx)
+            if cur and "ADR-001" not in cur:
+                idx.write_text(cur.rstrip() + f"\n| [001](ADR-001-architecture-style.md) | Architecture style: {vars['style_name']} | Proposed |\n", encoding="utf-8")

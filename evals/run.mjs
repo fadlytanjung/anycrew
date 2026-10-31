@@ -57,7 +57,7 @@ if (!fs.existsSync(path.join(projectDir, '.anycrew', 'config.json'))) {
   sh('git', ['config', 'user.email', 'eval@anycrew.local'], projectDir);
   sh('git', ['config', 'user.name', 'anycrew eval'], projectDir);
   const p = suite.project;
-  log(sh('node', [path.join(ROOT, 'bin', 'anycrew.mjs'), 'init', '--preset', p.preset, '--tools', runner === 'agy' ? 'antigravity' : 'claude', '--name', p.name, '--purpose', p.purpose], projectDir).split('\n').slice(-2).join('\n'));
+  log(sh('node', [path.join(ROOT, 'bin', 'anycrew.mjs'), 'init', '--preset', p.preset, '--tools', runner === 'agy' ? 'antigravity' : 'claude', '--name', p.name, '--purpose', p.purpose, ...(p.architecture ? ['--architecture', p.architecture] : [])], projectDir).split('\n').slice(-2).join('\n'));
   sh('git', ['add', '-A'], projectDir);
   sh('git', ['commit', '-q', '-m', 'chore: anycrew init'], projectDir);
 }
@@ -68,6 +68,10 @@ let started = !args.from;
 for (const step of suite.steps) {
   if (!started) { if (step.id === args.from) started = true; else continue; }
   log(`\n=== ${step.id} ===`);
+  if (step.setup) {
+    const su = spawnSync('sh', ['-c', step.setup], { cwd: projectDir, encoding: 'utf8', timeout: 600000, env: ENV });
+    if (su.status !== 0) log(`  setup failed (exit ${su.status}): ${(su.stdout + su.stderr).trim().slice(-300)}`);
+  }
   const t0 = Date.now();
   const run = runStep(step);
   const seconds = Math.round((Date.now() - t0) / 1000);

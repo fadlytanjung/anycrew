@@ -42,8 +42,9 @@ packages = ["src/anycrew"]
 "templates" = "anycrew/pack/templates"
 "presets" = "anycrew/pack/presets"
 "hooks" = "anycrew/pack/hooks"
+"catalog" = "anycrew/pack/catalog"
 "models.json" = "anycrew/pack/models.json"
 "package.json" = "anycrew/pack/package.json"
 
 [tool.hatch.build.targets.sdist]
-include = ["src/anycrew", "agents", "skills", "rules", "templates", "presets", "hooks", "models.json", "package.json", "README.md", "README.pypi.md", "LICENSE", "CHANGELOG.md"]
+include = ["src/anycrew", "agents", "skills", "rules", "templates", "presets", "hooks", "catalog", "models.json", "package.json", "README.md", "README.pypi.md", "LICENSE", "CHANGELOG.md"]

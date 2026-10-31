@@ -19,8 +19,11 @@ anycrew init --preset <python-fastapi-react|node-typescript-next|go-service|gene
 
 Without either runtime, do the same by hand:
 
-1. **Ask three things** if not given: the project name and one-sentence purpose, the stack
-   preset (or "generic"), and which assistants the team uses.
+1. **Ask four things** if not given: the project name and one-sentence purpose, the stack
+   preset (or "generic"), which assistants the team uses (usually one or two), and the
+   architecture style from `anycrew styles` (default: modular monolith with hexagonal modules;
+   `undecided` is allowed and `/crew-patterns` decides later). The style becomes a Proposed
+   `docs/adr/ADR-001-architecture-style.md`.
 2. **Write `AGENTS.md`** from `templates/AGENTS.md`, filling the name, purpose, the preset's
    commands and layout. Keep it under 32 KB; it is read by every assistant.
 3. **Create `docs/`** from `templates/docs/`: `00-constitution.md` (keep the generic principles,
@@ -33,5 +36,5 @@ Without either runtime, do the same by hand:
 7. **Verify**: the check command from the preset runs (even if it only prints TODO); every
    assistant sees the skills (`/crew-status` answers).
 
-Done when `/crew-status` reports the project as initialised and names the first phase (usually
-`crew-brainstorm` for a new idea, or `crew-spec` for an existing codebase).
+Done when `/crew-status` reports the project as initialised, names the architecture style and the
+first phase (usually `crew-brainstorm` for a new idea, or `crew-spec` for an existing codebase).

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0 — unreleased
+
+- `anycrew init` asks for the architecture style (`--architecture`, `anycrew styles`) and seeds a Proposed `docs/adr/ADR-001`; `docs/13-conventions.md` is created at init; `/crew-patterns` confirms or supersedes the ADR and records patterns in the config.
+- Evals: `skills` suite covering every remaining skill, interactive-init test, plugin manifest validation in CI.
+
 ## 0.2.1 — 2026-10-31
 
 - Claude Code plugin loads its 17 tiered agents again: the plugin is now a generated root at `plugins/claude/` that the marketplace points to (Claude reads agents only from a plugin's own `agents/` folder; the repository root stays canonical for Antigravity and Codex).

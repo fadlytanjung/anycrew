@@ -16,6 +16,7 @@
     "templates",
     "presets",
     "hooks",
+    "catalog",
     "models.json",
     "LICENSE",
     "README.md"
@@ -30,7 +31,8 @@
     "prepack": "cp README.md .README.repo.md && cp README.npm.md README.md",
     "postpack": "mv .README.repo.md README.md",
     "build:claude": "node scripts/build-claude.mjs",
-    "eval:latest": "node scripts/eval-latest.mjs"
+    "eval:latest": "node scripts/eval-latest.mjs",
+    "test:interactive": "python3 tests/test_interactive.py"
   },
   "engines": {
     "node": ">=18"

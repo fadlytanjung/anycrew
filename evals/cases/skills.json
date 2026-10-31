@@ -1,0 +1,158 @@
+{
+  "id": "skills",
+  "project": {
+    "name": "teamly-skills",
+    "purpose": "Teamly is a small SaaS where a team keeps shared to-do lists: sign in, create a workspace, invite teammates, create lists and tasks, assign and complete them.",
+    "preset": "python-fastapi-react",
+    "architecture": "modular-monolith"
+  },
+  "steps": [
+    {
+      "id": "status-fresh",
+      "prompt": "/crew-status",
+      "maxTurns": 15,
+      "checks": [ { "type": "exists", "path": "docs/adr/ADR-001-architecture-style.md" } ],
+      "judge": "The reply names the project as initialised, the architecture style as 'Modular monolith with hexagonal modules' with ADR-001 Proposed, the phase as Discover and recommends /crew-brainstorm (and /crew-patterns after the PRD). Score 5 if all, 3 if the architecture line is missing, 1 if it did not read the project."
+    },
+    {
+      "id": "research",
+      "prompt": "/crew-research Verify three facts the Teamly team assumes, with sources: (1) the current stable FastAPI version and its Python requirement, (2) whether Postgres row-level security can enforce per-workspace isolation, (3) the free-tier limits of one managed Postgres provider of your choice. Write docs/02-research.md and finish. Do not ask questions.",
+      "maxTurns": 50,
+      "checks": [
+        { "type": "exists", "path": "docs/02-research.md" },
+        { "type": "grep", "path": "docs/02-research.md", "pattern": "https?://" },
+        { "type": "grep", "path": "docs/02-research.md", "pattern": "(?i)verified|unverified" }
+      ],
+      "judge": "Read docs/02-research.md. Score 5 if each of the three questions has a finding with a source URL or a command, a checked-on date and a confidence label, contradictions are reported rather than resolved silently, and spikes are listed with a time box. Score 3 if sources are present but confidence or dates are missing. Score 1 if facts are asserted from memory."
+    },
+    {
+      "id": "prd-seed",
+      "prompt": "/crew-prd Write a compact PRD for Teamly (P0 only needs: sign in, one workspace per user, lists, tasks with assignee and done state). Mark assumptions. Do not ask questions. Write docs/03-prd.md and docs/04-requirements-traceability.md and finish.",
+      "maxTurns": 50,
+      "checks": [ { "type": "grep", "path": "docs/03-prd.md", "pattern": "FR-001" } ],
+      "judge": "Score 5 if docs/03 has personas, journeys, P0/P1/P2 with a cut line, FR/NFR IDs and a constitution check; 3 if IDs exist but scope is not prioritised; 1 otherwise."
+    },
+    {
+      "id": "patterns",
+      "prompt": "/crew-patterns Confirm or change the architecture style in docs/adr/ADR-001 for Teamly given docs/03 (two developers, four weeks, FastAPI + Postgres + React, one cloud), pick the design patterns the P0 problems need, record the pattern table in docs/13-conventions.md section 3, update .anycrew/config.json architecture.style and architecture.patterns, and finish. Do not ask questions; mark assumptions.",
+      "maxTurns": 60,
+      "checks": [
+        { "type": "grep", "path": "docs/adr/ADR-001-architecture-style.md", "pattern": "(?i)status:\\*?\\*? *(accepted|superseded)" },
+        { "type": "grep", "path": "docs/13-conventions.md", "pattern": "(?i)repository|ports? and adapters|strategy|state" },
+        { "type": "cmd", "run": "python3 -c \"import json; c=json.load(open('.anycrew/config.json')); assert c['architecture']['style'] and len(c['architecture'].get('patterns',[]))>=1\"" }
+      ],
+      "judge": "Read docs/adr/ADR-001-architecture-style.md, docs/13-conventions.md and .anycrew/config.json. Score 5 if the ADR now names the forces (team, horizon, change hot spots, integrations, consistency, scale, operations), compares at least two styles with costs, is Accepted or superseded by a new ADR, the pattern table lists pattern / where / why for concrete P0 problems with the 'avoid when' check answered, there is a Mermaid diagram of the shape, and the config records style and patterns. Score 3 if the decision is recorded but forces or avoid-checks are missing. Score 1 if it is a generic essay."
+    },
+    {
+      "id": "adr",
+      "prompt": "/crew-adr Record the decision to use Postgres row-level security for per-workspace isolation versus application-level filtering. Do not ask questions. Write the ADR, add it to docs/adr/README.md, and finish.",
+      "maxTurns": 40,
+      "checks": [
+        { "type": "count", "glob": "docs/adr/ADR-00[2-9]-*.md", "min": 1 },
+        { "type": "grep", "glob": "docs/adr/ADR-00[2-9]-*.md", "pattern": "(?i)## options considered" },
+        { "type": "grep", "path": "docs/adr/README.md", "pattern": "ADR-002" }
+      ],
+      "judge": "Read the newest ADR. Score 5 if it has status, context, an options table with at least two options and what each costs, a decision, good and bad consequences, and how to revisit, and is linked from docs/adr/README.md. Score 3 if sections exist but trade-offs are one-sided. Score 1 otherwise."
+    },
+    {
+      "id": "design",
+      "prompt": "/crew-design Define the P0 screens for Teamly (sign in, workspace home with lists, a list with its tasks) in docs/11-frontend.md and the design system in docs/12-design-system.md with contracts/design/tokens.json. Words first, states for every screen, 360–1600 px rules. Do not ask questions. Finish when the three files exist.",
+      "maxTurns": 60,
+      "checks": [
+        { "type": "exists", "path": "docs/11-frontend.md" },
+        { "type": "exists", "path": "docs/12-design-system.md" },
+        { "type": "exists", "path": "contracts/design/tokens.json" },
+        { "type": "grep", "path": "docs/11-frontend.md", "pattern": "(?i)empty" },
+        { "type": "cmd", "run": "python3 -c \"import json; json.load(open('contracts/design/tokens.json'))\"" }
+      ],
+      "judge": "Read docs/11, docs/12 and the tokens file. Score 5 if routes have purpose/data/visibility, each screen has words plus loading/empty/error/success states and responsive rules from 360 to 1600 px, tokens are valid JSON with colour roles, type scale, spacing and breakpoints, contrast pairs are listed, and UI quality gates are written. Score 3 if screens exist but states or tokens are thin. Score 1 otherwise."
+    },
+    {
+      "id": "llm",
+      "prompt": "/crew-llm Design a model-backed feature for Teamly: 'smart task triage' that proposes an assignee and a due date for a new task from its title and the team's history. Write docs/06-agent-design.md with the model/code boundary table, each call's schema, tier, cost and fallback, prompt files under backend/app/prompts/, and an eval plan. Do not ask questions. Finish when docs/06 exists.",
+      "maxTurns": 60,
+      "checks": [
+        { "type": "exists", "path": "docs/06-agent-design.md" },
+        { "type": "grep", "path": "docs/06-agent-design.md", "pattern": "(?i)boundary" },
+        { "type": "count", "glob": "backend/app/prompts/*.md", "min": 1 },
+        { "type": "grep", "glob": "backend/app/prompts/*.md", "pattern": "(?i)version" }
+      ],
+      "judge": "Read docs/06 and the prompt files. Score 5 if the boundary table puts proposing on the model and deciding/writing on code (suggest-then-accept), each call has a strict output schema, tier, temperature, timeout, fallback and cost estimate, prompts are files with id/version/model/output_schema front matter and an untrusted-content framing, and the eval plan names a dataset and scorers. Score 3 if the boundary is right but schemas or evals are missing. Score 1 if the model decides or prompts live in code."
+    },
+    {
+      "id": "spec-seed",
+      "prompt": "/crew-spec Create spec 001 (foundation: repo layout, Makefile with setup/dev/check/test covering lint, types and tests for backend and frontend, FastAPI /api/health, React/Vite skeleton, CI). Mark it Ready. Do not ask questions. Finish when spec.md, plan.md and tasks.md exist and are wired in.",
+      "maxTurns": 60,
+      "checks": [ { "type": "count", "glob": "docs/specs/001-*/tasks.md", "min": 1 } ],
+      "judge": "Score 5 if ACs are Given/When/Then with pinned values and tasks are small, ordered and TDD-marked; 3 if coarse; 1 otherwise."
+    },
+    {
+      "id": "plan",
+      "prompt": "/crew-plan 001 Rewrite plan.md for spec 001 so that slice 1 is the thinnest vertical path (one route, one test, one screen) and every step names real file paths; keep the constitution check and the ADR-001 style. Do not ask questions.",
+      "maxTurns": 40,
+      "checks": [ { "type": "grep", "glob": "docs/specs/001-*/plan.md", "pattern": "(?i)slice 1" }, { "type": "grep", "glob": "docs/specs/001-*/plan.md", "pattern": "(?i)constitution" } ],
+      "judge": "Read plan.md. Score 5 if slice 1 proves the design end to end with real paths, later slices add breadth, contract and data changes are listed, dependencies have versions, the constitution check and the architecture style are referenced, and ambiguities are flagged. Score 3 if steps lack file paths. Score 1 otherwise."
+    },
+    {
+      "id": "tasks",
+      "prompt": "/crew-tasks 001 Regenerate tasks.md from the plan: one task per step, TNNN-nn ids, files and ACs on every task, TDD markers where logic exists, the status-update task last. Do not ask questions.",
+      "maxTurns": 40,
+      "checks": [ { "type": "grep", "glob": "docs/specs/001-*/tasks.md", "pattern": "T001-01" }, { "type": "grep", "glob": "docs/specs/001-*/tasks.md", "pattern": "T001-99|status" } ],
+      "judge": "Read tasks.md. Score 5 if every task names files and ACs, fits one implementer run, is ordered by dependency, logic tasks carry TDD, and the last task updates docs/20. Score 3 if some tasks lack files or ACs. Score 1 otherwise."
+    },
+    {
+      "id": "implement-seed",
+      "prompt": "/crew-implement 001 Implement the first three tasks of spec 001 one at a time (test first, one commit each) so that `make check` exists and is green for the backend. Do not ask questions.",
+      "maxTurns": 150,
+      "checks": [ { "type": "exists", "path": "Makefile" }, { "type": "cmd", "run": "make check" } ],
+      "judge": "Score 5 if three tasks are ticked with one commit each and make check is green covering lint, types and tests; 3 if green but partial; 1 otherwise."
+    },
+    {
+      "id": "debug",
+      "setup": "python3 - <<'EOF'\nimport re,glob\nfor f in glob.glob('backend/**/*.py', recursive=True):\n    s=open(f).read()\n    if '/api/health' in s and 'ok' in s:\n        s2=s.replace('\"ok\"','\"okay\"',1).replace(\"'ok'\",\"'okay'\",1)\n        if s2!=s: open(f,'w').write(s2); print('seeded bug in',f); break\nEOF",
+      "prompt": "/crew-debug `make check` started failing on the health endpoint test after a recent change. Find the root cause, fix it with a regression test, and explain what you ruled out. Do not ask questions.",
+      "maxTurns": 60,
+      "checks": [ { "type": "cmd", "run": "make check" } ],
+      "judge": "Read the reply and `git diff HEAD~1` or the working tree. Score 5 if the reply states the reproduction, the root cause in one paragraph (the health status string was changed), the smallest fix, a regression test, and what was ruled out, with make check green. Score 3 if fixed without the explanation. Score 1 if a test was loosened or the symptom was patched."
+    },
+    {
+      "id": "refactor",
+      "setup": "mkdir -p backend/app/legacy && cat > backend/app/legacy/report.py <<'EOF'\nimport datetime\n\n\ndef build_report(rows, kind, fmt):\n    out = []\n    total = 0.0\n    for r in rows:\n        if kind == 'daily':\n            if r['amount'] > 0:\n                total = total + float(r['amount'])\n                out.append(str(r['id']) + ',' + str(r['amount']) + ',' + str(datetime.datetime.now()))\n        elif kind == 'weekly':\n            if r['amount'] > 0:\n                total = total + float(r['amount']) * 7\n                out.append(str(r['id']) + ',' + str(r['amount'] * 7) + ',' + str(datetime.datetime.now()))\n        elif kind == 'monthly':\n            if r['amount'] > 0:\n                total = total + float(r['amount']) * 30\n                out.append(str(r['id']) + ',' + str(r['amount'] * 30) + ',' + str(datetime.datetime.now()))\n    if fmt == 'csv':\n        return '\\n'.join(out) + '\\n' + 'total,' + str(total)\n    elif fmt == 'json':\n        return '{\"rows\": [' + ','.join('\"' + o + '\"' for o in out) + '], \"total\": ' + str(total) + '}'\n    return out\nEOF\ngit add -A && git commit -qm 'chore: legacy report module' || true",
+      "prompt": "/crew-refactor backend/app/legacy/report.py Audit this module against the smell catalogue, measure what you can, plan the top refactorings, perform them one commit at a time with a characterisation test first, keep `make check` green, and add a rule that stops the worst smell returning. Do not ask questions.",
+      "maxTurns": 100,
+      "checks": [
+        { "type": "cmd", "run": "make check" },
+        { "type": "cmd", "run": "git log --oneline | grep -cE 'refactor\\(' | awk '$1>=2{exit 0} {exit 1}'" }
+      ],
+      "judge": "Read the reply, `git log --stat -6` and the module. Score 5 if the audit names the smells with path:line (switch on type, float money, wall clock, string-built JSON, long function), a characterisation test was committed first, at least two refactorings landed as separate refactor commits with behaviour unchanged, make check is green, and a lint or layer rule was added. Score 3 if refactored without the characterisation test or the rule. Score 1 if behaviour changed or tests were loosened."
+    },
+    {
+      "id": "deploy-check",
+      "prompt": "/crew-deploy-check Run the pre-deploy checklist for Teamly as it stands (no real deploy). Create docs/16-infrastructure.md and docs/17-observability.md from the templates with the parts you can fill, and report every item as ✅ or ❌ with evidence. Do not ask questions.",
+      "maxTurns": 50,
+      "checks": [ { "type": "exists", "path": "docs/16-infrastructure.md" }, { "type": "exists", "path": "docs/17-observability.md" } ],
+      "judge": "Read the reply and docs/16, docs/17. Score 5 if each checklist item (gates, migrations, configuration and secrets, flags, rollback with command and owner, monitoring and cost alert) is marked with real evidence or a named owner and date, no secret appears anywhere, and the docs have the environment table and config table started. Score 3 if the checklist is present but evidence is thin. Score 1 if items are marked done without evidence."
+    },
+    {
+      "id": "docs",
+      "prompt": "/crew-docs Bring README.md, docs/README.md, docs/glossary.md and CHANGELOG.md up to date with what exists in this repository. Numbers only from evidence. Do not ask questions.",
+      "maxTurns": 40,
+      "checks": [ { "type": "exists", "path": "README.md" }, { "type": "exists", "path": "CHANGELOG.md" }, { "type": "grep", "path": "docs/README.md", "pattern": "02-research|06-agent-design|11-frontend" } ],
+      "judge": "Read README.md, docs/README.md, docs/glossary.md and CHANGELOG.md. Score 5 if the README has a two-sentence purpose, one diagram, how to run in a few commands and a link to the docs, the index lists every existing doc with the question it answers, the glossary covers the ID schemes, the changelog is derived from the commit log in plain words, and no number lacks a source. Score 3 if mostly right with stale entries. Score 1 if claims are invented."
+    },
+    {
+      "id": "sync",
+      "prompt": "/crew-sync Add 'cursor' to the tools in .anycrew/config.json and regenerate the assistant files. Report what was written and what was skipped. Do not ask questions.",
+      "maxTurns": 30,
+      "checks": [ { "type": "exists", "path": ".cursor/rules/00-sdd-process.mdc" }, { "type": "exists", "path": ".cursor/agents/implementer.md" }, { "type": "cmd", "run": "python3 -c \"import json; assert 'cursor' in json.load(open('.anycrew/config.json'))['tools']\"" } ],
+      "judge": "Score 5 if the config lists cursor, the .cursor files exist, the reply distinguishes written from skipped files, and hand-written files were not overwritten; 3 if regenerated but the report is vague; 1 if it edited generated files by hand instead of running the CLI."
+    },
+    {
+      "id": "checkpoint-final",
+      "prompt": "/crew-checkpoint Make docs/20-implementation-status.md match the tree. Do not ask questions.",
+      "maxTurns": 40,
+      "checks": [ { "type": "grep", "path": "docs/20-implementation-status.md", "pattern": "(?i)last updated" } ],
+      "judge": "Score 5 if every row matches code and tests with suites named and the date refreshed; 3 if statuses right but suites unnamed; 1 if promoted without evidence."
+    }
+  ]
+}

@@ -19,6 +19,10 @@ Delegate to the **architect** (strong tier). It reads the two catalogues in this
 
 ## Procedure
 
+0. **Start from ADR-001.** `docs/adr/ADR-001-architecture-style.md` holds the style chosen at
+   `anycrew init` (Proposed) or `undecided`. This skill confirms it (status → Accepted, forces
+   filled in) or supersedes it with a new ADR; `.anycrew/config.json` → `architecture.style` and
+   `architecture.patterns` record the outcome so `anycrew sync` and the status skill see it.
 1. **Name the forces** in a short table: team size and horizon, change hot spots, integrations,
    consistency needs, scale and cost, operations capacity. Ask at most three questions if they
    are unknown; otherwise mark assumptions.

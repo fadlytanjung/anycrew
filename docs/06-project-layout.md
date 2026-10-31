@@ -11,7 +11,9 @@ What a project looks like after `anycrew init`, and how the documents relate.
 | `docs/00-constitution.md` | principles every change is checked against; generic P1–P8, add your own |
 | `docs/20-implementation-status.md` | what is actually built; updated in the same commit as the change |
 | `docs/glossary.md` | terms and ID schemes |
+| `docs/13-conventions.md` | layout, layers, the pattern table (section 3), language conventions from the preset |
 | `docs/adr/README.md`, `docs/adr/ADR-template.md` | decisions |
+| `docs/adr/ADR-001-architecture-style.md` | the style chosen at init, Proposed until `/crew-patterns` confirms it (not written for `undecided`) |
 | `docs/specs/README.md`, `docs/specs/NNN-template/` | the spec loop |
 
 With `--all-docs`, every numbered template is created too (01–19). Otherwise each phase's agent
