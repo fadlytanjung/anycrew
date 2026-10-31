@@ -1,6 +1,6 @@
 {
   "name": "anycrew",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "One crew of specialist agents (brainstorm, PRD, architecture, patterns, spec, implement, test, refactor, review, security, debug, LLM features, release, docs) with a spec-driven workflow and per-agent model tiers.",
   "author": {
     "name": "anycrew contributors",

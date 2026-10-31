@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "anycrew"
-version = "0.2.1"
+version = "0.3.0"
 description = "One crew of specialist AI agents for any coding assistant. Spec-driven, test-first, security-reviewed, model-tiered. Installs into Claude Code, OpenAI Codex, Google Antigravity, Cursor, OpenCode and GitHub Copilot."
 readme = "README.pypi.md"
 license = "MIT"
