@@ -96,17 +96,17 @@ function runStep(step) {
   const cmd = ['claude', '-p', step.prompt, '--output-format', 'json', '--permission-mode', 'acceptEdits',
     '--allowedTools', 'Read,Write,Edit,MultiEdit,Glob,Grep,Bash,Agent,TodoWrite,WebSearch,WebFetch',
     '--max-turns', String(step.maxTurns ?? 60), '--max-budget-usd', String(budgetPerStep), '--no-session-persistence'];
-  const res = spawnSync(cmd[0], cmd.slice(1), { cwd: projectDir, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: ENV, timeout: stepTimeoutMs, killSignal: 'SIGTERM' });
+  const res = spawnSync(cmd[0], cmd.slice(1), { cwd: projectDir, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: ENV, timeout: stepTimeoutMs, killSignal: 'SIGKILL' });
   let json = null;
   try { json = JSON.parse(res.stdout); } catch { /* text fallback */ }
-  const timedOut = res.error?.code === 'ETIMEDOUT' || res.signal === 'SIGTERM';
+  const timedOut = res.error?.code === 'ETIMEDOUT' || res.signal === 'SIGKILL';
   const reply = json?.result ?? res.stdout ?? '';
   const error = timedOut ? `step timed out after ${stepTimeoutMs / 60000} min (killed)` : res.status ? `exit ${res.status}: ${(res.stderr || json?.result || '').toString().slice(0, 400)}` : (json?.is_error ? String(json.result).slice(0, 400) : null);
   return { reply: timedOut ? `(timed out)\n${reply}` : reply, cost: json?.total_cost_usd ?? null, turns: json?.num_turns ?? null, error };
 }
 
 function runAgy(prompt, { cwd }) {
-  const res = spawnSync('agy', ['-p', prompt, '--output-format', 'json'], { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: ENV, timeout: stepTimeoutMs, killSignal: 'SIGTERM' });
+  const res = spawnSync('agy', ['-p', prompt, '--output-format', 'json'], { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, env: ENV, timeout: stepTimeoutMs, killSignal: 'SIGKILL' });
   let json = null; try { json = JSON.parse(res.stdout); } catch {}
   const reply = json?.response ?? res.stdout ?? '';
   return { reply, cost: null, turns: json?.num_turns ?? null, tokens: json?.usage?.total_tokens ?? null, error: res.status || json?.status === 'FAILED' ? `exit ${res.status}: ${(json?.response ?? res.stderr ?? '').toString().slice(0, 400)}` : null };

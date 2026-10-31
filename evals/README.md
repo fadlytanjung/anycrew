@@ -61,3 +61,25 @@ A case is a JSON object: `id`, `prompt` (sent to the assistant), `checks` (deter
 `PASS` means every deterministic check passed and the judge scored ≥ 3. The summary table shows,
 per step: checks passed/total, judge score, cost and duration. Failures list the first failing
 check or the judge's reason, so a regression in an agent or skill points at the file to fix.
+
+## Latest results
+
+Lifecycle suite, Claude Code runner and judge, Teamly on `python-fastapi-react`, 30–31 Oct 2026
+(reports in `evals/reports/2026-10-30T*-lifecycle-claude/`):
+
+| Step | Checks | Judge | Note |
+|---|---|---|---|
+| status | – | 5 | phase and next skill correct |
+| brainstorm | 4/4 | 5 | weighted criteria, 8 options, scoring table, decision, risks, names |
+| prd | 6/6 | 5 | 40 FR + 16 NFR as testable sentences, cut line, traceability rows (re-run after an API timeout) |
+| architecture | 8/8 | 5 | containers and sequences, layer table, ER and state tables, OpenAPI 3.1 with 17 paths and 13 error codes, 3 ADRs (re-run after an API timeout and a usage limit) |
+| spec | 8/8 | 5 | 11 Given/When/Then ACs, vertical first slice, 15 ordered tasks |
+| implement ×3 | 6/6 | 4, 5, 3 | one task per commit with trailers; the check target first covered only pytest (prompt tightened since) |
+| test | 2/2 | 3 | 21 tests, make check green; several ACs left "pending" (prompt tightened since) |
+| review | – | 5 | real gate output, severity-ranked findings with path:line and scenarios |
+| security | 3/3 | 5 | threat model with 7 boundaries and 18 controls mapped to tests; evidence-backed audit |
+| verify | – | 5 | all 11 ACs bucketed with evidence; drift rows handed to a person |
+| checkpoint | 2/2 | 5 | status matches the tree; suites named |
+
+13/13 steps pass; two steps needed a re-run because of provider-side timeouts and a usage limit,
+which the harness now bounds with `--step-timeout`. Total accounting across runs: about $33.
