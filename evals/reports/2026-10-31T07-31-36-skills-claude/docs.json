@@ -1,0 +1,54 @@
+{
+  "step": {
+    "id": "docs",
+    "prompt": "/crew-docs Bring README.md, docs/README.md, docs/glossary.md and CHANGELOG.md up to date with what exists in this repository. Numbers only from evidence. Do not ask questions.",
+    "maxTurns": 40,
+    "checks": [
+      {
+        "type": "exists",
+        "path": "README.md"
+      },
+      {
+        "type": "exists",
+        "path": "CHANGELOG.md"
+      },
+      {
+        "type": "grep",
+        "path": "docs/README.md",
+        "pattern": "02-research|06-agent-design|11-frontend"
+      }
+    ],
+    "judge": "Read README.md, docs/README.md, docs/glossary.md and CHANGELOG.md. Score 5 if the README has a two-sentence purpose, one diagram, how to run in a few commands and a link to the docs, the index lists every existing doc with the question it answers, the glossary covers the ID schemes, the changelog is derived from the commit log in plain words, and no number lacks a source. Score 3 if mostly right with stale entries. Score 1 if claims are invented."
+  },
+  "run": {
+    "cost": 1.6453003800000001,
+    "turns": 12,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": "README.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "exists",
+      "path": "CHANGELOG.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/README.md",
+      "pattern": "02-research|06-agent-design|11-frontend",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "README.md has a two-sentence purpose, one Mermaid flowchart, five run commands and links to docs/README.md; the index lists every existing doc (00,02,03,04,06,11,12,13,16,17,20, glossary, ADRs, specs, evals report) with its question; the glossary defines AC-NNN-n, TNNN-nn, FR/NFR and ADR; CHANGELOG.md covers all 12 commits from git log in plain words naming each hash; every number checks out against its source (13 passed re-run, max-complexity = 8 and fastapi==0.162.0 in pyproject.toml, 7-day invite in PRD FR-101).",
+    "by": "claude"
+  }
+}

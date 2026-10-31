@@ -1,0 +1,32 @@
+{
+  "step": {
+    "id": "status-fresh",
+    "prompt": "/crew-status",
+    "maxTurns": 15,
+    "checks": [
+      {
+        "type": "exists",
+        "path": "docs/adr/ADR-001-architecture-style.md"
+      }
+    ],
+    "judge": "The reply names the project as initialised, the architecture style as 'Modular monolith with hexagonal modules' with ADR-001 Proposed, the phase as Discover and recommends /crew-brainstorm (and /crew-patterns after the PRD). Score 5 if all, 3 if the architecture line is missing, 1 if it did not read the project."
+  },
+  "run": {
+    "cost": 0.740956205,
+    "turns": 2,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": "docs/adr/ADR-001-architecture-style.md",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "The reply names teamly-skills as a clean anycrew init scaffold in phase Discover, states 'modular monolith with hexagonal modules (ADR-001 Proposed)' matching docs/adr/ADR-001-architecture-style.md, cites the status doc's 2026-10-31 date and single Built row accurately, and recommends /crew-brainstorm next with /crew-patterns after the PRD.",
+    "by": "claude"
+  }
+}

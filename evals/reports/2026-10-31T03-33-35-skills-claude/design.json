@@ -1,0 +1,74 @@
+{
+  "step": {
+    "id": "design",
+    "prompt": "/crew-design Define the P0 screens for Teamly (sign in, workspace home with lists, a list with its tasks) in docs/11-frontend.md and the design system in docs/12-design-system.md with contracts/design/tokens.json. Words first, states for every screen, 360–1600 px rules. Do not ask questions. Finish when the three files exist.",
+    "maxTurns": 60,
+    "checks": [
+      {
+        "type": "exists",
+        "path": "docs/11-frontend.md"
+      },
+      {
+        "type": "exists",
+        "path": "docs/12-design-system.md"
+      },
+      {
+        "type": "exists",
+        "path": "contracts/design/tokens.json"
+      },
+      {
+        "type": "grep",
+        "path": "docs/11-frontend.md",
+        "pattern": "(?i)empty"
+      },
+      {
+        "type": "cmd",
+        "run": "python3 -c \"import json; json.load(open('contracts/design/tokens.json'))\""
+      }
+    ],
+    "judge": "Read docs/11, docs/12 and the tokens file. Score 5 if routes have purpose/data/visibility, each screen has words plus loading/empty/error/success states and responsive rules from 360 to 1600 px, tokens are valid JSON with colour roles, type scale, spacing and breakpoints, contrast pairs are listed, and UI quality gates are written. Score 3 if screens exist but states or tokens are thin. Score 1 otherwise."
+  },
+  "run": {
+    "cost": 2.5816329999999996,
+    "turns": 13,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": "docs/11-frontend.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "exists",
+      "path": "docs/12-design-system.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "exists",
+      "path": "contracts/design/tokens.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/11-frontend.md",
+      "pattern": "(?i)empty",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "cmd",
+      "run": "python3 -c \"import json; json.load(open('contracts/design/tokens.json'))\"",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "docs/11-frontend.md has a route table with purpose, data loaded and visibility rules, each P0 screen has exact words plus loading/empty/error/success state tables and a 360–1600 px responsive section (§7); contracts/design/tokens.json parses as valid JSON with colour roles, font scale, space, breakpoints and 21 contrast pairs; docs/12-design-system.md lists the contrast table (§3.2) and ten UI quality gates (§7).",
+    "by": "claude"
+  }
+}

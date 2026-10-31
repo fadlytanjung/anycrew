@@ -1,0 +1,42 @@
+{
+  "step": {
+    "id": "implement-seed",
+    "prompt": "/crew-implement 001 Implement the first three tasks of spec 001 one at a time (test first, one commit each) so that `make check` exists and is green for the backend. Do not ask questions.",
+    "maxTurns": 150,
+    "checks": [
+      {
+        "type": "exists",
+        "path": "Makefile"
+      },
+      {
+        "type": "cmd",
+        "run": "make check"
+      }
+    ],
+    "judge": "Score 5 if three tasks are ticked with one commit each and make check is green covering lint, types and tests; 3 if green but partial; 1 otherwise."
+  },
+  "run": {
+    "cost": 2.60416875,
+    "turns": 38,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": "Makefile",
+      "ok": false,
+      "detail": "missing Makefile"
+    },
+    {
+      "type": "cmd",
+      "run": "make check",
+      "ok": false,
+      "detail": "`make check` exit 2: make: *** No rule to make target `check'.  Stop."
+    }
+  ],
+  "judge": {
+    "score": 3,
+    "reason": "Tasks T001-01..03 are ticked in docs/specs/001-foundation/tasks.md with one commit each (8b99512, 4805478, b56f505, each carrying its Tasks: ID), and pytest (1 passed) plus ruff check/format are green, but no Makefile exists so `make check` cannot run and no type checker (mypy/pyright) is configured or executed, so the gate is only partially covered.",
+    "by": "claude"
+  }
+}

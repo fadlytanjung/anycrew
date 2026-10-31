@@ -1,0 +1,52 @@
+{
+  "step": {
+    "id": "sync",
+    "prompt": "/crew-sync Add 'cursor' to the tools in .anycrew/config.json and regenerate the assistant files. Report what was written and what was skipped. Do not ask questions.",
+    "maxTurns": 30,
+    "checks": [
+      {
+        "type": "exists",
+        "path": ".cursor/rules/00-sdd-process.mdc"
+      },
+      {
+        "type": "exists",
+        "path": ".cursor/agents/implementer.md"
+      },
+      {
+        "type": "cmd",
+        "run": "python3 -c \"import json; assert 'cursor' in json.load(open('.anycrew/config.json'))['tools']\""
+      }
+    ],
+    "judge": "Score 5 if the config lists cursor, the .cursor files exist, the reply distinguishes written from skipped files, and hand-written files were not overwritten; 3 if regenerated but the report is vague; 1 if it edited generated files by hand instead of running the CLI."
+  },
+  "run": {
+    "cost": 0,
+    "turns": 1,
+    "error": "exit 1: You've hit your 5-hour limit · resets 3:30pm (Asia/Kuala_Lumpur)"
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": ".cursor/rules/00-sdd-process.mdc",
+      "ok": false,
+      "detail": "missing .cursor/rules/00-sdd-process.mdc"
+    },
+    {
+      "type": "exists",
+      "path": ".cursor/agents/implementer.md",
+      "ok": false,
+      "detail": "missing .cursor/agents/implementer.md"
+    },
+    {
+      "type": "cmd",
+      "run": "python3 -c \"import json; assert 'cursor' in json.load(open('.anycrew/config.json'))['tools']\"",
+      "ok": false,
+      "detail": "`python3 -c \"import json; assert 'cursor' in json.load(open('.anycrew/config.json'))['tools']\"` exit 1: Traceback (most recent call last): |   File \"<string>\", line 1, in <module> | AssertionError"
+    }
+  ],
+  "judge": {
+    "score": 0,
+    "reason": "judge gave no JSON: You've hit your 5-hour limit · resets 3:30pm (Asia/Kuala_Lumpur)",
+    "by": "claude"
+  }
+}

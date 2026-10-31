@@ -1,0 +1,46 @@
+{
+  "step": {
+    "id": "plan",
+    "prompt": "/crew-plan 001 Rewrite plan.md for spec 001 so that slice 1 is the thinnest vertical path (one route, one test, one screen) and every step names real file paths; keep the constitution check and the ADR-001 style. Do not ask questions.",
+    "maxTurns": 40,
+    "checks": [
+      {
+        "type": "grep",
+        "glob": "docs/specs/001-*/plan.md",
+        "pattern": "(?i)slice 1"
+      },
+      {
+        "type": "grep",
+        "glob": "docs/specs/001-*/plan.md",
+        "pattern": "(?i)constitution"
+      }
+    ],
+    "judge": "Read plan.md. Score 5 if slice 1 proves the design end to end with real paths, later slices add breadth, contract and data changes are listed, dependencies have versions, the constitution check and the architecture style are referenced, and ambiguities are flagged. Score 3 if steps lack file paths. Score 1 otherwise."
+  },
+  "run": {
+    "cost": 2.5050879999999998,
+    "turns": 15,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "grep",
+      "glob": "docs/specs/001-*/plan.md",
+      "pattern": "(?i)slice 1",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "glob": "docs/specs/001-*/plan.md",
+      "pattern": "(?i)constitution",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "plan.md slice 1 is one route, one test and one screen with real paths (backend/tests/integration/test_health.py, backend/app/main.py, frontend/src/app/App.tsx) proving browser→proxy→FastAPI end to end; slices 2–6 add hardening, states, gates, docs and CI; a 'Contract and data changes' section, a dependency table (fastapi 0.162.0 pinned per verified 02-research.md, the rest lockfile-pinned by stated policy), a constitution check table and a 'Fit with ADR-001' paragraph are all present; assumptions A-1/A-2, the rule 60 vs 40 conflict and the stale tasks.md are explicitly flagged.",
+    "by": "claude"
+  }
+}

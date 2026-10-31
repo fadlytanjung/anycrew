@@ -1,0 +1,33 @@
+{
+  "step": {
+    "id": "debug",
+    "setup": "python3 - <<'EOF'\nimport re,glob\nfor f in glob.glob('backend/**/*.py', recursive=True):\n    s=open(f).read()\n    if '/api/health' in s and 'ok' in s:\n        s2=s.replace('\"ok\"','\"okay\"',1).replace(\"'ok'\",\"'okay'\",1)\n        if s2!=s: open(f,'w').write(s2); print('seeded bug in',f); break\nEOF",
+    "prompt": "/crew-debug `make check` started failing on the health endpoint test after a recent change. Find the root cause, fix it with a regression test, and explain what you ruled out. Do not ask questions.",
+    "maxTurns": 60,
+    "checks": [
+      {
+        "type": "cmd",
+        "run": "make check"
+      }
+    ],
+    "judge": "Read the reply and `git diff HEAD~1` or the working tree. Score 5 if the reply states the reproduction, the root cause in one paragraph (the health status string was changed), the smallest fix, a regression test, and what was ruled out, with make check green. Score 3 if fixed without the explanation. Score 1 if a test was loosened or the symptom was patched."
+  },
+  "run": {
+    "cost": 1.3749312,
+    "turns": 9,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "cmd",
+      "run": "make check",
+      "ok": false,
+      "detail": "`make check` exit 2: make: *** No rule to make target `check'.  Stop."
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "Reply names the reproduction, states the root cause in one paragraph (Literal[\\\"ok\\\"] changed to Literal[\\\"okay\\\"] while the handler still returned \\\"ok\\\"), restores health.py to HEAD as the smallest fix, adds backend/tests/unit/test_health_model.py as a regression test, lists what was ruled out with evidence, and leaves the integration test untouched; make check is honestly reported as unrunnable because no Makefile exists yet (T001-15 unticked), with pytest, ruff check and ruff format reported green instead.",
+    "by": "claude"
+  }
+}

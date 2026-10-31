@@ -1,0 +1,68 @@
+{
+  "step": {
+    "id": "llm",
+    "prompt": "/crew-llm Design a model-backed feature for Teamly: 'smart task triage' that proposes an assignee and a due date for a new task from its title and the team's history. Write docs/06-agent-design.md with the model/code boundary table, each call's schema, tier, cost and fallback, prompt files under backend/app/prompts/, and an eval plan. Do not ask questions. Finish when docs/06 exists.",
+    "maxTurns": 60,
+    "checks": [
+      {
+        "type": "exists",
+        "path": "docs/06-agent-design.md"
+      },
+      {
+        "type": "grep",
+        "path": "docs/06-agent-design.md",
+        "pattern": "(?i)boundary"
+      },
+      {
+        "type": "count",
+        "glob": "backend/app/prompts/*.md",
+        "min": 1
+      },
+      {
+        "type": "grep",
+        "glob": "backend/app/prompts/*.md",
+        "pattern": "(?i)version"
+      }
+    ],
+    "judge": "Read docs/06 and the prompt files. Score 5 if the boundary table puts proposing on the model and deciding/writing on code (suggest-then-accept), each call has a strict output schema, tier, temperature, timeout, fallback and cost estimate, prompts are files with id/version/model/output_schema front matter and an untrusted-content framing, and the eval plan names a dataset and scorers. Score 3 if the boundary is right but schemas or evals are missing. Score 1 if the model decides or prompts live in code."
+  },
+  "run": {
+    "cost": 2.6076634999999992,
+    "turns": 29,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": "docs/06-agent-design.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/06-agent-design.md",
+      "pattern": "(?i)boundary",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "count",
+      "glob": "backend/app/prompts/*.md",
+      "min": 1,
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "glob": "backend/app/prompts/*.md",
+      "pattern": "(?i)version",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "docs/06 §2 keeps judgement steps on the model (C1 intent enum, C2 member_id+citations) while code verifies IDs, computes dates, and only the member's submit writes (steps 11–14); §3 gives both calls schema file, fast tier, temperature 0, 2500 ms timeout, retry, fallback and post-checks, §4 prices them per call; backend/app/prompts/*.md carry id/version/model/output_schema front matter with <untrusted_title>/<untrusted_history> framing and JSON schemas with additionalProperties:false; §6 names backend/evals/triage/dataset.jsonl with eight slices and eleven scorers with pass bars.",
+    "by": "claude"
+  }
+}

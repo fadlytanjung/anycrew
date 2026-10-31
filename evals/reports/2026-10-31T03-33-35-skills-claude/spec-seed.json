@@ -1,0 +1,34 @@
+{
+  "step": {
+    "id": "spec-seed",
+    "prompt": "/crew-spec Create spec 001 (foundation: repo layout, Makefile with setup/dev/check/test covering lint, types and tests for backend and frontend, FastAPI /api/health, React/Vite skeleton, CI). Mark it Ready. Do not ask questions. Finish when spec.md, plan.md and tasks.md exist and are wired in.",
+    "maxTurns": 60,
+    "checks": [
+      {
+        "type": "count",
+        "glob": "docs/specs/001-*/tasks.md",
+        "min": 1
+      }
+    ],
+    "judge": "Score 5 if ACs are Given/When/Then with pinned values and tasks are small, ordered and TDD-marked; 3 if coarse; 1 otherwise."
+  },
+  "run": {
+    "cost": 2.9604957499999998,
+    "turns": 26,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "count",
+      "glob": "docs/specs/001-*/tasks.md",
+      "min": 1,
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "docs/specs/001-foundation/spec.md has 18 Given/When/Then ACs with pinned values (200 + `{\\\"status\\\": \\\"ok\\",
+    "by": "claude"
+  }
+}

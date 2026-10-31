@@ -1,0 +1,52 @@
+{
+  "step": {
+    "id": "sync",
+    "prompt": "/crew-sync Add 'cursor' to the tools in .anycrew/config.json and regenerate the assistant files. Report what was written and what was skipped. Do not ask questions.",
+    "maxTurns": 30,
+    "checks": [
+      {
+        "type": "exists",
+        "path": ".cursor/rules/00-sdd-process.mdc"
+      },
+      {
+        "type": "exists",
+        "path": ".cursor/agents/implementer.md"
+      },
+      {
+        "type": "cmd",
+        "run": "python3 -c \"import json; assert 'cursor' in json.load(open('.anycrew/config.json'))['tools']\""
+      }
+    ],
+    "judge": "Score 5 if the config lists cursor, the .cursor files exist, the reply distinguishes written from skipped files, and hand-written files were not overwritten; 3 if regenerated but the report is vague; 1 if it edited generated files by hand instead of running the CLI."
+  },
+  "run": {
+    "cost": 0.9375735,
+    "turns": 9,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": ".cursor/rules/00-sdd-process.mdc",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "exists",
+      "path": ".cursor/agents/implementer.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "cmd",
+      "run": "python3 -c \"import json; assert 'cursor' in json.load(open('.anycrew/config.json'))['tools']\"",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": ".anycrew/config.json tools now lists \\\"claude\\\" and \\\"cursor\\\"; .cursor/ holds 26 CLI-generated files (8 .mdc rules, 17 agents, hooks.json) each carrying the `anycrew:generated` marker; the reply separates written (32) from skipped (84 unchanged, AGENTS.md untouched) and flags the six regenerated skill files with a restore command; hand-written AGENTS.md and the pre-existing docs/ edits were not touched.",
+    "by": "claude"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "step": {
+    "id": "adr",
+    "prompt": "/crew-adr Record the decision to use Postgres row-level security for per-workspace isolation versus application-level filtering. Do not ask questions. Write the ADR, add it to docs/adr/README.md, and finish.",
+    "maxTurns": 40,
+    "checks": [
+      {
+        "type": "count",
+        "glob": "docs/adr/ADR-00[2-9]-*.md",
+        "min": 1
+      },
+      {
+        "type": "grep",
+        "glob": "docs/adr/ADR-00[2-9]-*.md",
+        "pattern": "(?i)## options considered"
+      },
+      {
+        "type": "grep",
+        "path": "docs/adr/README.md",
+        "pattern": "ADR-002"
+      }
+    ],
+    "judge": "Read the newest ADR. Score 5 if it has status, context, an options table with at least two options and what each costs, a decision, good and bad consequences, and how to revisit, and is linked from docs/adr/README.md. Score 3 if sections exist but trade-offs are one-sided. Score 1 otherwise."
+  },
+  "run": {
+    "cost": 1.72068925,
+    "turns": 17,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "count",
+      "glob": "docs/adr/ADR-00[2-9]-*.md",
+      "min": 1,
+      "ok": false,
+      "detail": "docs/adr/ADR-00[2-9]-*.md: 0 < 1"
+    },
+    {
+      "type": "grep",
+      "glob": "docs/adr/ADR-00[2-9]-*.md",
+      "pattern": "(?i)## options considered",
+      "ok": false,
+      "detail": "docs/adr/ADR-00[2-9]-*.md: /(?i)## options considered/ not found"
+    },
+    {
+      "type": "grep",
+      "path": "docs/adr/README.md",
+      "pattern": "ADR-002",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "docs/adr/ADR-002-workspace-isolation-rls.md has Status (Proposed), Context with a forces table, an options table of four options each with 'What it costs' and 'What it gives', a two-part Decision, Consequences split into Good/Bad/Watch for, and a 'How to revisit' section; docs/adr/README.md links it as row 002.",
+    "by": "claude"
+  }
+}

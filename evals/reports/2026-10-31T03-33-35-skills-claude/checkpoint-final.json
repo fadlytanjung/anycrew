@@ -1,0 +1,34 @@
+{
+  "step": {
+    "id": "checkpoint-final",
+    "prompt": "/crew-checkpoint Make docs/20-implementation-status.md match the tree. Do not ask questions.",
+    "maxTurns": 40,
+    "checks": [
+      {
+        "type": "grep",
+        "path": "docs/20-implementation-status.md",
+        "pattern": "(?i)last updated"
+      }
+    ],
+    "judge": "Score 5 if every row matches code and tests with suites named and the date refreshed; 3 if statuses right but suites unnamed; 1 if promoted without evidence."
+  },
+  "run": {
+    "cost": 0,
+    "turns": 1,
+    "error": "exit 1: You've hit your 5-hour limit · resets 3:30pm (Asia/Kuala_Lumpur)"
+  },
+  "checks": [
+    {
+      "type": "grep",
+      "path": "docs/20-implementation-status.md",
+      "pattern": "(?i)last updated",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 0,
+    "reason": "judge gave no JSON: You've hit your 5-hour limit · resets 3:30pm (Asia/Kuala_Lumpur)",
+    "by": "claude"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "step": {
+    "id": "checkpoint-final",
+    "prompt": "/crew-checkpoint Make docs/20-implementation-status.md match the tree. Do not ask questions.",
+    "maxTurns": 40,
+    "checks": [
+      {
+        "type": "grep",
+        "path": "docs/20-implementation-status.md",
+        "pattern": "(?i)last updated"
+      }
+    ],
+    "judge": "Score 5 if every row matches code and tests with suites named and the date refreshed; 3 if statuses right but suites unnamed; 1 if promoted without evidence."
+  },
+  "run": {
+    "cost": 1.3441385,
+    "turns": 9,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "grep",
+      "path": "docs/20-implementation-status.md",
+      "pattern": "(?i)last updated",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "Every row matches the tree: backend row names both suites (backend/tests/integration/test_health.py and backend/tests/unit/test_health_model.py, both present with AC-001-6 tests), pytest reproduces 13 passed, frontend/Makefile/.github/openapi.yaml/docs/15 are indeed absent, task dependencies for T001-19 (after T001-10, T001-12) and T001-21 (after T001-15) are quoted correctly from tasks.md, nothing was promoted to Built, and the last-updated line carries today's date with the reason.",
+    "by": "claude"
+  }
+}

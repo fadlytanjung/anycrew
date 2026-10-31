@@ -1,0 +1,56 @@
+{
+  "step": {
+    "id": "patterns",
+    "prompt": "/crew-patterns Confirm or change the architecture style in docs/adr/ADR-001 for Teamly given docs/03 (two developers, four weeks, FastAPI + Postgres + React, one cloud), pick the design patterns the P0 problems need, record the pattern table in docs/13-conventions.md section 3, update .anycrew/config.json architecture.style and architecture.patterns, and finish. Do not ask questions; mark assumptions.",
+    "maxTurns": 60,
+    "checks": [
+      {
+        "type": "grep",
+        "path": "docs/adr/ADR-001-architecture-style.md",
+        "pattern": "(?i)status:\\*?\\*? *(accepted|superseded)"
+      },
+      {
+        "type": "grep",
+        "path": "docs/13-conventions.md",
+        "pattern": "(?i)repository|ports? and adapters|strategy|state"
+      },
+      {
+        "type": "cmd",
+        "run": "python3 -c \"import json; c=json.load(open('.anycrew/config.json')); assert c['architecture']['style'] and len(c['architecture'].get('patterns',[]))>=1\""
+      }
+    ],
+    "judge": "Read docs/adr/ADR-001-architecture-style.md, docs/13-conventions.md and .anycrew/config.json. Score 5 if the ADR now names the forces (team, horizon, change hot spots, integrations, consistency, scale, operations), compares at least two styles with costs, is Accepted or superseded by a new ADR, the pattern table lists pattern / where / why for concrete P0 problems with the 'avoid when' check answered, there is a Mermaid diagram of the shape, and the config records style and patterns. Score 3 if the decision is recorded but forces or avoid-checks are missing. Score 1 if it is a generic essay."
+  },
+  "run": {
+    "cost": 2.0645467500000003,
+    "turns": 16,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "grep",
+      "path": "docs/adr/ADR-001-architecture-style.md",
+      "pattern": "(?i)status:\\*?\\*? *(accepted|superseded)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/13-conventions.md",
+      "pattern": "(?i)repository|ports? and adapters|strategy|state",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "cmd",
+      "run": "python3 -c \"import json; c=json.load(open('.anycrew/config.json')); assert c['architecture']['style'] and len(c['architecture'].get('patterns',[]))>=1\"",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "ADR-001 is Accepted with a forces table (team/horizon, change hot spots, integrations, consistency, scale/cost, operations), five styles compared with costs, a Mermaid flowchart and an answered 'Avoid this style when' check; docs/13 §3 lists pattern/where/why for the P0 problems (FR/NFR cited) with considered-and-rejected patterns; .anycrew/config.json records style modular-monolith and nine pattern slugs.",
+    "by": "claude"
+  }
+}

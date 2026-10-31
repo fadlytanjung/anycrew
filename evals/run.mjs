@@ -92,7 +92,7 @@ for (const step of suite.steps) {
 try { fs.cpSync(projectDir, path.join(reportDir, 'project'), { recursive: true, filter: (s) => !/node_modules|\.venv|\.git$|__pycache__|\.pytest_cache|\.ruff_cache|dist/.test(s) }); } catch {}
 if (!args.keep && !args.dir) { log(`\n(project kept at ${projectDir}; delete it when done)`); }
 log(`\nreport: ${reportDir}/summary.md`);
-try { execFileSync('node', [path.join(ROOT, 'scripts', 'eval-latest.mjs'), suiteId, runner], { stdio: 'ignore' }); log(`latest per step: ${path.join(ROOT, 'evals', 'reports', 'LATEST.md')}`); } catch {}
+try { execFileSync('node', [path.join(ROOT, 'scripts', 'eval-latest.mjs'), suiteId, runner], { stdio: 'ignore' }); log(`latest per step: ${path.join(ROOT, 'evals', 'reports', `LATEST-${suiteId}-${runner}.md`)}`); } catch {}
 process.exit(results.every((r) => r.pass) ? 0 : 1);
 
 // ---------------------------------------------------------------------------

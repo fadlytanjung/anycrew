@@ -1,0 +1,43 @@
+{
+  "step": {
+    "id": "refactor",
+    "setup": "mkdir -p backend/app/legacy && cat > backend/app/legacy/report.py <<'EOF'\nimport datetime\n\n\ndef build_report(rows, kind, fmt):\n    out = []\n    total = 0.0\n    for r in rows:\n        if kind == 'daily':\n            if r['amount'] > 0:\n                total = total + float(r['amount'])\n                out.append(str(r['id']) + ',' + str(r['amount']) + ',' + str(datetime.datetime.now()))\n        elif kind == 'weekly':\n            if r['amount'] > 0:\n                total = total + float(r['amount']) * 7\n                out.append(str(r['id']) + ',' + str(r['amount'] * 7) + ',' + str(datetime.datetime.now()))\n        elif kind == 'monthly':\n            if r['amount'] > 0:\n                total = total + float(r['amount']) * 30\n                out.append(str(r['id']) + ',' + str(r['amount'] * 30) + ',' + str(datetime.datetime.now()))\n    if fmt == 'csv':\n        return '\\n'.join(out) + '\\n' + 'total,' + str(total)\n    elif fmt == 'json':\n        return '{\"rows\": [' + ','.join('\"' + o + '\"' for o in out) + '], \"total\": ' + str(total) + '}'\n    return out\nEOF\ngit add -A && git commit -qm 'chore: legacy report module' || true",
+    "prompt": "/crew-refactor backend/app/legacy/report.py Audit this module against the smell catalogue, measure what you can, plan the top refactorings, perform them one commit at a time with a characterisation test first, keep `make check` green, and add a rule that stops the worst smell returning. Do not ask questions.",
+    "maxTurns": 100,
+    "checks": [
+      {
+        "type": "cmd",
+        "run": "make check"
+      },
+      {
+        "type": "cmd",
+        "run": "git log --oneline | grep -cE 'refactor\\(' | awk '$1>=2{exit 0} {exit 1}'"
+      }
+    ],
+    "judge": "Read the reply, `git log --stat -6` and the module. Score 5 if the audit names the smells with path:line (switch on type, float money, wall clock, string-built JSON, long function), a characterisation test was committed first, at least two refactorings landed as separate refactor commits with behaviour unchanged, make check is green, and a lint or layer rule was added. Score 3 if refactored without the characterisation test or the rule. Score 1 if behaviour changed or tests were loosened."
+  },
+  "run": {
+    "cost": 3.36168025,
+    "turns": 34,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "cmd",
+      "run": "make check",
+      "ok": false,
+      "detail": "`make check` exit 2: make: *** No rule to make target `check'.  Stop."
+    },
+    {
+      "type": "cmd",
+      "run": "git log --oneline | grep -cE 'refactor\\(' | awk '$1>=2{exit 0} {exit 1}'",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "The reply audits backend/app/legacy/report.py with line numbers for the type switch (8-19), wall clock (11/15/19), float money (6/10/14/18), hand-built JSON (23) and long function (20-24); commit f1097a7 landed 13 characterisation tests first, four separate refactor commits (eee03d3, 7371a1e, 560523b, 9fd67fe) keep identical output as confirmed by reading the original and final module, and 11f030d adds ruff C901 max-complexity 8 plus TID251 wall-clock bans. Makefile does not exist (honestly reported) but ruff check, ruff format --check and pytest all pass on HEAD, and the test diff only swaps the monkeypatch for the injected clock without weakening any assertion.",
+    "by": "claude"
+  }
+}

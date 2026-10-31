@@ -1,0 +1,54 @@
+{
+  "step": {
+    "id": "docs",
+    "prompt": "/crew-docs Bring README.md, docs/README.md, docs/glossary.md and CHANGELOG.md up to date with what exists in this repository. Numbers only from evidence. Do not ask questions.",
+    "maxTurns": 40,
+    "checks": [
+      {
+        "type": "exists",
+        "path": "README.md"
+      },
+      {
+        "type": "exists",
+        "path": "CHANGELOG.md"
+      },
+      {
+        "type": "grep",
+        "path": "docs/README.md",
+        "pattern": "02-research|06-agent-design|11-frontend"
+      }
+    ],
+    "judge": "Read README.md, docs/README.md, docs/glossary.md and CHANGELOG.md. Score 5 if the README has a two-sentence purpose, one diagram, how to run in a few commands and a link to the docs, the index lists every existing doc with the question it answers, the glossary covers the ID schemes, the changelog is derived from the commit log in plain words, and no number lacks a source. Score 3 if mostly right with stale entries. Score 1 if claims are invented."
+  },
+  "run": {
+    "cost": 0,
+    "turns": 1,
+    "error": "exit 1: You've hit your 5-hour limit · resets 3:30pm (Asia/Kuala_Lumpur)"
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": "README.md",
+      "ok": false,
+      "detail": "missing README.md"
+    },
+    {
+      "type": "exists",
+      "path": "CHANGELOG.md",
+      "ok": false,
+      "detail": "missing CHANGELOG.md"
+    },
+    {
+      "type": "grep",
+      "path": "docs/README.md",
+      "pattern": "02-research|06-agent-design|11-frontend",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 0,
+    "reason": "judge gave no JSON: You've hit your 5-hour limit · resets 3:30pm (Asia/Kuala_Lumpur)",
+    "by": "claude"
+  }
+}

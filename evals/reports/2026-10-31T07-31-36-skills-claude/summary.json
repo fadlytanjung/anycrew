@@ -1,0 +1,50 @@
+[
+  {
+    "id": "deploy-check",
+    "pass": true,
+    "checks": "2/2",
+    "judge": 5,
+    "judgeWhy": "Every checklist item is marked with concrete, dated evidence (commit 11f030d, ruff and pytest output, missing Makefile, git tag count 0, .gitignore:12 for .env, grep for logging libraries) or a named role owner and explicit TBD; no secret literal appears in the reply or docs, and docs/16 has the environment table and the three-variable config table from backend/app/config.py while docs/17 has the alert table with owners.",
+    "costUsd": 1.5407419999999998,
+    "turns": 17,
+    "seconds": 235,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "docs",
+    "pass": true,
+    "checks": "3/3",
+    "judge": 5,
+    "judgeWhy": "README.md has a two-sentence purpose, one Mermaid flowchart, five run commands and links to docs/README.md; the index lists every existing doc (00,02,03,04,06,11,12,13,16,17,20, glossary, ADRs, specs, evals report) with its question; the glossary defines AC-NNN-n, TNNN-nn, FR/NFR and ADR; CHANGELOG.md covers all 12 commits from git log in plain words naming each hash; every number checks out against its source (13 passed re-run, max-complexity = 8 and fastapi==0.162.0 in pyproject.toml, 7-day invite in PRD FR-101).",
+    "costUsd": 1.6453003800000001,
+    "turns": 12,
+    "seconds": 227,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "sync",
+    "pass": true,
+    "checks": "3/3",
+    "judge": 5,
+    "judgeWhy": ".anycrew/config.json tools now lists \\\"claude\\\" and \\\"cursor\\\"; .cursor/ holds 26 CLI-generated files (8 .mdc rules, 17 agents, hooks.json) each carrying the `anycrew:generated` marker; the reply separates written (32) from skipped (84 unchanged, AGENTS.md untouched) and flags the six regenerated skill files with a restore command; hand-written AGENTS.md and the pre-existing docs/ edits were not touched.",
+    "costUsd": 0.9375735,
+    "turns": 9,
+    "seconds": 64,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "checkpoint-final",
+    "pass": true,
+    "checks": "1/1",
+    "judge": 5,
+    "judgeWhy": "Every row matches the tree: backend row names both suites (backend/tests/integration/test_health.py and backend/tests/unit/test_health_model.py, both present with AC-001-6 tests), pytest reproduces 13 passed, frontend/Makefile/.github/openapi.yaml/docs/15 are indeed absent, task dependencies for T001-19 (after T001-10, T001-12) and T001-21 (after T001-15) are quoted correctly from tasks.md, nothing was promoted to Built, and the last-updated line carries today's date with the reason.",
+    "costUsd": 1.3441385,
+    "turns": 9,
+    "seconds": 96,
+    "error": null,
+    "failing": []
+  }
+]

@@ -1,0 +1,46 @@
+{
+  "step": {
+    "id": "tasks",
+    "prompt": "/crew-tasks 001 Regenerate tasks.md from the plan: one task per step, TNNN-nn ids, files and ACs on every task, TDD markers where logic exists, the status-update task last. Do not ask questions.",
+    "maxTurns": 40,
+    "checks": [
+      {
+        "type": "grep",
+        "glob": "docs/specs/001-*/tasks.md",
+        "pattern": "T001-01"
+      },
+      {
+        "type": "grep",
+        "glob": "docs/specs/001-*/tasks.md",
+        "pattern": "T001-99|status"
+      }
+    ],
+    "judge": "Read tasks.md. Score 5 if every task names files and ACs, fits one implementer run, is ordered by dependency, logic tasks carry TDD, and the last task updates docs/20. Score 3 if some tasks lack files or ACs. Score 1 otherwise."
+  },
+  "run": {
+    "cost": 1.8665402500000001,
+    "turns": 12,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "grep",
+      "glob": "docs/specs/001-*/tasks.md",
+      "pattern": "T001-01",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "glob": "docs/specs/001-*/tasks.md",
+      "pattern": "T001-99|status",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "All 22 tasks in docs/specs/001-foundation/tasks.md carry a Files list and AC-001-n IDs, every 'After' dependency points to an earlier task, the eight logic tasks (T001-02, 07, 08, 09, 12, 13, 14, 17) are marked TDD with named failing tests, and T001-22 closes by updating docs/20-implementation-status.md naming the suites; the only nit is the reply claims nine TDD tasks while the file has eight.",
+    "by": "claude"
+  }
+}

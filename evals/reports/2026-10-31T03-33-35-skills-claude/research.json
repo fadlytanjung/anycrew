@@ -1,0 +1,56 @@
+{
+  "step": {
+    "id": "research",
+    "prompt": "/crew-research Verify three facts the Teamly team assumes, with sources: (1) the current stable FastAPI version and its Python requirement, (2) whether Postgres row-level security can enforce per-workspace isolation, (3) the free-tier limits of one managed Postgres provider of your choice. Write docs/02-research.md and finish. Do not ask questions.",
+    "maxTurns": 50,
+    "checks": [
+      {
+        "type": "exists",
+        "path": "docs/02-research.md"
+      },
+      {
+        "type": "grep",
+        "path": "docs/02-research.md",
+        "pattern": "https?://"
+      },
+      {
+        "type": "grep",
+        "path": "docs/02-research.md",
+        "pattern": "(?i)verified|unverified"
+      }
+    ],
+    "judge": "Read docs/02-research.md. Score 5 if each of the three questions has a finding with a source URL or a command, a checked-on date and a confidence label, contradictions are reported rather than resolved silently, and spikes are listed with a time box. Score 3 if sources are present but confidence or dates are missing. Score 1 if facts are asserted from memory."
+  },
+  "run": {
+    "cost": 1.1543733,
+    "turns": 9,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": "docs/02-research.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/02-research.md",
+      "pattern": "https?://",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "grep",
+      "path": "docs/02-research.md",
+      "pattern": "(?i)verified|unverified",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "docs/02-research.md gives each of the three questions (FastAPI version, Postgres RLS, Neon free tier) a findings table with a URL or exact command, a 2026-10-31 checked-on date and a verified/partially verified/unverified label; gaps and single-source facts are flagged explicitly (e.g. card requirement confirmed by only one page, session-setting RLS pattern marked unverified) rather than smoothed over, and the Spikes table lists four prototypes with 2–4 hour time boxes.",
+    "by": "claude"
+  }
+}

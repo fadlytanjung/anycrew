@@ -58,8 +58,9 @@ A case is a JSON object: `id`, `prompt` (sent to the assistant), `checks` (deter
 
 ## Reading a report
 
-`evals/reports/LATEST.md` holds the most recent result per step across all run folders (a re-run
-after a provider timeout replaces the earlier attempt there; `npm run eval:latest` rebuilds it).
+`evals/reports/LATEST-<suite>-<runner>.md` holds the most recent result per step across all run
+folders of that suite (a re-run after a provider timeout replaces the earlier attempt there);
+`evals/reports/LATEST.md` indexes those files. `npm run eval:latest -- <suite> <runner>` rebuilds them.
 
 `PASS` means every deterministic check passed and the judge scored ≥ 3. The summary table shows,
 per step: checks passed/total, judge score, cost and duration. Failures list the first failing
@@ -86,3 +87,29 @@ Lifecycle suite, Claude Code runner and judge, Teamly on `python-fastapi-react`,
 
 13/13 steps pass; two steps needed a re-run because of provider-side timeouts and a usage limit,
 which the harness now bounds with `--step-timeout`. Total accounting across runs: about $33.
+
+Skills suite (the 17 steps covering every remaining skill), Claude Code runner and judge, fresh
+Teamly init, 31 Oct 2026 (reports in `evals/reports/2026-10-31T*-skills-claude/`):
+
+| Step | Checks | Judge | Note |
+|---|---|---|---|
+| status-fresh | 1/1 | 5 | names the ADR-001 style and recommends `/crew-patterns` after the PRD |
+| research | 3/3 | 5 | dated, labelled findings; single-source facts flagged; time-boxed spikes |
+| prd-seed | 1/1 | 5 | personas, journeys, cut line, FR/NFR tables, constitution check |
+| patterns | 3/3 | 5 | ADR-001 accepted with forces and five styles compared; pattern table in docs/13; config updated |
+| adr | 1/3 | 5 | correct ADR-002 with options table; the check regex was too strict (fixed since) |
+| design | 5/5 | 5 | route table, state tables per screen, tokens.json with 21 contrast pairs, UI gates |
+| llm | 4/4 | 5 | model/code boundary, prompts as files with schemas, eval dataset and scorers |
+| spec-seed, plan, tasks | 5/5 | 5, 5, 5 | 18 ACs, vertical first slice, 22 tasks with TDD and dependencies |
+| implement-seed | 0/2 | 3 | three tasks, one commit each, but no Makefile because the gate task sat later in the order (implementer rule added since) |
+| debug | 0/1 | 5 | root cause, smallest fix, regression test, ruled-out list; `make check` absent for the same reason |
+| refactor | 1/2 | 5 | characterisation tests first, four refactor commits, complexity and wall-clock rules added; same `make check` gap |
+| deploy-check | 2/2 | 5 | every item evidenced or owned; docs/16 and docs/17 started (re-run after a usage limit) |
+| docs | 3/3 | 5 | README, index, glossary and changelog with every number sourced (re-run) |
+| sync | 3/3 | 5 | cursor added through the CLI; written vs skipped reported; AGENTS.md untouched (re-run) |
+| checkpoint-final | 1/1 | 5 | rows match the tree, suites named, nothing promoted (re-run) |
+
+13/17 steps pass on the first run; the judge scored every agent 5 except the implementer (3). The
+four failures share one cause: the implementer left the `make check` gate for a later task, so
+three later checks that run `make check` could not pass, and one check regex rejected a valid ADR
+heading. Both are fixed; the suite re-runs from `implement-seed` on the next release. Cost: about $35.

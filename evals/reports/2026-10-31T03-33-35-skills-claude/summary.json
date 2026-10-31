@@ -1,0 +1,223 @@
+[
+  {
+    "id": "status-fresh",
+    "pass": true,
+    "checks": "1/1",
+    "judge": 5,
+    "judgeWhy": "The reply names teamly-skills as a clean anycrew init scaffold in phase Discover, states 'modular monolith with hexagonal modules (ADR-001 Proposed)' matching docs/adr/ADR-001-architecture-style.md, cites the status doc's 2026-10-31 date and single Built row accurately, and recommends /crew-brainstorm next with /crew-patterns after the PRD.",
+    "costUsd": 0.740956205,
+    "turns": 2,
+    "seconds": 39,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "research",
+    "pass": true,
+    "checks": "3/3",
+    "judge": 5,
+    "judgeWhy": "docs/02-research.md gives each of the three questions (FastAPI version, Postgres RLS, Neon free tier) a findings table with a URL or exact command, a 2026-10-31 checked-on date and a verified/partially verified/unverified label; gaps and single-source facts are flagged explicitly (e.g. card requirement confirmed by only one page, session-setting RLS pattern marked unverified) rather than smoothed over, and the Spikes table lists four prototypes with 2–4 hour time boxes.",
+    "costUsd": 1.1543733,
+    "turns": 9,
+    "seconds": 169,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "prd-seed",
+    "pass": true,
+    "checks": "1/1",
+    "judge": 5,
+    "judgeWhy": "docs/03-prd.md has a persona table (§2), three journeys J1–J3 (§3), P0/P1/P2 scope with an explicit cut line (§4), FR-001..FR-204 and NFR-001..NFR-104 tables with priorities (§5–6), and a constitution check table P1–P8 (§8).",
+    "costUsd": 1.5497995,
+    "turns": 17,
+    "seconds": 158,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "patterns",
+    "pass": true,
+    "checks": "3/3",
+    "judge": 5,
+    "judgeWhy": "ADR-001 is Accepted with a forces table (team/horizon, change hot spots, integrations, consistency, scale/cost, operations), five styles compared with costs, a Mermaid flowchart and an answered 'Avoid this style when' check; docs/13 §3 lists pattern/where/why for the P0 problems (FR/NFR cited) with considered-and-rejected patterns; .anycrew/config.json records style modular-monolith and nine pattern slugs.",
+    "costUsd": 2.0645467500000003,
+    "turns": 16,
+    "seconds": 270,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "adr",
+    "pass": false,
+    "checks": "1/3",
+    "judge": 5,
+    "judgeWhy": "docs/adr/ADR-002-workspace-isolation-rls.md has Status (Proposed), Context with a forces table, an options table of four options each with 'What it costs' and 'What it gives', a two-part Decision, Consequences split into Good/Bad/Watch for, and a 'How to revisit' section; docs/adr/README.md links it as row 002.",
+    "costUsd": 1.72068925,
+    "turns": 17,
+    "seconds": 167,
+    "error": null,
+    "failing": [
+      "docs/adr/ADR-00[2-9]-*.md: 0 < 1",
+      "docs/adr/ADR-00[2-9]-*.md: /(?i)## options considered/ not found"
+    ]
+  },
+  {
+    "id": "design",
+    "pass": true,
+    "checks": "5/5",
+    "judge": 5,
+    "judgeWhy": "docs/11-frontend.md has a route table with purpose, data loaded and visibility rules, each P0 screen has exact words plus loading/empty/error/success state tables and a 360–1600 px responsive section (§7); contracts/design/tokens.json parses as valid JSON with colour roles, font scale, space, breakpoints and 21 contrast pairs; docs/12-design-system.md lists the contrast table (§3.2) and ten UI quality gates (§7).",
+    "costUsd": 2.5816329999999996,
+    "turns": 13,
+    "seconds": 310,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "llm",
+    "pass": true,
+    "checks": "4/4",
+    "judge": 5,
+    "judgeWhy": "docs/06 §2 keeps judgement steps on the model (C1 intent enum, C2 member_id+citations) while code verifies IDs, computes dates, and only the member's submit writes (steps 11–14); §3 gives both calls schema file, fast tier, temperature 0, 2500 ms timeout, retry, fallback and post-checks, §4 prices them per call; backend/app/prompts/*.md carry id/version/model/output_schema front matter with <untrusted_title>/<untrusted_history> framing and JSON schemas with additionalProperties:false; §6 names backend/evals/triage/dataset.jsonl with eight slices and eleven scorers with pass bars.",
+    "costUsd": 2.6076634999999992,
+    "turns": 29,
+    "seconds": 426,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "spec-seed",
+    "pass": true,
+    "checks": "1/1",
+    "judge": 5,
+    "judgeWhy": "docs/specs/001-foundation/spec.md has 18 Given/When/Then ACs with pinned values (200 + `{\\\"status\\\": \\\"ok\\",
+    "costUsd": 2.9604957499999998,
+    "turns": 26,
+    "seconds": 339,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "plan",
+    "pass": true,
+    "checks": "2/2",
+    "judge": 5,
+    "judgeWhy": "plan.md slice 1 is one route, one test and one screen with real paths (backend/tests/integration/test_health.py, backend/app/main.py, frontend/src/app/App.tsx) proving browser→proxy→FastAPI end to end; slices 2–6 add hardening, states, gates, docs and CI; a 'Contract and data changes' section, a dependency table (fastapi 0.162.0 pinned per verified 02-research.md, the rest lockfile-pinned by stated policy), a constitution check table and a 'Fit with ADR-001' paragraph are all present; assumptions A-1/A-2, the rule 60 vs 40 conflict and the stale tasks.md are explicitly flagged.",
+    "costUsd": 2.5050879999999998,
+    "turns": 15,
+    "seconds": 222,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "tasks",
+    "pass": true,
+    "checks": "2/2",
+    "judge": 5,
+    "judgeWhy": "All 22 tasks in docs/specs/001-foundation/tasks.md carry a Files list and AC-001-n IDs, every 'After' dependency points to an earlier task, the eight logic tasks (T001-02, 07, 08, 09, 12, 13, 14, 17) are marked TDD with named failing tests, and T001-22 closes by updating docs/20-implementation-status.md naming the suites; the only nit is the reply claims nine TDD tasks while the file has eight.",
+    "costUsd": 1.8665402500000001,
+    "turns": 12,
+    "seconds": 138,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "implement-seed",
+    "pass": false,
+    "checks": "0/2",
+    "judge": 3,
+    "judgeWhy": "Tasks T001-01..03 are ticked in docs/specs/001-foundation/tasks.md with one commit each (8b99512, 4805478, b56f505, each carrying its Tasks: ID), and pytest (1 passed) plus ruff check/format are green, but no Makefile exists so `make check` cannot run and no type checker (mypy/pyright) is configured or executed, so the gate is only partially covered.",
+    "costUsd": 2.60416875,
+    "turns": 38,
+    "seconds": 231,
+    "error": null,
+    "failing": [
+      "missing Makefile",
+      "`make check` exit 2: make: *** No rule to make target `check'.  Stop."
+    ]
+  },
+  {
+    "id": "debug",
+    "pass": false,
+    "checks": "0/1",
+    "judge": 5,
+    "judgeWhy": "Reply names the reproduction, states the root cause in one paragraph (Literal[\\\"ok\\\"] changed to Literal[\\\"okay\\\"] while the handler still returned \\\"ok\\\"), restores health.py to HEAD as the smallest fix, adds backend/tests/unit/test_health_model.py as a regression test, lists what was ruled out with evidence, and leaves the integration test untouched; make check is honestly reported as unrunnable because no Makefile exists yet (T001-15 unticked), with pytest, ruff check and ruff format reported green instead.",
+    "costUsd": 1.3749312,
+    "turns": 9,
+    "seconds": 130,
+    "error": null,
+    "failing": [
+      "`make check` exit 2: make: *** No rule to make target `check'.  Stop."
+    ]
+  },
+  {
+    "id": "refactor",
+    "pass": false,
+    "checks": "1/2",
+    "judge": 5,
+    "judgeWhy": "The reply audits backend/app/legacy/report.py with line numbers for the type switch (8-19), wall clock (11/15/19), float money (6/10/14/18), hand-built JSON (23) and long function (20-24); commit f1097a7 landed 13 characterisation tests first, four separate refactor commits (eee03d3, 7371a1e, 560523b, 9fd67fe) keep identical output as confirmed by reading the original and final module, and 11f030d adds ruff C901 max-complexity 8 plus TID251 wall-clock bans. Makefile does not exist (honestly reported) but ruff check, ruff format --check and pytest all pass on HEAD, and the test diff only swaps the monkeypatch for the injected clock without weakening any assertion.",
+    "costUsd": 3.36168025,
+    "turns": 34,
+    "seconds": 410,
+    "error": null,
+    "failing": [
+      "`make check` exit 2: make: *** No rule to make target `check'.  Stop."
+    ]
+  },
+  {
+    "id": "deploy-check",
+    "pass": false,
+    "checks": "2/2",
+    "judge": 0,
+    "judgeWhy": "judge gave no JSON: You've hit your 5-hour limit · resets 3:30pm (Asia/Kuala_Lumpur)",
+    "costUsd": 1.41322705,
+    "turns": 9,
+    "seconds": 203,
+    "error": null,
+    "failing": []
+  },
+  {
+    "id": "docs",
+    "pass": false,
+    "checks": "1/3",
+    "judge": 0,
+    "judgeWhy": "judge gave no JSON: You've hit your 5-hour limit · resets 3:30pm (Asia/Kuala_Lumpur)",
+    "costUsd": 0,
+    "turns": 1,
+    "seconds": 4,
+    "error": "exit 1: You've hit your 5-hour limit · resets 3:30pm (Asia/Kuala_Lumpur)",
+    "failing": [
+      "missing README.md",
+      "missing CHANGELOG.md"
+    ]
+  },
+  {
+    "id": "sync",
+    "pass": false,
+    "checks": "0/3",
+    "judge": 0,
+    "judgeWhy": "judge gave no JSON: You've hit your 5-hour limit · resets 3:30pm (Asia/Kuala_Lumpur)",
+    "costUsd": 0,
+    "turns": 1,
+    "seconds": 3,
+    "error": "exit 1: You've hit your 5-hour limit · resets 3:30pm (Asia/Kuala_Lumpur)",
+    "failing": [
+      "missing .cursor/rules/00-sdd-process.mdc",
+      "missing .cursor/agents/implementer.md",
+      "`python3 -c \"import json; assert 'cursor' in json.load(open('.anycrew/config.json'))['tools']\"` exit 1: Traceback (most recent call last): |   File \"<string>\", line 1, in <module> | AssertionError"
+    ]
+  },
+  {
+    "id": "checkpoint-final",
+    "pass": false,
+    "checks": "1/1",
+    "judge": 0,
+    "judgeWhy": "judge gave no JSON: You've hit your 5-hour limit · resets 3:30pm (Asia/Kuala_Lumpur)",
+    "costUsd": 0,
+    "turns": 1,
+    "seconds": 3,
+    "error": "exit 1: You've hit your 5-hour limit · resets 3:30pm (Asia/Kuala_Lumpur)",
+    "failing": []
+  }
+]

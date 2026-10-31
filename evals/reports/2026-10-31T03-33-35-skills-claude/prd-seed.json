@@ -1,0 +1,34 @@
+{
+  "step": {
+    "id": "prd-seed",
+    "prompt": "/crew-prd Write a compact PRD for Teamly (P0 only needs: sign in, one workspace per user, lists, tasks with assignee and done state). Mark assumptions. Do not ask questions. Write docs/03-prd.md and docs/04-requirements-traceability.md and finish.",
+    "maxTurns": 50,
+    "checks": [
+      {
+        "type": "grep",
+        "path": "docs/03-prd.md",
+        "pattern": "FR-001"
+      }
+    ],
+    "judge": "Score 5 if docs/03 has personas, journeys, P0/P1/P2 with a cut line, FR/NFR IDs and a constitution check; 3 if IDs exist but scope is not prioritised; 1 otherwise."
+  },
+  "run": {
+    "cost": 1.5497995,
+    "turns": 17,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "grep",
+      "path": "docs/03-prd.md",
+      "pattern": "FR-001",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "docs/03-prd.md has a persona table (§2), three journeys J1–J3 (§3), P0/P1/P2 scope with an explicit cut line (§4), FR-001..FR-204 and NFR-001..NFR-104 tables with priorities (§5–6), and a constitution check table P1–P8 (§8).",
+    "by": "claude"
+  }
+}

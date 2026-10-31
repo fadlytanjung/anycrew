@@ -1,0 +1,42 @@
+{
+  "step": {
+    "id": "deploy-check",
+    "prompt": "/crew-deploy-check Run the pre-deploy checklist for Teamly as it stands (no real deploy). Create docs/16-infrastructure.md and docs/17-observability.md from the templates with the parts you can fill, and report every item as ✅ or ❌ with evidence. Do not ask questions.",
+    "maxTurns": 50,
+    "checks": [
+      {
+        "type": "exists",
+        "path": "docs/16-infrastructure.md"
+      },
+      {
+        "type": "exists",
+        "path": "docs/17-observability.md"
+      }
+    ],
+    "judge": "Read the reply and docs/16, docs/17. Score 5 if each checklist item (gates, migrations, configuration and secrets, flags, rollback with command and owner, monitoring and cost alert) is marked with real evidence or a named owner and date, no secret appears anywhere, and the docs have the environment table and config table started. Score 3 if the checklist is present but evidence is thin. Score 1 if items are marked done without evidence."
+  },
+  "run": {
+    "cost": 1.5407419999999998,
+    "turns": 17,
+    "error": null
+  },
+  "checks": [
+    {
+      "type": "exists",
+      "path": "docs/16-infrastructure.md",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "type": "exists",
+      "path": "docs/17-observability.md",
+      "ok": true,
+      "detail": ""
+    }
+  ],
+  "judge": {
+    "score": 5,
+    "reason": "Every checklist item is marked with concrete, dated evidence (commit 11f030d, ruff and pytest output, missing Makefile, git tag count 0, .gitignore:12 for .env, grep for logging libraries) or a named role owner and explicit TBD; no secret literal appears in the reply or docs, and docs/16 has the environment table and the three-variable config table from backend/app/config.py while docs/17 has the alert table with owners.",
+    "by": "claude"
+  }
+}

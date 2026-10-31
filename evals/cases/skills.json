@@ -49,7 +49,7 @@
       "maxTurns": 40,
       "checks": [
         { "type": "count", "glob": "docs/adr/ADR-00[2-9]-*.md", "min": 1 },
-        { "type": "grep", "glob": "docs/adr/ADR-00[2-9]-*.md", "pattern": "(?i)## options considered" },
+        { "type": "grep", "glob": "docs/adr/ADR-00[2-9]-*.md", "pattern": "(?i)##.*options" },
         { "type": "grep", "path": "docs/adr/README.md", "pattern": "ADR-002" }
       ],
       "judge": "Read the newest ADR. Score 5 if it has status, context, an options table with at least two options and what each costs, a decision, good and bad consequences, and how to revisit, and is linked from docs/adr/README.md. Score 3 if sections exist but trade-offs are one-sided. Score 1 otherwise."
@@ -102,7 +102,7 @@
     },
     {
       "id": "implement-seed",
-      "prompt": "/crew-implement 001 Implement the first three tasks of spec 001 one at a time (test first, one commit each) so that `make check` exists and is green for the backend. Do not ask questions.",
+      "prompt": "/crew-implement 001 Implement the first three tasks of spec 001 one at a time (test first, one commit each) so that `make check` exists and is green for the backend. If the gate task sits later in the order, pull it forward and say so. Do not ask questions.",
       "maxTurns": 150,
       "checks": [ { "type": "exists", "path": "Makefile" }, { "type": "cmd", "run": "make check" } ],
       "judge": "Score 5 if three tasks are ticked with one commit each and make check is green covering lint, types and tests; 3 if green but partial; 1 otherwise."

@@ -1,5 +1,6 @@
-// Builds evals/reports/LATEST.md: the most recent result per step across all report folders of a
-// suite+runner, with the folder each result came from. Usage: node scripts/eval-latest.mjs [lifecycle] [claude]
+// Builds evals/reports/LATEST-<suite>-<runner>.md: the most recent result per step across all report
+// folders of a suite+runner, with the folder each result came from; then rebuilds LATEST.md as the
+// index of every per-suite file. Usage: node scripts/eval-latest.mjs [lifecycle] [claude]
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -28,5 +29,20 @@ ${rows.map((r) => `| ${r.id} | ${r.pass ? '✅' : '❌'} | ${r.checks} | ${r.jud
 
 **${rows.filter((r) => r.pass).length}/${rows.length} steps pass · latest-run cost $${rows.reduce((n, r) => n + (r.costUsd ?? 0), 0).toFixed(2)}**
 `;
-fs.writeFileSync(path.join(dir, 'LATEST.md'), md);
+fs.writeFileSync(path.join(dir, `LATEST-${suite}-${runner}.md`), md);
 console.log(md);
+
+// Index of every per-suite file, with its pass count.
+const files = fs.readdirSync(dir).filter((f) => /^LATEST-.+\.md$/.test(f)).sort();
+const index = files.map((f) => {
+  const text = fs.readFileSync(path.join(dir, f), 'utf8');
+  const total = text.match(/\*\*(\d+\/\d+ steps pass[^*]*)\*\*/)?.[1] ?? '';
+  const name = f.replace(/^LATEST-|\.md$/g, '');
+  return `- [${name}](${f}) — ${total}`;
+}).join('\n');
+fs.writeFileSync(path.join(dir, 'LATEST.md'), `# Latest eval results
+
+One file per suite and runner; each holds the most recent result per step across all run folders.
+
+${index}
+`);
